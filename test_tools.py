@@ -74,3 +74,15 @@ if __name__ == "__main__":
     test_petta_journal_append_and_recall()
     test_python_tool_executes_code()
     print("All tool tests passed!")
+
+
+def test_send_rejects_path_traversal():
+    """send.run() should reject channel names with path traversal characters."""
+    sys.path.insert(0, str(PROJECT_ROOT / "tools"))
+    import send
+    for bad_channel in ["../something", "../../foo", "subdir/file", "..badname"]:
+        result = send.run(bad_channel, "test")
+        assert "Invalid" in result, (
+            f"Expected 'Invalid' for channel {bad_channel!r}, got: {result!r}"
+        )
+    sys.path.pop(0)
