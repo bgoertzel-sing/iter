@@ -1,0 +1,539 @@
+WORKING MEDIUM-TERM MEMORY (WMTM)
+ARCHITECTURE DESIGN DOCUMENT
+Ben Goertzel / ProtoCosmo2
+September 5, 2026
+
+1. PROBLEM STATEMENT
+
+The current petta-memory system is a fixed, append-only archive. It stores
+all working-memory snapshots as MemoryClusters with EvidenceFor edges,
+PromotesFrom links, and Supersedes markers. ECAN adds attention weighting
+(STI/ATI/LTI with decay), but nothing acts on decayed weight to actually
+evict items. PLN inference exists but does not feed derived beliefs back
+into any working layer. The result is a growing archive with scoring, not
+a living working memory.
+
+What Ben is asking for: a mutable layer that:
+- Dynamically selects a relevant subset from prior working memories
+- Derives new knowledge via inference from that subset
+- Forgets derived knowledge when it stops being useful
+- Pushes out stale items from prior working memories
+- Acts as a "working medium-term memory" between STM and LTM
+2. ARCHITECTURE OVERVIEW
+
+The WMTM sits between the existing components:
+
+  +-------------------+     +-------------------+     +-------------------+
+  | Working Memory    | --> |   WMTM Layer      | --> | LTM Archive       |
+  | (current context) |     | (mutable, active) |     | (petta-memory)    |
+  +-------------------+     +-------------------+     +-------------------+
+                                   |
+                                   v
+                            +-------------------+
+                            | PLN Inference     |
+                            | (derives new      |
+                            |  beliefs)         |
+                            +-------------------+
+
+The WMTM is a bounded-capacity, mutable working set. It:
+- PULLS items from LTM based on current task relevance (ECAN-driven)
+- HOLDS them in an active AtomSpace with attention values
+- DERIVES new beliefs via PLN inference over the active set
+- INSERTS derived beliefs back into the active set
+- EVICTS items (both derived and recalled) when their attention
+  drops below a threshold (forgetting)
+- PROMOTES surviving items back to LTM if they prove durable
+
+3. CORE COMPONENTS
+
+3.1 WMTMStore
+A bounded-capacity mutable store. Unlike the append-only journal,
+items can be added, updated, and REMOVED.
+
+  class WMTMStore:
+      capacity: int           # max items (e.g. 200)
+      items: dict             # id -> WMTMItem
+      attention: dict         # id -> AttentionValue (STI, ATI, LTI)
+
+      def admit(self, item_id, content, source_type):
+          # Add item. If at capacity, evict lowest-STI item first.
+          # source_type: 'recalled' (from LTM) or 'derived' (from PLN)
+
+      def evict(self, item_id):
+          # Remove item. If it was 'derived', it is simply forgotten.
+          # If it was 'recalled' and survived >N cycles, optionally
+          # write back enrichment to LTM.
+
+      def get_active_set(self):
+          # Return items sorted by STI descending (the "attention focus")
+
+      def tick(self):
+          # Apply ECAN decay to all items. Evict any below threshold.
+
+3.2 WMTMItem
+Each item in the WMTM is either a recalled LTM item or a derived belief.
+
+  class WMTMItem:
+      id: str
+      content: str             # belief text or structured representation
+      source_type: str         # 'recalled' or 'derived'
+      origin_cluster: str      # LTM cluster ID (if recalled)
+      derived_from: list       # parent item IDs (if derived)
+      attention: AttentionValue
+      age: int                 # cycles since admission
+      utility: float           # how useful it has been (see 3.5)
+      last_used: int           # cycle of last access
+3.3 RecallBridge (LTM -> WMTM)
+
+Selects which items to pull from the LTM archive into the WMTM based on
+current task context and ECAN attention signals.
+
+  class RecallBridge:
+      def recall(self, query_context, top_k=20):
+          # 1. Keyword/semantic match against LTM MemoryClusters
+          # 2. Boost items with high LTI (long-term importance)
+          # 3. Boost items connected to currently-active WMTM items
+          #    (spreading activation via EvidenceFor edges)
+          # 4. Return top_k candidates for admission to WMTM
+
+      def spreading_activation(self, seed_ids, depth=2):
+          # Follow EvidenceFor/PromotesFrom edges from seed items
+          # to find related items in LTM. Apply decaying activation
+          # per hop. Return ranked candidates.
+
+The key insight: recall is NOT just keyword search. It uses the graph
+structure (EvidenceFor, PromotesFrom, Supersedes) to find items that are
+connected to what is already active, even if they do not share keywords.
+
+3.4 InferenceEngine (WMTM-internal PLN)
+
+Runs PLN inference over the active WMTM set to derive new beliefs.
+
+  class WMTMInferenceEngine:
+      def infer(self, active_set):
+          # 1. Identify inference patterns in active set:
+          #    - deduction (A->B, B->C => A->C)
+          #    - induction (multiple A->B instances => generalize)
+          #    - abduction (B is true, A->B => maybe A)
+          # 2. Generate candidate derived beliefs with confidence
+          # 3. Return candidates for admission to WMTM
+
+      def generate_candidates(self, active_set):
+          # Pattern-match over active items to find inference opportunities
+          # Each candidate gets:
+          #   - derived_from: list of parent item IDs
+          #   - confidence: based on PLN truth values (s,t)
+          #   - content: the derived belief text
+
+Derived beliefs enter the WMTM with initial STI proportional to:
+  - Parent items' combined STI
+  - Inference confidence (PLN strength)
+  - Novelty bonus (not duplicating an existing item)
+
+3.5 UtilityTracker
+
+Tracks how useful each WMTM item has been, to inform eviction decisions.
+
+  class UtilityTracker:
+      def record_use(self, item_id, context):
+          # Called when an item is accessed/used in reasoning or response
+          # Increments utility score
+
+      def record_miss(self, item_id):
+          # Called when an item was in WMTM but was NOT used in a cycle
+          # where it could have been relevant (negative signal)
+
+      def get_utility(self, item_id):
+          # Returns composite score:
+          #   utility = uses * recency_decay + age_penalty
+          # Items with low utility are eviction candidates
+
+3.6 ForgettingPolicy
+
+Decides what to evict and when.
+
+  class ForgettingPolicy:
+      sti_threshold: float      # below this STI, item is evicted
+      max_age: int              # max cycles before forced review
+      derived_max_age: int      # stricter for derived items
+
+      def evaluate(self, wmtm_store):
+          # 1. Evict any item with STI < sti_threshold
+          # 2. For items at max_age: if utility < min_utility, evict
+          # 3. If at capacity: evict lowest-utility item
+          # 4. Derived items: stricter thresholds (easier to forget)
+
+      def should_writeback(self, item):
+          # A recalled item that survived many cycles and had high
+          # utility might deserve enrichment back to LTM
+          # (e.g., new EvidenceFor links discovered during its WMTM stay)
+4. THE WMTM CYCLE
+
+Each reasoning cycle:
+
+  Step 1: RECALL
+    - RecallBridge identifies relevant LTM items based on current task
+    - Spreading activation from already-active WMTM items
+    - Top-k candidates admitted to WMTM (evicting if at capacity)
+
+  Step 2: INFER
+    - WMTMInferenceEngine runs PLN patterns over active set
+    - Derived beliefs admitted with initial STI
+    - Novelty check: skip if belief already exists in active set
+
+  Step 3: USE
+    - Active set is available to the reasoning system
+    - UtilityTracker records which items were actually used
+
+  Step 4: DECAY
+    - ECAN decay applied to all items (STI decreases per cycle)
+    - Used items get STI boost (reinforcement)
+    - Unused items decay faster
+
+  Step 5: FORGET
+    - ForgettingPolicy evaluates all items
+    - Items below threshold evicted
+    - Derived items with low utility: simply removed (forgotten)
+    - Recalled items with high utility + long survival: writeback to LTM
+
+  Step 6: WRITEBACK (optional)
+    - If a recalled item gained new connections during its WMTM stay
+      (e.g., EvidenceFor links to other active items discovered via
+      inference), write those back to LTM as enrichment
+    - This is the mechanism by which the WMTM improves the archive
+
+5. INTEGRATION WITH EXISTING COMPONENTS
+
+5.1 ECAN (ecan.py)
+  - Reuse ECANAttentionAgent for STI/ATI/LTI management
+  - WMTM items are the atoms; attention values drive recall + eviction
+  - Stimulus: task relevance boosts STI (via ecan_context)
+  - New: ForgettingPolicy consumes ECAN attention values for eviction
+
+5.2 LTM Archive (store.py)
+  - RecallBridge reads MemoryClusters, EvidenceFor, PromotesFrom
+  - Writeback writes new EvidenceFor links to journal (via petta_append)
+  - No changes to journal format needed
+
+5.3 PLN Inference
+  - WMTMInferenceEngine wraps existing PLN patterns
+  - Operates on the bounded active set (not the full archive)
+  - This is computationally feasible because the active set is small
+    (~200 items vs 420+ clusters in LTM)
+
+5.4 Live Bridge (live_bridge.py)
+  - WMTM cycle can be triggered per reasoning turn
+  - Results (derived beliefs, recalled items) available to the agent
+  - The agent can query WMTM.get_active_set() for context
+
+6. DATA STRUCTURES
+
+6.1 WMTM AtomSpace (in-memory, not persisted)
+  - Atoms: WMTMItems (recalled or derived)
+  - Links: derived-from, evidence-for (mirrored from LTM), co-activation
+  - AttentionValues: per-atom STI/ATI/LTI
+  - This is ephemeral: rebuilt each session from LTM + task context
+
+6.2 Persistence Strategy
+  - WMTM itself is NOT persisted (it is working memory, rebuilt each session)
+  - Only WRITEBACKS to LTM are persisted (new EvidenceFor links, enriched
+    clusters)
+  - This keeps the archive growing (with enrichment) while the WMTM
+    remains fresh and mutable
+
+6.3 WMTM Metadata in LTM
+  - When a derived belief is forgotten, we record a lightweight note:
+    (WMTMDerivedForgotten cluster-id "content" confidence timestamp)
+  - This lets the system avoid re-deriving the same useless belief
+  - When a derived belief survives long enough, it gets PROMOTED to LTM
+    as a new MemoryCluster with DerivedFrom metadata
+7. FORGETTING MECHANISM (DETAILED)
+
+Forgetting is the heart of WMTM. Without it, WMTM is just another archive.
+
+7.1 Eviction Triggers (any one suffices):
+
+  a) STI Decay: Item's STI falls below sti_threshold (default: 5.0)
+     - ECAN decay rate: 2% per cycle (configurable)
+     - Items used in reasoning get +10 STI boost
+     - Items not used but in focus area get +1 STI (ambient activation)
+
+  b) Age Limit: Item has been in WMTM for max_age cycles (default: 50)
+     - At age limit, item is reviewed:
+       - If utility > min_utility: reset age, keep (it is proving useful)
+       - If utility < min_utility: evict
+
+  c) Capacity Pressure: WMTM at capacity and new item needs admission
+     - Evict item with lowest composite score:
+       composite = STI * 0.4 + utility * 0.4 + LTI * 0.2
+     - Derived items get a 1.5x penalty multiplier (easier to evict
+       derived knowledge than recalled knowledge)
+
+  d) Contradiction Resolution: If a derived belief contradicts a
+     recalled belief with higher confidence, the lower-confidence one
+     is evicted
+
+7.2 Forgetting Categories:
+
+  - RECALLED items: On eviction, optionally writeback enrichment to LTM.
+    The item itself still exists in LTM. We just remove it from WMTM.
+    Writeback only if the item gained new connections or was used
+    significantly.
+
+  - DERIVED items: On eviction, two paths:
+    - Low utility, short survival: simply forgotten. Record in a
+      "forgetting log" to avoid re-deriving.
+    - High utility, long survival (survived >N cycles): PROMOTE to LTM
+      as a new MemoryCluster. This is how the WMTM contributes new
+      knowledge to the long-term archive.
+
+7.3 The Forgetting Log
+  - In-memory structure: set of (content_hash, confidence) tuples
+  - When inference generates a candidate, check forgetting log first
+  - If a similar belief was recently forgotten with similar confidence,
+    skip re-derivation (or lower its initial STI)
+  - Prevents the "eternal return" problem where the same useless
+    belief keeps getting re-derived every cycle
+
+8. RECALL MECHANISM (DETAILED)
+
+8.1 Recall Sources:
+
+  a) Task-Driven: Current task/reasoning context generates a query
+     - Keywords extracted from task
+     - Semantic similarity to LTM cluster contents
+     - Top-k matches pulled into WMTM
+
+  b) Spreading Activation: Already-active WMTM items spread activation
+     through the LTM graph
+     - Follow EvidenceFor edges (depth 1-2)
+     - Follow PromotesFrom edges (depth 1)
+     - Do NOT follow Supersedes (those are replaced)
+     - Decaying activation per hop: 0.7^depth
+
+  c) ECAN-Driven: Items with high LTI in LTM are candidates
+     - LTI reflects long-term importance
+     - Periodically sample high-LTI items not currently in WMTM
+     - This brings "forgotten but important" items back
+
+8.2 Recall Filtering:
+  - Deduplication: skip items already in WMTM
+  - Supersedes resolution: only recall the latest version
+  - Relevance threshold: only admit items with activation above a floor
+  - Capacity-aware: only admit as many as capacity allows
+
+8.3 Recall Budget:
+  - Each cycle: admit at most N new items (default: 10)
+  - This prevents flooding WMTM with recalled items in a single cycle
+  - Gives inference and forgetting time to work between recalls
+9. INFERENCE MECHANISM (DETAILED)
+
+9.1 Inference Patterns (PLN-based):
+
+  a) Deduction:
+     If A -> B (strength s1) and B -> C (strength s2) in active set,
+     derive A -> C with strength s1 * s2 * confidence_factor
+
+  b) Induction:
+     If multiple A_i -> B patterns share structure,
+     derive a generalized rule with strength = weighted average
+
+  c) Abduction:
+     If B is observed and A -> B exists,
+     derive "maybe A" with strength = s(A->B) * prior(A)
+
+  d) Analogy:
+     If A is similar to A' (shared features) and A -> B,
+     derive A' -> B' (where B' is analogous to B) with discount
+
+  e) Evidence Aggregation:
+     If multiple items provide evidence for the same conclusion,
+     combine their strengths (noisy-OR or weighted average)
+
+9.2 Inference Budget:
+  - Max candidates per cycle: 5 (prevents inference explosion)
+  - Only run inference on items in top-50% STI (the attention focus)
+  - Candidates below confidence threshold (0.3) are discarded
+
+9.3 Belief Representation:
+  - Beliefs in WMTM can be:
+    - Free text (from recalled MemoryClusters)
+    - Structured (from PLN atoms: ConceptNode, InheritanceLink, etc.)
+  - Inference operates on structured representations
+  - A lightweight parser converts text beliefs to pseudo-structured form
+    (subject-predicate-object triples) for pattern matching
+  - This is intentionally simple - full NLP parsing is out of scope
+
+10. CONFIGURATION PARAMETERS
+
+  # WMTM Capacity
+  wmtm_capacity: 200          # max items in active set
+  recall_budget: 10           # max new items per cycle
+  inference_budget: 5         # max derived candidates per cycle
+
+  # Attention (ECAN)
+  sti_threshold: 5.0          # eviction threshold
+  sti_decay_rate: 0.02        # per cycle
+  sti_boost_on_use: 10.0
+  sti_ambient: 1.0            # for items in focus area
+  lti_boost_on_survival: 0.5  # per cycle survived
+
+  # Forgetting
+  max_age: 50                 # cycles before forced review
+  derived_max_age: 30         # stricter for derived items
+  min_utility: 2.0            # below this at max_age -> evict
+  derived_eviction_penalty: 1.5  # multiplier in capacity eviction
+
+  # Recall
+  spreading_depth: 2
+  spreading_decay: 0.7
+  recall_relevance_floor: 0.1
+  lti_sample_rate: 0.1        # probability of LTI-driven recall per cycle
+
+  # Inference
+  confidence_threshold: 0.3
+  novelty_bonus_sti: 5.0
+  contradiction_penalty: 0.5  # lower confidence if contradicts existing
+
+  # Promotion
+  promotion_survival_cycles: 20  # derived item must survive this long
+  promotion_utility_threshold: 5.0
+
+  # Writeback
+  writeback_utility_threshold: 3.0
+  writeback_survival_cycles: 10
+11. IMPLEMENTATION ROADMAP
+
+Phase 1: Core WMTM Store + Forgetting (MVP)
+  - WMTMStore with capacity management
+  - WMTMItem data structure
+  - Basic ForgettingPolicy (STI threshold + capacity eviction)
+  - ECAN integration for attention values
+  - Unit tests for admit/evict/tick
+  - Target: 2-3 days
+
+Phase 2: Recall Bridge
+  - RecallBridge with keyword matching against LTM
+  - Spreading activation via EvidenceFor/PromotesFrom edges
+  - Recall budgeting and deduplication
+  - Integration with existing store.py reader
+  - Unit tests for recall accuracy
+  - Target: 2-3 days
+
+Phase 3: Inference Engine
+  - WMTMInferenceEngine with deduction + induction patterns
+  - Simple triple extraction from belief text
+  - Candidate generation with confidence scoring
+  - Novelty checking against active set
+  - Unit tests for inference correctness
+  - Target: 3-4 days
+
+Phase 4: Utility Tracking + Advanced Forgetting
+  - UtilityTracker (use recording, miss detection)
+  - Age-based eviction with utility review
+  - Forgetting log (prevent re-derivation)
+  - Derived item promotion to LTM
+  - Writeback of enrichment to LTM via petta_append
+  - Integration tests (full WMTM cycle)
+  - Target: 3-4 days
+
+Phase 5: Advanced Inference + Tuning
+  - Abduction and analogy patterns
+  - Contradiction detection and resolution
+  - ECAN parameter tuning for WMTM-specific dynamics
+  - Performance benchmarks
+  - Target: 3-5 days
+
+Total estimated: 13-19 days of focused work
+
+12. TESTING STRATEGY
+
+12.1 Unit Tests:
+  - WMTMStore: admit, evict, capacity, tick
+  - RecallBridge: keyword match, spreading activation, dedup
+  - InferenceEngine: each pattern type, confidence calc
+  - ForgettingPolicy: each trigger, composite scoring
+  - UtilityTracker: use/miss recording, scoring
+
+12.2 Integration Tests:
+  - Full WMTM cycle: recall -> infer -> use -> decay -> forget
+  - Multi-cycle: verify forgetting log prevents re-derivation
+  - Promotion: derived belief survives and gets written to LTM
+  - Writeback: recalled item enrichment written to LTM
+
+12.3 Simulation Tests:
+  - Simulate 100 reasoning cycles with synthetic task contexts
+  - Verify WMTM stabilizes (not infinite growth, not total collapse)
+  - Verify useful items survive, useless items are evicted
+  - Measure: average WMTM occupancy, eviction rate, inference rate
+
+12.4 Property-Based Tests:
+  - WMTM never exceeds capacity (invariant)
+  - Every evicted derived item is either forgotten or promoted (no loss)
+  - Forgetting log prevents identical re-derivation within N cycles
+  - Recall never admits superseded items
+
+13. KEY DESIGN DECISIONS AND RATIONALE
+
+13.1 Why ephemeral (not persisted)?
+  The WMTM is working memory. It should be rebuilt fresh each session
+  based on the task at hand. Persisting it would make it another archive,
+  defeating the purpose. Only the enrichments (writebacks) are persisted.
+
+13.2 Why bounded capacity?
+  Working memory is inherently limited. A 200-item bound forces the
+  system to make choices about what is relevant. This is where forgetting
+  becomes meaningful — without a bound, you can keep everything and
+  forgetting is unnecessary.
+
+13.3 Why separate derived items from recalled items?
+  Derived beliefs are speculative. They should be easier to forget
+  (derived_eviction_penalty) and must prove themselves (promotion
+  threshold) before entering LTM. Recalled items already have LTM
+  standing and should be retained longer in WMTM.
+
+13.4 Why a forgetting log?
+  Without it, the inference engine will re-derive the same useless beliefs
+  every cycle, creating a churn that wastes computation and prevents
+  convergence. The forgetting log creates a "lessons learned" mechanism:
+  "we tried this inference, it was not useful, do not repeat."
+
+13.5 Why spreading activation for recall?
+  Pure keyword matching misses structural relationships. Two items may
+  share no keywords but be connected via EvidenceFor chains. Spreading
+  activation through the graph surfaces these connections, making recall
+  more intelligent than simple search.
+
+14. RISKS AND MITIGATIONS
+
+  Risk: Inference quality is poor with simple triple extraction
+  Mitigation: Start with deduction only (most reliable). Add patterns
+  incrementally. Full NLP integration is a future enhancement.
+
+  Risk: Forgetting log grows unbounded
+  Mitigation: Apply LTI decay to forgetting log entries too. Entries
+  older than N cycles with no re-encounter are pruned.
+
+  Risk: WMTM oscillates (items constantly admitted and evicted)
+  Mitigation: Hysteresis in eviction thresholds. Items that were recently
+  evicted get a cooldown before re-admission. Monitor oscillation rate.
+
+  Risk: Writeback creates noise in LTM archive
+  Mitigation: Only writeback high-confidence enrichments. Require
+  multiple cycles of utility before writeback. Ben reviews writebacks
+  before they are committed (human-in-the-loop option).
+
+15. SUMMARY
+
+The WMTM transforms petta-memory from a passive archive into an active
+cognitive layer. It recalls relevant knowledge, derives new beliefs through
+inference, and forgets what is no longer useful — the three pillars of
+working memory. The design leverages existing ECAN attention mechanisms
+for scoring and adds the missing piece: action on attention (eviction and
+promotion). The result is a system that thinks, not just remembers.
+
+---
+
+Document ends. Total sections: 15.
+Designed for: petta-memory repository, ProtoCosmo2 architecture.
+Author: Iter agent. Date: September 5, 2026.
