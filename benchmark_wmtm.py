@@ -33,26 +33,46 @@ def bench_stability():
         if len(s)>50:v+=1
     print(f"B3 Stability: 200 stress cycles cap=50 violations={v}")
 def bench_inference():
+    results={}
+    # deduction
     s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
     r=o.cycle(recall_fn=lambda:[('r1','alpha implies beta',80.0),('r2','beta implies gamma',80.0)])
     d=[i for i in s.get_active_set() if i.source_type=="derived"]
-    print(f"  deduction: derived={r.admitted_derived} items={len(d)}")
-    for i in d:print(f"    {i.content[:70]}")
+    results['deduction']=bool(d)
+    print(f"  deduction:     {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    # induction
+    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
+    r=o.cycle(recall_fn=lambda:[('r1','alpha has property_x',60.0),('r2','alpha has property_x',60.0)])
+    d=[i for i in s.get_active_set() if i.source_type=="derived" and 'induced' in i.content]
+    results['induction']=bool(d)
+    print(f"  induction:     {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    # abduction
     s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
     r=o.cycle(recall_fn=lambda:[('r1','rain implies wet_ground',80.0),('r2','wet_ground is observed',90.0)])
     d=[i for i in s.get_active_set() if i.source_type=="derived"]
-    print(f"  abduction: derived={r.admitted_derived} items={len(d)}")
-    for i in d:print(f"    {i.content[:70]}")
+    results['abduction']=bool(d)
+    print(f"  abduction:     {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    # analogy
+    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
+    r=o.cycle(recall_fn=lambda:[('r1','alpha has red',80.0),('r2','beta has green',80.0)])
+    d=[i for i in s.get_active_set() if i.source_type=="derived"]
+    results['analogy']=bool(d)
+    print(f"  analogy:       {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    # evidence aggregation
     s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
     r=o.cycle(recall_fn=lambda:[('r1','alpha has property_x',60.0),('r2','alpha has property_x',60.0)])
-    d=[i for i in s.get_active_set() if i.source_type=="derived"]
-    print(f"  evidence_agg: derived={r.admitted_derived} items={len(d)}")
-    for i in d:print(f"    {i.content[:70]}")
+    d=[i for i in s.get_active_set() if i.source_type=="derived" and 'aggregated' in i.content]
+    results['evidence']=bool(d)
+    print(f"  evidence_agg:  {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    # contradiction
     s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
     r=o.cycle(recall_fn=lambda:[('r1','sky has blue',80.0),('r2','sky has green',80.0)])
     contra=r.contradictions if r.contradictions else []
-    print(f"  contradiction: detected={len(contra)}")
-    for c in contra:print(f"    {c.subject} {c.relation}: {c.conflicting_objects} sev={c.severity}")
+    results['contradiction']=bool(contra)
+    print(f"  contradiction: {'PASS' if contra else 'FAIL'} detected={len(contra)}")
+    for c in contra:print(f"    {c.subject} {c.relation}: {c.conflicting_objects} sev={c.severity:.2f}")
+    passed=sum(1 for v in results.values() if v)
+    print(f"  TOTAL: {passed}/{len(results)} patterns passing")
 def bench_writeback():
     s=WMTMStore(capacity=50)
     ut=UtilityTracker()
