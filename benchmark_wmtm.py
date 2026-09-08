@@ -32,47 +32,57 @@ def bench_stability():
         o.cycle(recall_fn=lambda r=mk(random.randint(0,15),c):r)
         if len(s)>50:v+=1
     print(f"B3 Stability: 200 stress cycles cap=50 violations={v}")
+def _run_inference_test(name, recall_items, check_filter, contradictions=False):
+    """Run a single inference-pattern test and return (passed, result_obj)."""
+    s = WMTMStore(capacity=50)
+    o = WMTMOrchestrator(s)
+    r = o.cycle(recall_fn=lambda: recall_items)
+    if contradictions:
+        contra = r.contradictions if r.contradictions else []
+        passed = bool(contra)
+        print(f"  {name:<15}{'PASS' if passed else 'FAIL':>5} detected={len(contra)}")
+        for c in contra:
+            print(f"    {c.subject} {c.relation}: {c.conflicting_objects} sev={c.severity:.2f}")
+        return passed, r
+    d = [i for i in s.get_active_set() if check_filter(i)]
+    passed = bool(d)
+    print(f"  {name:<15}{'PASS' if passed else 'FAIL':>5} derived={r.admitted_derived}")
+    return passed, r
+
 def bench_inference():
-    results={}
+    results = {}
     # deduction
-    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
-    r=o.cycle(recall_fn=lambda:[('r1','alpha implies beta',80.0),('r2','beta implies gamma',80.0)])
-    d=[i for i in s.get_active_set() if i.source_type=="derived"]
-    results['deduction']=bool(d)
-    print(f"  deduction:     {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    passed, _ = _run_inference_test(
+        "deduction:", [('r1','alpha implies beta',80.0),('r2','beta implies gamma',80.0)],
+        lambda i: i.source_type == "derived")
+    results['deduction'] = passed
     # induction
-    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
-    r=o.cycle(recall_fn=lambda:[('r1','alpha has property_x',60.0),('r2','alpha has property_x',60.0)])
-    d=[i for i in s.get_active_set() if i.source_type=="derived" and 'induced' in i.content]
-    results['induction']=bool(d)
-    print(f"  induction:     {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    passed, _ = _run_inference_test(
+        "induction:", [('r1','alpha has property_x',60.0),('r2','alpha has property_x',60.0)],
+        lambda i: i.source_type == "derived" and 'induced' in i.content)
+    results['induction'] = passed
     # abduction
-    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
-    r=o.cycle(recall_fn=lambda:[('r1','rain implies wet_ground',80.0),('r2','wet_ground is observed',90.0)])
-    d=[i for i in s.get_active_set() if i.source_type=="derived"]
-    results['abduction']=bool(d)
-    print(f"  abduction:     {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    passed, _ = _run_inference_test(
+        "abduction:", [('r1','rain implies wet_ground',80.0),('r2','wet_ground is observed',90.0)],
+        lambda i: i.source_type == "derived")
+    results['abduction'] = passed
     # analogy
-    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
-    r=o.cycle(recall_fn=lambda:[('r1','alpha has red',80.0),('r2','beta has green',80.0)])
-    d=[i for i in s.get_active_set() if i.source_type=="derived"]
-    results['analogy']=bool(d)
-    print(f"  analogy:       {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    passed, _ = _run_inference_test(
+        "analogy:", [('r1','alpha has red',80.0),('r2','beta has green',80.0)],
+        lambda i: i.source_type == "derived")
+    results['analogy'] = passed
     # evidence aggregation
-    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
-    r=o.cycle(recall_fn=lambda:[('r1','alpha has property_x',60.0),('r2','alpha has property_x',60.0)])
-    d=[i for i in s.get_active_set() if i.source_type=="derived" and 'aggregated' in i.content]
-    results['evidence']=bool(d)
-    print(f"  evidence_agg:  {'PASS' if d else 'FAIL'} derived={r.admitted_derived}")
+    passed, _ = _run_inference_test(
+        "evidence_agg:", [('r1','alpha has property_x',60.0),('r2','alpha has property_x',60.0)],
+        lambda i: i.source_type == "derived" and 'aggregated' in i.content)
+    results['evidence'] = passed
     # contradiction
-    s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
-    r=o.cycle(recall_fn=lambda:[('r1','sky has blue',80.0),('r2','sky has green',80.0)])
-    contra=r.contradictions if r.contradictions else []
-    results['contradiction']=bool(contra)
-    print(f"  contradiction: {'PASS' if contra else 'FAIL'} detected={len(contra)}")
-    for c in contra:print(f"    {c.subject} {c.relation}: {c.conflicting_objects} sev={c.severity:.2f}")
-    passed=sum(1 for v in results.values() if v)
-    print(f"  TOTAL: {passed}/{len(results)} patterns passing")
+    passed, _ = _run_inference_test(
+        "contradiction:", [('r1','sky has blue',80.0),('r2','sky has green',80.0)],
+        None, contradictions=True)
+    results['contradiction'] = passed
+    total = sum(1 for v in results.values() if v)
+    print(f"  TOTAL: {total}/{len(results)} patterns passing")
 def bench_writeback():
     s=WMTMStore(capacity=50)
     ut=UtilityTracker()
@@ -90,33 +100,65 @@ def bench_forgetting():
     rec=[(f'r{i}',f'item_{i} implies val_{i}',50.0) for i in range(15)]
     r=o.cycle(recall_fn=lambda r=rec:r)
     print(f"B7 Forgetting: store={len(s)} evicted={r.evicted} forget_log={len(o.forget_log)}")
+def _run_config(label, sd, st, dma):
+    """Run one ECAN config over 200 cycles and return (label, score, avg_occ, total_derived)."""
+    random.seed(42)
+    s = WMTMStore(capacity=50)
+    o = WMTMOrchestrator(s)
+    o.forgetting_policy = ForgettingPolicy(sti_threshold=st, derived_max_age=dma, derived_sti_threshold=st * 2)
+    _apply_decay_patch(s, sd)
+    occ, inf, ev = _run_sweep_cycles(o, s)
+    ao = sum(occ) / len(occ)
+    stab = max(occ) <= 50
+    sc = _compute_score(stab, ao, sum(inf), sum(ev))
+    st_str = 'PASS' if stab else 'FAIL'
+    print(f'{label:<16}{ao:>7.1f}{st_str:>5}{sum(inf):>6}{sum(ev):>6}{sc:>6.3f}')
+    return (label, sc, ao, sum(inf))
+
+def _apply_decay_patch(store, sd_val):
+    """Patch store.admit to set sti_decay on admitted items."""
+    oa = store.admit
+    def inner(*a, **kw):
+        item = oa(*a, **kw)
+        if item is not None:
+            item.attention.sti_decay = sd_val
+        return item
+    store.admit = inner
+
+def _run_sweep_cycles(orch, store, n=200):
+    """Run n cycles and collect occupancy/derived/evicted metrics."""
+    occ, inf, ev = [], [], []
+    for c in range(n):
+        if c % 5 == 0:
+            r = orch.cycle(recall_fn=lambda r=mk(5, c): r)
+        else:
+            r = orch.cycle()
+        occ.append(len(store)); inf.append(r.admitted_derived); ev.append(r.evicted)
+    return occ, inf, ev
+
+def _compute_score(stab, ao, total_derived, total_evicted):
+    """Compute the ECAN stability/occupancy/derived/eviction score."""
+    if not stab:
+        return 0.0
+    return (max(0, 1 - abs(ao / 50 - 0.7)) * 0.4
+            + min(total_derived / 25, 1) * 0.3
+            + max(0, 1 - abs(total_evicted / 200 - 0.4)) * 0.3)
+
 def param_sweep():
-    configs=[('baseline',0.90,0.05,20),('fast_decay',0.80,0.05,20),('slow_decay',0.97,0.05,20),('high_thresh',0.90,0.15,20),('low_thresh',0.90,0.02,20),('short_lived',0.90,0.05,10),('long_lived',0.90,0.05,40),('aggressive',0.80,0.15,10),('conservative',0.97,0.02,40),('balanced',0.92,0.07,15)]
+    configs = [
+        ('baseline', 0.90, 0.05, 20), ('fast_decay', 0.80, 0.05, 20),
+        ('slow_decay', 0.97, 0.05, 20), ('high_thresh', 0.90, 0.15, 20),
+        ('low_thresh', 0.90, 0.02, 20), ('short_lived', 0.90, 0.05, 10),
+        ('long_lived', 0.90, 0.05, 40), ('aggressive', 0.80, 0.15, 10),
+        ('conservative', 0.97, 0.02, 40), ('balanced', 0.92, 0.07, 15),
+    ]
     print(f"\nB8 ECAN Parameter Sweep (200c/config, cap=50):")
-    print("-"*52)
-    best=None
-    for lbl,sd,st,dma in configs:
-        random.seed(42)
-        s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
-        o.forgetting_policy=ForgettingPolicy(sti_threshold=st,derived_max_age=dma,derived_sti_threshold=st*2)
-        oa=s.admit
-        def pa(sd_val=sd):
-            def inner(*a,**kw):
-                item=oa(*a,**kw)
-                if item is not None:item.attention.sti_decay=sd_val
-                return item
-            return inner
-        s.admit=pa()
-        occ,inf,ev=[],[],[]
-        for c in range(200):
-            if c%5==0:r=o.cycle(recall_fn=lambda r=mk(5,c):r)
-            else:r=o.cycle()
-            occ.append(len(s));inf.append(r.admitted_derived);ev.append(r.evicted)
-        ao=sum(occ)/len(occ);stab=max(occ)<=50
-        sc=0 if not stab else max(0,1-abs(ao/50-0.7))*0.4+min(sum(inf)/25,1)*0.3+max(0,1-abs(sum(ev)/200-0.4))*0.3
-        st_str='PASS' if stab else 'FAIL'
-        print(f'{lbl:<16}{ao:>7.1f}{st_str:>5}{sum(inf):>6}{sum(ev):>6}{sc:>6.3f}')
-        if best is None or sc>best[1]:best=(lbl,sc,ao,sum(inf))
+    print("-" * 52)
+    best = None
+    for lbl, sd, st, dma in configs:
+        result = _run_config(lbl, sd, st, dma)
+        if best is None or result[1] > best[1]:
+            best = result
     print(f'\nBest: {best[0]} (score={best[1]:.3f}, occ={best[2]:.1f}, derived={best[3]})')
 
 if __name__=="__main__":

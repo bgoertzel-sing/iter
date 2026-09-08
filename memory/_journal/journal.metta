@@ -44758,3 +44758,53 @@ All 145 existing tests pass. benchmark_wmtm.py created (184 lines, syntax valid)
 (About ep-note-20260908T031745Z journal)
 (EventNote ev-ep-note-20260908T031745Z "Code quality refactoring (2026-09-07) — COMMIT 3: Refactored recall_bridge.py parse_journal() complexity 19→6 by extracting _collect_superseded() and _populate_cluster_fields(). All 222 tests pass. Remaining high-complexity (>=8): inference.py::_deduction=9, _abduction=8, _analogy=9; writeback.py::select_candidates=9; recall_bridge.py::spreading_activation=9. These are inference/algorithm internals where the complexity is inherent to the logic.")
 ;;; END MemoryCluster ep-note-20260908T031745Z
+;;; BEGIN MemoryCluster ep-note-20260908T034556Z
+(MemoryCluster ep-note-20260908T034556Z)
+(SchemaVersion ep-note-20260908T034556Z medium-memory-v1)
+(ClusterType ep-note-20260908T034556Z Episode)
+(ClusterSource ep-note-20260908T034556Z iter-experience)
+(ClusterOpenedAt ep-note-20260908T034556Z 2026-09-08T03:45:56Z)
+(Contains ep-note-20260908T034556Z ev-ep-note-20260908T034556Z)
+(ObservedEvent ev-ep-note-20260908T034556Z)
+(About ep-note-20260908T034556Z journal)
+(EventNote ev-ep-note-20260908T034556Z "Code-quality sweep complete (2026-09-07):
+
+Commits:
+- 12d3740: Fixed journal pollution (test_tools.py uses JOURNAL_DIR env var + temp dir; cleaned 75 TEST_MARKER clusters from journal.metta)
+- 40b7654: Created test_wmtm_recall_bridge.py (23 tests, total 222→245)
+
+Code quality audit:
+- All 52 public functions have type annotations + docstrings
+- No unused imports
+- resolve_contradictions() already refactored (CC 12→2)
+- All test coverage gaps resolved
+- Remaining CC>=8 are inherent algorithm logic (pattern matching, graph traversal, selection)
+
+All 245 tests pass.")
+;;; END MemoryCluster ep-note-20260908T034556Z
+;;; BEGIN MemoryCluster ep-note-20260908T035444Z
+(MemoryCluster ep-note-20260908T035444Z)
+(SchemaVersion ep-note-20260908T035444Z medium-memory-v1)
+(ClusterType ep-note-20260908T035444Z Episode)
+(ClusterSource ep-note-20260908T035444Z iter-experience)
+(ClusterOpenedAt ep-note-20260908T035444Z 2026-09-08T03:54:44Z)
+(Contains ep-note-20260908T035444Z ev-ep-note-20260908T035444Z)
+(ObservedEvent ev-ep-note-20260908T035444Z)
+(About ep-note-20260908T035444Z journal)
+(EventNote ev-ep-note-20260908T035444Z "Code-quality sweep FINAL UPDATE (2026-09-07):
+
+Additional commits beyond previous status:
+- f97739e: Refactored 3 functions:
+  * forgetting.py::evaluate() CC 9→3 (5 helpers extracted)
+  * recall_bridge.py::spreading_activation() CC 11→4 (2 helpers extracted)
+  * writeback.py::select_candidates() CC 9→4 (3 helpers extracted)
+- de6f4e3: Refactored recall_bridge.py::recall() CC 8→4 (_score_cluster extracted)
+
+All 277 tests pass (verified in 4 batches due to shell timeout).
+
+Remaining CC≥7 (inherent algorithm logic, not worth refactoring):
+- inference.py: _deduction()=9, _analogy()=9, _evidence_aggregation()=9, _abduction()=8, detect_contradictions()=8
+- recall_bridge.py: parse_journal()=7
+
+Total commits this session: 12d3740, 40b7654, bf0ddb6, f97739e, de6f4e3")
+;;; END MemoryCluster ep-note-20260908T035444Z
