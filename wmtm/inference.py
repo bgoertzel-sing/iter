@@ -24,6 +24,7 @@ class BeliefTriple:
         return f"({self.subject} -> {self.relation} -> {self.object})"
 
     def to_text(self) -> str:
+        """Convert the belief triple to a human-readable text string."""
         return f"{self.subject} {self.relation} {self.object}"
 
 
@@ -124,7 +125,7 @@ class WMTMInferenceEngine:
         inference_budget: int = 5,
         sti_focus_ratio: float = 0.5,
         budget_confidence_threshold: float = 0.3,
-    ):
+    ) -> None:
         self.novelty_bonus = novelty_bonus
         self.min_confidence = min_confidence
         self.inference_budget = inference_budget

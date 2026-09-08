@@ -76,7 +76,7 @@ class WritebackManager:
         min_utility: float = 2.0,
         derived_min_utility: float = 1.5,
         derived_min_age: int = 15,
-    ):
+    ) -> None:
         self.min_age = min_age
         self.min_utility = min_utility
         self.derived_min_utility = derived_min_utility

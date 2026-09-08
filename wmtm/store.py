@@ -66,6 +66,7 @@ class WMTMStore:
         return self._items.pop(item_id, None)
 
     def get(self, item_id: str) -> Optional[WMTMItem]:
+        """Retrieve an item by ID, returning None if not found."""
         return self._items.get(item_id)
 
     def touch(self, item_id: str) -> None:

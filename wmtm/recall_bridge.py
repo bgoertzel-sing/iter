@@ -36,6 +36,7 @@ class LTMCluster:
 
     @property
     def text(self) -> str:
+        """Return concatenated about_tags and event_note as searchable text."""
         return " ".join(self.about_tags) + " " + self.event_note
 
 

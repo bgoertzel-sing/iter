@@ -90,9 +90,11 @@ class UtilityTracker:
             item.utility = rec.utility_score
 
     def get_record(self, item_id: str) -> Optional[UtilityRecord]:
+        """Return the utility record for an item, or None if not tracked."""
         return self._records.get(item_id)
 
     def get_utility(self, item_id: str) -> float:
+        """Return the current utility score for an item (0.0 if untracked)."""
         rec = self._records.get(item_id)
         return rec.utility_score if rec else 0.0
 

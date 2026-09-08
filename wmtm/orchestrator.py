@@ -52,7 +52,7 @@ class WMTMOrchestrator:
         forgetting_policy: Optional[ForgettingPolicy] = None,
         forgetting_log: Optional[ForgettingLog] = None,
         writeback_manager: Optional[WritebackManager] = None,
-    ):
+    ) -> None:
         self.store = store
         self.engine = inference_engine or WMTMInferenceEngine()
         self.utility = utility_tracker or UtilityTracker()
@@ -174,4 +174,5 @@ class WMTMOrchestrator:
 
     @property
     def cycle_count(self) -> int:
+        """Return the current cycle count."""
         return self._cycle

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .item import WMTMItem
 from .store import WMTMStore
 
 
@@ -58,7 +59,7 @@ class ForgettingPolicy:
         # Filter out None (items already gone)
         return [e for e in evicted if e is not None]
 
-    def should_writeback(self, item, min_survival_cycles: int = 30,
+    def should_writeback(self, item: WMTMItem, min_survival_cycles: int = 30,
                          min_utility: float = 2.0) -> bool:
         """A recalled item that survived many cycles with high utility
         may deserve enrichment back to LTM."""
