@@ -160,24 +160,9 @@ class RecallBridge:
         for cluster in self._clusters:
             if cluster.id in active_ids:
                 continue
-
-            score: float = 0.0
-            cluster_text: set[str] = self._tokenize(cluster.text)
-            matching_terms: set[str] = query_terms & cluster_text
-            score += len(matching_terms) * 1.0
-
-            cluster_text_raw: str = cluster.text.lower()
-            for term in query_terms:
-                if term in cluster_text_raw:
-                    score += 0.5
-
-            if score == 0:
+            score = self._score_cluster(cluster, query_terms, active_ids, store)
+            if score <= 0:
                 continue
-
-            score += min(cluster.evidence_support_count * 0.01, 2.0)
-            spread_score: float = self._spreading_activation_for(cluster, active_ids, store)
-            score += spread_score
-
             candidates.append(RecallCandidate(
                 cluster_id=cluster.id,
                 content=cluster.event_note or cluster.text,
@@ -188,6 +173,32 @@ class RecallBridge:
 
         candidates.sort(key=lambda c: c.score, reverse=True)
         return candidates[:top_k]
+
+    def _score_cluster(
+        self,
+        cluster: LTMCluster,
+        query_terms: set[str],
+        active_ids: set[str],
+        store: WMTMStore,
+    ) -> float:
+        """Compute relevance score for a cluster against query terms."""
+        score: float = 0.0
+        cluster_text: set[str] = self._tokenize(cluster.text)
+        matching_terms: set[str] = query_terms & cluster_text
+        score += len(matching_terms) * 1.0
+
+        cluster_text_raw: str = cluster.text.lower()
+        for term in query_terms:
+            if term in cluster_text_raw:
+                score += 0.5
+
+        if score == 0:
+            return 0.0
+
+        score += min(cluster.evidence_support_count * 0.01, 2.0)
+        spread_score: float = self._spreading_activation_for(cluster, active_ids, store)
+        score += spread_score
+        return score
 
     def spreading_activation(
         self,
