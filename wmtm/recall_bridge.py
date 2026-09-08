@@ -56,18 +56,34 @@ def _populate_cluster_fields(cluster: LTMCluster, stripped: str) -> None:
     for m in _RE_ABOUT.finditer(stripped):
         if m.group(1) == cluster.id:
             cluster.about_tags.append(m.group(2))
-    for m in _RE_EVENT_NOTE.finditer(stripped):
-        cluster.event_note = m.group(2)
+    _extract_simple(cluster, stripped, _RE_EVENT_NOTE, "event_note")
     for m in _RE_EVIDENCE_FOR.finditer(stripped):
         cluster.evidence_for.append(m.group(2))
-    for m in _RE_CLUSTER_TYPE.finditer(stripped):
-        if m.group(1) == cluster.id:
-            cluster.cluster_type = m.group(2)
-    for m in _RE_EVIDENCE_SUPPORT.finditer(stripped):
-        if m.group(1) == cluster.id:
-            cluster.evidence_support_count = int(m.group(2))
+    _extract_cluster_scoped(cluster, stripped, _RE_CLUSTER_TYPE, "cluster_type")
+    _extract_cluster_scoped_int(cluster, stripped, _RE_EVIDENCE_SUPPORT, "evidence_support_count")
     for m in _RE_PROMOTES_FROM.finditer(stripped):
         cluster.promotes_from.append(m.group(2))
+
+
+def _extract_simple(cluster: LTMCluster, stripped: str, regex, attr: str) -> None:
+    """Set a simple string attribute from the first regex match."""
+    m = regex.search(stripped)
+    if m:
+        setattr(cluster, attr, m.group(2))
+
+
+def _extract_cluster_scoped(cluster: LTMCluster, stripped: str, regex, attr: str) -> None:
+    """Set an attribute only if the regex match's group(1) equals the cluster ID."""
+    for m in regex.finditer(stripped):
+        if m.group(1) == cluster.id:
+            setattr(cluster, attr, m.group(2))
+
+
+def _extract_cluster_scoped_int(cluster: LTMCluster, stripped: str, regex, attr: str) -> None:
+    """Set an int attribute only if the regex match's group(1) equals the cluster ID."""
+    for m in regex.finditer(stripped):
+        if m.group(1) == cluster.id:
+            setattr(cluster, attr, int(m.group(2)))
 
 
 def parse_journal(lines: list[str]) -> list[LTMCluster]:
