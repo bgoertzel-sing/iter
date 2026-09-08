@@ -40,14 +40,45 @@ class LTMCluster:
         return " ".join(self.about_tags) + " " + self.event_note
 
 
-def parse_journal(lines: list[str]) -> list[LTMCluster]:
-    """Parse journal lines into LTMCluster objects, skipping superseded."""
+def _collect_superseded(lines: list[str]) -> set[str]:
+    """Scan all lines for Supersedes markers and return superseded cluster IDs."""
     superseded: set[str] = set()
     for line in lines:
         for m in _RE_SUPERSEDES.finditer(line):
             old_id: str = m.group(2)
             if old_id != "old-id":
                 superseded.add(old_id)
+    return superseded
+
+
+def _populate_cluster_fields(cluster: LTMCluster, stripped: str) -> None:
+    """Extract metadata from a single line into the current cluster."""
+    for m in _RE_ABOUT.finditer(stripped):
+        if m.group(1) == cluster.id:
+            cluster.about_tags.append(m.group(2))
+    for m in _RE_EVENT_NOTE.finditer(stripped):
+        cluster.event_note = m.group(2)
+    for m in _RE_EVIDENCE_FOR.finditer(stripped):
+        cluster.evidence_for.append(m.group(2))
+    for m in _RE_CLUSTER_TYPE.finditer(stripped):
+        if m.group(1) == cluster.id:
+            cluster.cluster_type = m.group(2)
+    for m in _RE_EVIDENCE_SUPPORT.finditer(stripped):
+        if m.group(1) == cluster.id:
+            cluster.evidence_support_count = int(m.group(2))
+    for m in _RE_PROMOTES_FROM.finditer(stripped):
+        cluster.promotes_from.append(m.group(2))
+
+
+def parse_journal(lines: list[str]) -> list[LTMCluster]:
+    """Parse journal lines into LTMCluster objects, skipping superseded.
+
+    Two-pass parser:
+    1. Collect all Supersedes markers to identify superseded cluster IDs.
+    2. Walk lines, opening clusters on BEGIN markers, populating fields
+       from metadata lines, and closing on END markers (skipping superseded).
+    """
+    superseded: set[str] = _collect_superseded(lines)
 
     clusters: list[LTMCluster] = []
     current: Optional[LTMCluster] = None
@@ -74,21 +105,7 @@ def parse_journal(lines: list[str]) -> list[LTMCluster]:
 
         if current is not None:
             current_lines.append(line)
-            for m in _RE_ABOUT.finditer(stripped):
-                if m.group(1) == current.id:
-                    current.about_tags.append(m.group(2))
-            for m in _RE_EVENT_NOTE.finditer(stripped):
-                current.event_note = m.group(2)
-            for m in _RE_EVIDENCE_FOR.finditer(stripped):
-                current.evidence_for.append(m.group(2))
-            for m in _RE_CLUSTER_TYPE.finditer(stripped):
-                if m.group(1) == current.id:
-                    current.cluster_type = m.group(2)
-            for m in _RE_EVIDENCE_SUPPORT.finditer(stripped):
-                if m.group(1) == current.id:
-                    current.evidence_support_count = int(m.group(2))
-            for m in _RE_PROMOTES_FROM.finditer(stripped):
-                current.promotes_from.append(m.group(2))
+            _populate_cluster_fields(current, stripped)
 
     return clusters
 
