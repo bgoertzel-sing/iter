@@ -109,7 +109,7 @@ class WMTMOrchestrator:
             return True
         return False
 
-    def _admit_candidate(self, cand, index: int):
+    def _admit_candidate(self, cand, index: int) -> None:
         """Admit a single derived candidate into the store."""
         item_id = f"derived-{cand.inference_type}-{self._cycle}-{index}"
         return self.store.admit(
