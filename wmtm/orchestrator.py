@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 from .store import WMTMStore
-from .inference import WMTMInferenceEngine, InferenceCandidate
+from .inference import WMTMInferenceEngine, InferenceCandidate, ContradictionReport
 from .utility import UtilityTracker
 from .forgetting_log import ForgettingLog
 from .forgetting import ForgettingPolicy
@@ -32,6 +32,7 @@ class CycleResult:
     evicted: int = 0
     written_back: int = 0
     active_count: int = 0
+    contradictions: list = field(default_factory=list)
 
 
 class WMTMOrchestrator:
@@ -123,6 +124,10 @@ class WMTMOrchestrator:
         # 3b. Log any items evicted by capacity during derived admission
         for ev in self.store.drain_pending_evicted():
             self.forget_log.record(ev, self._cycle)
+
+        # 3c. Detect contradictions in the active set (report only, resolution is Phase 5)
+        contradictions = self.engine.detect_contradictions(self.store)
+        result.contradictions = contradictions
 
         # 4. Tick: decay + age
         evicted_by_tick = self.store.tick()
