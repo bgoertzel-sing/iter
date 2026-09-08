@@ -33,33 +33,41 @@ def _read_lines():
     except Exception:
         return []
 
+def _collect_superseded_ids(lines):
+    """Scan all lines for (Supersedes new-id old-id) pairs and return the set of superseded old-ids."""
+    superseded = set()
+    for line in lines:
+        if "(Supersedes" not in line:
+            continue
+        for m in _RE_SUPERSEDES.finditer(line):
+            new_id, old_id = m.group(1), m.group(2)
+            if new_id != "new-id" and old_id != "old-id":
+                superseded.add(old_id)
+    return superseded
+
+def _filter_superseded(lines, superseded):
+    """Walk lines, dropping clusters whose BEGIN id is in the superseded set."""
+    out = []
+    dropping = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith(";;; BEGIN MemoryCluster"):
+            dropping = stripped.rsplit(" ", 1)[-1] in superseded
+            if not dropping:
+                out.append(line)
+        elif stripped.startswith(";;; END MemoryCluster"):
+            if not dropping:
+                out.append(line)
+            dropping = False
+        elif not dropping:
+            out.append(line)
+    return out
+
 def resolve_supersedes(lines):
     """Given journal lines, return lines with superseded clusters removed."""
     try:
-        superseded = set()
-        for line in lines:
-            if "(Supersedes" not in line:
-                continue
-            for m in _RE_SUPERSEDES.finditer(line):
-                new_id, old_id = m.group(1), m.group(2)
-                # Only treat as a link when it does not look like placeholder text
-                if new_id != "new-id" and old_id != "old-id":
-                    superseded.add(old_id)
-        out = []
-        dropping = False
-        for line in lines:
-            stripped = line.strip()
-            if stripped.startswith(";;; BEGIN MemoryCluster"):
-                dropping = stripped.rsplit(" ", 1)[-1] in superseded
-                if not dropping:
-                    out.append(line)
-            elif stripped.startswith(";;; END MemoryCluster"):
-                if not dropping:
-                    out.append(line)
-                dropping = False
-            elif not dropping:
-                out.append(line)
-        return out
+        superseded = _collect_superseded_ids(lines)
+        return _filter_superseded(lines, superseded)
     except Exception:
         return lines
 
