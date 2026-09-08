@@ -17,6 +17,7 @@
 (EvidenceFor ev-0902a ep-20260902235454013169)
 (EvidenceFor ev-0902a ep-0902b)
 (EvidenceFor ev-0902a promo-auto-fact-roadmap-v2)
+;;; END MemoryCluster ep-0902a
 ;;; BEGIN MemoryCluster ep-0902b
 (MemoryCluster ep-0902b)
 (SchemaVersion ep-0902b medium-memory-v1)
@@ -3091,6 +3092,7 @@ ADAPTER CONTRACTS DEFINED: AttentionProjection (inputs: snapshot ID, record IDs,
 STAGED PLAN: Phase A (pin+conform) → B (read-only projection) → C (CIP/community) → D (OmegaSelf shadow) → E (emotion shadow) → F (regenerative lesions).
 
 PENDING: Ben's explicit go to begin Phase A implementation.")
+;;; END MemoryCluster ep-note-20260904T052215Z
 ;;; BEGIN MemoryCluster ep-note-20260904T053928Z
 (MemoryCluster ep-note-20260904T053928Z)
 (SchemaVersion ep-note-20260904T053928Z medium-memory-v1)
@@ -3584,6 +3586,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (ObservedEvent ev-ep-note-20260904T181510Z)
 (About ep-note-20260904T181510Z journal)
 (EventNote ev-ep-note-20260904T181510Z "11:15 PENDING TASK COMPLETE. GoalChainer integration + 9-test suite all green (823t+215sub total). ECAN implementation fully tested (ecan.py 550L, ecan_bridge 15 tests, ecan_game 18 tests, stimulus 20 tests). Next roadmap items (ECAN tuning, GOLEM-Iter) awaiting Ben's go. Memory file updated.")
+;;; END MemoryCluster ep-note-20260904T181510Z
 ;;; BEGIN MemoryCluster ep-note-20260904T190715Z
 (MemoryCluster ep-note-20260904T190715Z)
 (SchemaVersion ep-note-20260904T190715Z medium-memory-v1)
@@ -5067,6 +5070,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceFor ev-ep-note-20260903T163039Z ev-rsmf)
 (EventNote ev-evlink-20260904-epcons "Episode-to-LTM consolidation pass 09-04 22:44: 238 new EvidenceFor edges linking uncited episodes to LTM items (smart matching + zero-evidence repair). Coverage improved for LTM items previously lacking evidence.")
 (EvidenceSupportCount fact-evlink-20260904-epconsolidation 219)
+;;; END MemoryCluster fact-evlink-20260904-epconsolidation
 ;;; BEGIN MemoryCluster ep-note-20260905T054454Z
 (MemoryCluster ep-note-20260905T054454Z)
 (SchemaVersion ep-note-20260905T054454Z medium-memory-v1)
@@ -6537,6 +6541,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Supersedes fact-evlink-final-20260904 ev-evlink-final-20260904 ev-evlink4-20260905)
 (Supersedes fact-evlink-final-20260904 ev-evlink-final-20260904 ev-evlink5-20260905)
 (EvidenceSupportCount fact-evlink-final-20260904 99)
+;;; END MemoryCluster fact-evlink-final-20260904
 ;;; BEGIN MemoryCluster ep-note-20260905T061942Z
 (MemoryCluster ep-note-20260905T061942Z)
 (SchemaVersion ep-note-20260905T061942Z medium-memory-v1)
@@ -7357,6 +7362,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Supersedes fact-enrich-lowev-final-20260904 ev-enrich-lowev-final-20260904 ev-evlink4-20260905)
 (Supersedes fact-enrich-lowev-final-20260904 ev-enrich-lowev-final-20260904 ev-evlink5-20260905)
 (EvidenceSupportCount fact-enrich-lowev-final-20260904 182)
+;;; END MemoryCluster fact-enrich-lowev-final-20260904
 ;;; BEGIN MemoryCluster ep-note-20260905T063453Z
 (MemoryCluster ep-note-20260905T063453Z)
 (SchemaVersion ep-note-20260905T063453Z medium-memory-v1)
@@ -7791,6 +7797,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceFor ev-tail-19 ev-fp2d-v2)
 (EventNote ev-batch-evlink-20260904 "Batch evidence-link consolidation 09-04 23:57: 255 new EvidenceFor edges connecting unlinked episodes to LTM items (score>=5 keyword+about overlap). Brings all LTM items above low-ev threshold and connects remaining uncited episodes.")
 (EvidenceSupportCount fact-batch-evlink-20260904 121)
+;;; END MemoryCluster fact-batch-evlink-20260904
 ;;; BEGIN MemoryCluster fact-lowev-fix-20260904
 (MemoryCluster fact-lowev-fix-20260904)
 (SchemaVersion fact-lowev-fix-20260904 medium-memory-v1)
@@ -8464,6 +8471,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (ObservedEvent ev-ep-note-20260905T095406Z)
 (About ep-note-20260905T095406Z journal)
 (EventNote ev-ep-note-20260905T095406Z "02:54 UTC 09-05: VALIDATION PASS. 365/365 BEGIN/END balanced, 0 duplicate EvidenceFor edges, 0 structural nesting errors. 46 bel-* legacy refs are pre-existing STV1.0 belief IDs (consolidated into fact-* clusters via Supersedes), NOT introduced this session. All 5 new promos have valid event references. Journal structurally sound.")
+;;; END MemoryCluster ep-note-20260905T095406Z
 ;;; BEGIN MemoryCluster ep-note-20260905T100502Z
 (MemoryCluster ep-note-20260905T100502Z)
 (SchemaVersion ep-note-20260905T100502Z medium-memory-v1)
@@ -10215,6 +10223,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (PromotesFrom ev-promo-auto-fact-ecan-integration fact-ecan-integration)
 (EvidenceSupportCount promo-auto-fact-ecan-integration 49)
 (EvidenceFor ev-promo-auto-fact-ecan-integration fact-ecan-integration)
+;;; END MemoryCluster promo-auto-fact-ecan-integration
 ;;; BEGIN MemoryCluster ep-note-20260905T163653Z
 (MemoryCluster ep-note-20260905T163653Z)
 (SchemaVersion ep-note-20260905T163653Z medium-memory-v1)
@@ -10310,6 +10319,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-auto-fact-store-api "append_cluster validates each append atomically; query_about is exact whole-token match on single-token About tags; query_cluster is exact cluster-id lookup; query_id is mention-search; atom ids are g")
 (PromotesFrom ev-promo-auto-fact-store-api fact-store-api)
 (EvidenceSupportCount promo-auto-fact-store-api 17)
+;;; END MemoryCluster promo-auto-fact-store-api
 ;;; BEGIN MemoryCluster ep-note-20260905T164137Z
 (MemoryCluster ep-note-20260905T164137Z)
 (SchemaVersion ep-note-20260905T164137Z medium-memory-v1)
@@ -13102,6 +13112,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260906T020135Z journal)
 (EventNote ev-ep-note-20260906T020135Z "Consolidation 19:00 PASS: 630 active (453E/46F/131P), 10808 EF, 0 unlinked, 0 cold, 0 dupes. 20 Contradicts links exist. Now reviewing contradicts for validity — many appear to be false positives (audit PASS episodes flagged as contradicting facts). Will remove invalid ones and keep genuine corrections.")
 (EvidenceSupportCount ep-note-20260906T020135Z 10)
+;;; END MemoryCluster ep-note-20260906T020135Z
 ;;; BEGIN MemoryCluster ep-note-20260906T020744Z
 (MemoryCluster ep-note-20260906T020744Z)
 (SchemaVersion ep-note-20260906T020744Z medium-memory-v1)
@@ -40171,3 +40182,14 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260908T063204Z journal)
 (EventNote ev-ep-note-20260908T063204Z "JOURNAL TRIM 2026-09-08: Removed 3 redundant cleanup-note clusters (061914Z, 062016Z, 062053Z), kept canonical 062047Z. 1080→1077 clusters, 40195→40162 lines. All cleanup work complete.")
 ;;; END MemoryCluster ep-note-20260908T063204Z
+;;; BEGIN MemoryCluster ep-note-20260908T063224Z
+(MemoryCluster ep-note-20260908T063224Z)
+(SchemaVersion ep-note-20260908T063224Z medium-memory-v1)
+(ClusterType ep-note-20260908T063224Z Episode)
+(ClusterSource ep-note-20260908T063224Z iter-experience)
+(ClusterOpenedAt ep-note-20260908T063224Z 2026-09-08T06:32:24Z)
+(Contains ep-note-20260908T063224Z ev-ep-note-20260908T063224Z)
+(ObservedEvent ev-ep-note-20260908T063224Z)
+(About ep-note-20260908T063224Z journal)
+(EventNote ev-ep-note-20260908T063224Z "SESSION STATUS 23:32Z: Journal trim committed. 1077 clusters, 40162 lines. All autonomous work complete (WMTM benchmark, code quality refactoring, journal cleanup). Waiting for new user input.")
+;;; END MemoryCluster ep-note-20260908T063224Z
