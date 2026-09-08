@@ -32,6 +32,10 @@ class AttentionValue:
         """Inject attention (typically into STI)."""
         self.sti += amount
 
+    def penalty(self, amount: float) -> None:
+        """Reduce STI by a penalty amount (clamped to >= 0)."""
+        self.sti = max(0.0, self.sti - amount)
+
     @property
     def total(self) -> float:
         """Weighted composite attention for ranking."""

@@ -83,6 +83,25 @@ class ContradictionReport:
     severity: float  # higher = more severe
 
 
+@dataclass
+class ContradictionResolution:
+    """Records the resolution of a contradiction.
+
+    The winner is the item with the highest composite score
+    (attention + utility). Losers are penalized or evicted
+    depending on severity.
+    """
+    report: ContradictionReport
+    winner_id: str
+    loser_ids: list[str]
+    strategy: str  # 'composite' (STI + utility weighted)
+    winner_score: float
+    loser_scores: list[float]
+    action: str  # 'penalize' or 'evict'
+    evicted_ids: list[str] = field(default_factory=list)
+    evicted_items: list = field(default_factory=list)  # WMTMItem objects that were evicted
+
+
 class WMTMInferenceEngine:
     """Runs PLN-style inference over the active WMTM set.
 
@@ -348,6 +367,77 @@ class WMTMInferenceEngine:
                     severity=severity,
                 ))
         return reports
+
+    def resolve_contradictions(
+        self,
+        store: WMTMStore,
+        reports: list[ContradictionReport],
+        eviction_severity_threshold: float = 0.9,
+    ) -> list[ContradictionResolution]:
+        """Resolve contradictions by attention+utility-weighted winner selection.
+
+        For each contradiction:
+        1. Compute composite score for each involved item:
+           score = sti * 1.0 + utility * 0.5
+        2. Highest-scoring item wins (gets a small STI boost).
+        3. Losing items are either:
+           - Penalized (STI reduction) if severity < eviction_severity_threshold
+           - Evicted from the store if severity >= eviction_severity_threshold
+
+        Returns list of ContradictionResolution records.
+        """
+        resolutions = []
+        for report in reports:
+            items = [store.get(iid) for iid in report.item_ids]
+            items = [it for it in items if it is not None]
+            if len(items) < 2:
+                continue
+
+            # Compute composite scores
+            scored = []
+            for item in items:
+                score = item.attention.sti * 1.0 + item.utility * 0.5
+                scored.append((score, item))
+
+            scored.sort(key=lambda x: x[0], reverse=True)
+            winner_score, winner = scored[0]
+            losers = scored[1:]
+            loser_ids = [item.id for _, item in losers]
+            loser_scores = [score for score, _ in losers]
+
+            # Decide action based on severity
+            should_evict = report.severity >= eviction_severity_threshold
+            action = 'evict' if should_evict else 'penalize'
+
+            evicted_ids: list[str] = []
+            evicted_items: list[WMTMItem] = []
+            for score, loser in losers:
+                if should_evict:
+                    evicted = store.evict(loser.id)
+                    if evicted is not None:
+                        evicted_ids.append(loser.id)
+                        evicted_items.append(evicted)
+                else:
+                    # Penalize: reduce STI proportional to severity
+                    penalty_amount = report.severity * loser.attention.sti
+                    loser.attention.penalty(penalty_amount)
+
+            # Boost winner (vindicated)
+            winner.attention.boost(report.severity * 2.0)
+
+            resolutions.append(ContradictionResolution(
+                report=report,
+                winner_id=winner.id,
+                loser_ids=loser_ids,
+                strategy='composite',
+                winner_score=winner_score,
+                loser_scores=loser_scores,
+                action=action,
+                evicted_ids=evicted_ids,
+                evicted_items=evicted_items,
+            ))
+
+        return resolutions
 
     def is_novel(
         self,

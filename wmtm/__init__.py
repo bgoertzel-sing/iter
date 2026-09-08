@@ -16,7 +16,7 @@ from .item import WMTMItem
 from .attention import AttentionValue
 from .store import WMTMStore
 from .forgetting import ForgettingPolicy
-from .inference import WMTMInferenceEngine, InferenceCandidate, ContradictionReport, BeliefTriple, extract_triples
+from .inference import WMTMInferenceEngine, InferenceCandidate, ContradictionReport, ContradictionResolution, BeliefTriple, extract_triples
 from .utility import UtilityTracker, UtilityRecord
 from .forgetting_log import ForgettingLog, ForgetRecord
 from .writeback import WritebackManager, WritebackCandidate
@@ -31,6 +31,7 @@ __all__ = [
     "WMTMInferenceEngine",
     "InferenceCandidate",
     "ContradictionReport",
+    "ContradictionResolution",
     "BeliefTriple",
     "extract_triples",
     "UtilityTracker",

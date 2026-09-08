@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 from .store import WMTMStore
-from .inference import WMTMInferenceEngine, InferenceCandidate, ContradictionReport
+from .inference import WMTMInferenceEngine, InferenceCandidate, ContradictionReport, ContradictionResolution
 from .utility import UtilityTracker
 from .forgetting_log import ForgettingLog
 from .forgetting import ForgettingPolicy
@@ -33,6 +33,7 @@ class CycleResult:
     written_back: int = 0
     active_count: int = 0
     contradictions: list = field(default_factory=list)
+    resolutions: list = field(default_factory=list)
 
 
 class WMTMOrchestrator:
@@ -125,9 +126,19 @@ class WMTMOrchestrator:
         for ev in self.store.drain_pending_evicted():
             self.forget_log.record(ev, self._cycle)
 
-        # 3c. Detect contradictions in the active set (report only, resolution is Phase 5)
+        # 3c. Detect and resolve contradictions in the active set
         contradictions = self.engine.detect_contradictions(self.store)
         result.contradictions = contradictions
+
+        # 3d. Resolve contradictions (Phase 5: attention+utility-weighted resolution)
+        if contradictions:
+            resolutions = self.engine.resolve_contradictions(self.store, contradictions)
+            result.resolutions = resolutions
+            # Log items evicted by contradiction resolution
+            for res in resolutions:
+                for ev_item in res.evicted_items:
+                    self.forget_log.record(ev_item, self._cycle)
+                    self.utility.remove(ev_item.id)
 
         # 4. Tick: decay + age
         evicted_by_tick = self.store.tick()
