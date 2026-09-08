@@ -444,11 +444,16 @@ class WMTMInferenceEngine:
         candidate: InferenceCandidate,
         store: WMTMStore,
     ) -> bool:
-        """Check if a candidate is novel (not duplicating existing WMTM item)."""
+        """Check if a candidate is novel (not duplicating existing WMTM item).
+
+        Uses exact content comparison (case-insensitive) rather than
+        substring matching, because derived items often contain parent
+        content as part of their explanation (e.g., abduction explanations
+        reference the implication they were abduced from).
+        """
+        cand_lower = candidate.content.lower().strip()
         for item in store.get_active_set():
-            if candidate.content.lower() in item.content.lower():
-                return False
-            if item.content.lower() in candidate.content.lower():
+            if item.content.lower().strip() == cand_lower:
                 return False
         return True
 
