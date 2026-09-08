@@ -30,34 +30,49 @@ class ForgettingPolicy:
         Returns list of evicted items.
         """
         evicted = []
+        evicted.extend(self._evict_below_sti(store))
+        evicted.extend(self._evict_aged_low_utility(store))
+        evicted.extend(self._evict_over_capacity(store))
+        return [e for e in evicted if e is not None]
 
-        # 1. Evict items below STI threshold
+    def _evict_below_sti(self, store: WMTMStore) -> list:
+        """Evict items whose STI falls below their type-specific threshold."""
+        evicted = []
         for item in list(store._items.values()):
-            threshold = (
-                self.derived_sti_threshold
-                if item.source_type == "derived"
-                else self.sti_threshold
-            )
+            threshold = self._sti_threshold_for(item)
             if item.attention.sti < threshold:
                 evicted.append(store.evict(item.id))
+        return evicted
 
-        # 2. Age-based review: items exceeding max_age with low utility
+    def _evict_aged_low_utility(self, store: WMTMStore) -> list:
+        """Evict items exceeding their max age with utility below minimum."""
+        evicted = []
         for item in list(store._items.values()):
-            age_limit = (
-                self.derived_max_age
-                if item.source_type == "derived"
-                else self.max_age
-            )
+            age_limit = self._max_age_for(item)
             if item.age >= age_limit and item.utility < self.min_utility:
                 evicted.append(store.evict(item.id))
+        return evicted
 
-        # 3. If still over capacity, evict lowest-utility items
+    @staticmethod
+    def _evict_over_capacity(store: WMTMStore) -> list:
+        """Evict lowest-utility items until store is at or below capacity."""
+        evicted = []
         while len(store) > store.capacity:
             lowest = min(store._items.values(), key=lambda it: it.utility)
             evicted.append(store.evict(lowest.id))
+        return evicted
 
-        # Filter out None (items already gone)
-        return [e for e in evicted if e is not None]
+    def _sti_threshold_for(self, item: WMTMItem) -> float:
+        """Return the STI threshold for the item's source type."""
+        if item.source_type == "derived":
+            return self.derived_sti_threshold
+        return self.sti_threshold
+
+    def _max_age_for(self, item: WMTMItem) -> int:
+        """Return the max age for the item's source type."""
+        if item.source_type == "derived":
+            return self.derived_max_age
+        return self.max_age
 
     def should_writeback(self, item: WMTMItem, min_survival_cycles: int = 30,
                          min_utility: float = 2.0) -> bool:

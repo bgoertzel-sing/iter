@@ -10,7 +10,7 @@ For recalled items, this allows enrichment (e.g., adding new evidence).
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable
+from typing import Callable, Optional
 
 from .item import WMTMItem
 from .store import WMTMStore
@@ -89,22 +89,38 @@ class WritebackManager:
         for item in store.get_active_set():
             if item.id in self._written_back:
                 continue
-
-            if item.source_type == "derived":
-                if item.age >= self.derived_min_age and item.utility >= self.derived_min_utility:
-                    candidates.append(WritebackCandidate(
-                        item=item,
-                        reason="derived_promotion",
-                        metta_content=format_derived_metta(item),
-                    ))
-            elif item.source_type == "recalled":
-                if item.age >= self.min_age and item.utility >= self.min_utility:
-                    candidates.append(WritebackCandidate(
-                        item=item,
-                        reason="enrichment",
-                        metta_content=format_enrichment_metta(item),
-                    ))
+            cand = self._select_for_item(item)
+            if cand is not None:
+                candidates.append(cand)
         return candidates
+
+    def _select_for_item(self, item: WMTMItem) -> Optional[WritebackCandidate]:
+        """Evaluate a single item for writeback eligibility."""
+        if item.source_type == "derived":
+            return self._select_derived(item)
+        if item.source_type == "recalled":
+            return self._select_recalled(item)
+        return None
+
+    def _select_derived(self, item: WMTMItem) -> Optional[WritebackCandidate]:
+        """Check if a derived item qualifies for promotion to LTM."""
+        if item.age >= self.derived_min_age and item.utility >= self.derived_min_utility:
+            return WritebackCandidate(
+                item=item,
+                reason="derived_promotion",
+                metta_content=format_derived_metta(item),
+            )
+        return None
+
+    def _select_recalled(self, item: WMTMItem) -> Optional[WritebackCandidate]:
+        """Check if a recalled item qualifies for enrichment writeback."""
+        if item.age >= self.min_age and item.utility >= self.min_utility:
+            return WritebackCandidate(
+                item=item,
+                reason="enrichment",
+                metta_content=format_enrichment_metta(item),
+            )
+        return None
 
     def writeback(
         self,

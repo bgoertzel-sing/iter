@@ -203,24 +203,52 @@ class RecallBridge:
         ]
 
         for _hop in range(depth + 1):
-            next_frontier: list[tuple[str, float]] = []
-            for cid, activation in frontier:
-                if cid in visited:
-                    continue
-                visited.add(cid)
-                scores[cid] = scores.get(cid, 0.0) + activation
-                cluster: Optional[LTMCluster] = self._by_id.get(cid)
-                if not cluster:
-                    continue
-                for target in cluster.evidence_for:
-                    if target not in visited:
-                        next_frontier.append((target, activation * decay))
-                for source_id in self._evidence_for_targets.get(cid, []):
-                    if source_id not in visited:
-                        next_frontier.append((source_id, activation * decay))
-            frontier = next_frontier
+            frontier = self._activation_hop(
+                frontier, visited, scores, decay
+            )
 
         return scores
+
+    def _activation_hop(
+        self,
+        frontier: list[tuple[str, float]],
+        visited: set[str],
+        scores: dict[str, float],
+        decay: float,
+    ) -> list[tuple[str, float]]:
+        """Process one hop of spreading activation, updating visited/scores.
+
+        Returns the next frontier to explore.
+        """
+        next_frontier: list[tuple[str, float]] = []
+        for cid, activation in frontier:
+            if cid in visited:
+                continue
+            visited.add(cid)
+            scores[cid] = scores.get(cid, 0.0) + activation
+            cluster: Optional[LTMCluster] = self._by_id.get(cid)
+            if not cluster:
+                continue
+            self._collect_activation_neighbors(
+                cluster, activation, decay, visited, next_frontier
+            )
+        return next_frontier
+
+    def _collect_activation_neighbors(
+        self,
+        cluster: LTMCluster,
+        activation: float,
+        decay: float,
+        visited: set[str],
+        next_frontier: list[tuple[str, float]],
+    ) -> None:
+        """Add unvisited EvidenceFor targets and reverse-evidence sources."""
+        for target in cluster.evidence_for:
+            if target not in visited:
+                next_frontier.append((target, activation * decay))
+        for source_id in self._evidence_for_targets.get(cluster.id, []):
+            if source_id not in visited:
+                next_frontier.append((source_id, activation * decay))
 
     def _spreading_activation_for(
         self,
