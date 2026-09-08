@@ -21,6 +21,7 @@ from .utility import UtilityTracker, UtilityRecord
 from .forgetting_log import ForgettingLog, ForgetRecord
 from .writeback import WritebackManager, WritebackCandidate
 from .orchestrator import WMTMOrchestrator, CycleResult
+from .recall_bridge import RecallBridge, LTMCluster
 
 __all__ = [
     "WMTMItem",
@@ -39,4 +40,6 @@ __all__ = [
     "WritebackCandidate",
     "WMTMOrchestrator",
     "CycleResult",
+    "RecallBridge",
+    "LTMCluster",
 ]

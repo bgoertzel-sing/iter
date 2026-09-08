@@ -61,15 +61,26 @@ def extract_triples(text: str) -> list[BeliefTriple]:
     return triples
 
 
+
 @dataclass
 class InferenceCandidate:
     """A derived belief candidate for admission to WMTM."""
     content: str
     confidence: float
     derived_from: list[str]
-    inference_type: str  # 'deduction', 'induction', 'abduction'
+    inference_type: str  # 'deduction', 'induction', 'abduction', 'analogy', 'evidence_aggregation'
     triple: Optional[BeliefTriple] = None
     initial_sti: float = 0.0
+
+
+@dataclass
+class ContradictionReport:
+    """Reports a detected contradiction between items."""
+    subject: str
+    relation: str
+    conflicting_objects: list[str]
+    item_ids: list[str]
+    severity: float  # higher = more severe
 
 
 class WMTMInferenceEngine:
@@ -79,19 +90,63 @@ class WMTMInferenceEngine:
     - Deduction: A->B, B->C => A->C (with confidence = s1*s2)
     - Induction: multiple A->B => generalize to A implies B
     - Abduction: B true, A->B => maybe A (lower confidence)
+    - Analogy: shared relation across pairs => analogical transfer
+    - Evidence aggregation: multiple items support same conclusion
+
+    Inference budget:
+    - Only run on top-50% STI items (attention focus)
+    - Max candidates per cycle (default 5)
+    - Confidence threshold for budget filtering (default 0.3)
     """
 
-    def __init__(self, novelty_bonus: float = 0.5, min_confidence: float = 0.1):
+    def __init__(
+        self,
+        novelty_bonus: float = 0.5,
+        min_confidence: float = 0.1,
+        inference_budget: int = 5,
+        sti_focus_ratio: float = 0.5,
+        budget_confidence_threshold: float = 0.3,
+    ):
         self.novelty_bonus = novelty_bonus
         self.min_confidence = min_confidence
+        self.inference_budget = inference_budget
+        self.sti_focus_ratio = sti_focus_ratio
+        self.budget_confidence_threshold = budget_confidence_threshold
+
+    def _focus_set(self, active_set: list[WMTMItem]) -> list[WMTMItem]:
+        """Return the top-N% STI items (attention focus).
+
+        If fewer than 2 items, return all.
+        """
+        if len(active_set) <= 2:
+            return active_set
+        sorted_items = sorted(active_set, key=lambda it: it.attention.sti, reverse=True)
+        cutoff = max(2, int(len(sorted_items) * self.sti_focus_ratio))
+        return sorted_items[:cutoff]
 
     def infer(self, active_set: list[WMTMItem]) -> list[InferenceCandidate]:
-        """Run inference over the active set, return candidates."""
+        """Run inference over the active set, return candidates.
+
+        Applies inference budget:
+        1. Filter to top-50% STI items (attention focus)
+        2. Run all inference patterns
+        3. Filter by min_confidence
+        4. Sort by confidence descending, truncate to budget
+        """
+        focus_set = self._focus_set(active_set)
+
         candidates = []
-        candidates.extend(self._deduction(active_set))
-        candidates.extend(self._induction(active_set))
-        candidates.extend(self._abduction(active_set))
+        candidates.extend(self._deduction(focus_set))
+        candidates.extend(self._induction(focus_set))
+        candidates.extend(self._abduction(focus_set))
+        candidates.extend(self._analogy(focus_set))
+        candidates.extend(self._evidence_aggregation(focus_set))
+
         candidates = [c for c in candidates if c.confidence >= self.min_confidence]
+
+        candidates.sort(key=lambda c: c.confidence, reverse=True)
+        candidates = candidates[:self.inference_budget]
+
         return candidates
 
     def generate_candidates(self, active_set: list[WMTMItem]) -> list[InferenceCandidate]:
@@ -188,6 +243,111 @@ class WMTMInferenceEngine:
                         initial_sti=initial_sti,
                     ))
         return candidates
+
+    def _analogy(self, active_set: list[WMTMItem]) -> list[InferenceCandidate]:
+        """Analogy: if two pairs share the same relation, infer analogical transfer.
+
+        Given (s1, r, o1) and (s2, r, o2) where s1 != s2 and o1 != o2,
+        derive (s1, r, o2) as an analogical transfer with discounted confidence.
+        """
+        candidates = []
+        item_triples: list[tuple[WMTMItem, BeliefTriple]] = []
+        for item in active_set:
+            for t in extract_triples(item.content):
+                item_triples.append((item, t))
+
+        for i, (item1, t1) in enumerate(item_triples):
+            for j, (item2, t2) in enumerate(item_triples):
+                if i >= j:
+                    continue
+                if (t1.relation == t2.relation
+                        and t1.subject != t2.subject
+                        and t1.object != t2.object):
+                    confidence = 0.25  # analogy is speculative
+                    parent_sti = (item1.attention.sti + item2.attention.sti) / 2
+                    initial_sti = parent_sti * confidence
+                    derived_triple = BeliefTriple(
+                        subject=t1.subject,
+                        relation=t1.relation,
+                        object=t2.object,
+                    )
+                    candidates.append(InferenceCandidate(
+                        content=derived_triple.to_text(),
+                        confidence=confidence,
+                        derived_from=[item1.id, item2.id],
+                        inference_type='analogy',
+                        triple=derived_triple,
+                        initial_sti=initial_sti,
+                    ))
+        return candidates
+
+    def _evidence_aggregation(self, active_set: list[WMTMItem]) -> list[InferenceCandidate]:
+        """Evidence aggregation: multiple items support same conclusion.
+
+        If multiple items provide evidence for the same (subject, relation)
+        pair with the same object, combine their strengths using noisy-OR:
+        combined = 1 - product(1 - s_i)
+        """
+        candidates = []
+        evidence_map: dict[tuple[str, str], list[tuple[str, WMTMItem]]] = {}
+        for item in active_set:
+            for t in extract_triples(item.content):
+                key = (t.subject, t.relation)
+                evidence_map.setdefault(key, []).append((t.object, item))
+
+        for (subj, rel), entries in evidence_map.items():
+            if len(entries) < 2:
+                continue
+            objects = {obj for obj, _ in entries}
+            if len(objects) > 1:
+                continue  # disagreement handled by contradiction detection
+            obj = list(objects)[0]
+            n = len(entries)
+            base_strength = 0.7
+            combined = 1.0 - (1.0 - base_strength) ** n
+            combined = min(combined, 0.95)
+            item_ids = [item.id for _, item in entries]
+            parent_sti = sum(item.attention.sti for _, item in entries) / n
+            initial_sti = parent_sti * combined * 0.5
+            triple = BeliefTriple(subject=subj, relation=rel, object=obj)
+            candidates.append(InferenceCandidate(
+                content=f"{triple.to_text()} (aggregated from {n} sources)",
+                confidence=combined,
+                derived_from=item_ids,
+                inference_type='evidence_aggregation',
+                triple=triple,
+                initial_sti=initial_sti,
+            ))
+        return candidates
+
+    def detect_contradictions(self, store: WMTMStore) -> list[ContradictionReport]:
+        """Detect contradictions between items in the store.
+
+        Two items contradict if they share the same (subject, relation)
+        but have different objects. Returns ContradictionReport for each
+        conflicting pair.
+        """
+        reports = []
+        items = store.get_active_set()
+        triple_map: dict[tuple[str, str], list[tuple[str, WMTMItem]]] = {}
+        for item in items:
+            for t in extract_triples(item.content):
+                key = (t.subject, t.relation)
+                triple_map.setdefault(key, []).append((t.object, item))
+
+        for (s, r), entries in triple_map.items():
+            objects = {obj for obj, _ in entries}
+            if len(objects) > 1:
+                items_involved = [item for _, item in entries]
+                severity = len(objects) * 0.3
+                reports.append(ContradictionReport(
+                    subject=s,
+                    relation=r,
+                    conflicting_objects=sorted(objects),
+                    item_ids=[it.id for it in items_involved],
+                    severity=severity,
+                ))
+        return reports
 
     def is_novel(
         self,

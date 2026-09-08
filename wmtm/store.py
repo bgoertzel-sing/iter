@@ -19,6 +19,7 @@ class WMTMStore:
             raise ValueError("capacity must be positive")
         self.capacity = capacity
         self._items: dict[str, WMTMItem] = {}
+        self._pending_evicted: list[WMTMItem] = []
         self._tick = tick
 
     # -- core operations ------------------------------------------------
@@ -73,13 +74,17 @@ class WMTMStore:
         if item:
             item.touch(self._tick)
 
-    def get_active_set(self) -> list[WMTMItem]:
-        """Return items sorted by total attention (STI+ATI+LTI) descending."""
-        return sorted(
-            self._items.values(),
-            key=lambda it: it.attention.total,
-            reverse=True,
-        )
+    def get_active_set(self) -> list["WMTMItem"]:
+        """Return all active items sorted by total attention descending."""
+        items = list(self._items.values())
+        items.sort(key=lambda it: it.attention.total, reverse=True)
+        return items
+
+    def drain_pending_evicted(self) -> list["WMTMItem"]:
+        """Return and clear items evicted by capacity overflow."""
+        evicted = self._pending_evicted
+        self._pending_evicted = []
+        return evicted
 
     def tick(self) -> list[WMTMItem]:
         """Advance one cycle: decay attention, age items, return evicted list."""
@@ -103,7 +108,9 @@ class WMTMStore:
         if not self._items:
             return None
         lowest = min(self._items.values(), key=lambda it: it.attention.sti)
-        return self._items.pop(lowest.id)
+        evicted = self._items.pop(lowest.id)
+        self._pending_evicted.append(evicted)
+        return evicted
 
     # -- dunder helpers -------------------------------------------------
 

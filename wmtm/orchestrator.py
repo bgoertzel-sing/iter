@@ -56,6 +56,7 @@ class WMTMOrchestrator:
         self.utility = utility_tracker or UtilityTracker()
         self.forgetting = forgetting_policy or ForgettingPolicy()
         self.forget_log = forgetting_log or ForgettingLog()
+        self.forget_log_override_threshold = 500.0  # only re-derive forgotten content if exceptionally high attention
         self.writeback = writeback_manager or WritebackManager()
         self._cycle = 0
 
@@ -85,6 +86,10 @@ class WMTMOrchestrator:
                     initial_sti=sti,
                 )
 
+        # 1b. Log any items evicted by capacity during recall
+        for ev in self.store.drain_pending_evicted():
+            self.forget_log.record(ev, self._cycle)
+
         # 2. Run inference
         active = self.store.get_active_set()
         candidates = self.engine.infer(active)
@@ -94,7 +99,7 @@ class WMTMOrchestrator:
         for i, cand in enumerate(candidates):
             # Skip if previously forgotten (unless high attention)
             if self.forget_log.is_forgotten(cand.content):
-                if cand.initial_sti < 5.0:
+                if cand.initial_sti < self.forget_log_override_threshold:
                     continue
             # Skip if content duplicates existing
             if not self.engine.is_novel(cand, self.store):
@@ -115,6 +120,10 @@ class WMTMOrchestrator:
 
         result.admitted_derived = len(admitted)
 
+        # 3b. Log any items evicted by capacity during derived admission
+        for ev in self.store.drain_pending_evicted():
+            self.forget_log.record(ev, self._cycle)
+
         # 4. Tick: decay + age
         evicted_by_tick = self.store.tick()
         for ev in evicted_by_tick:
@@ -122,6 +131,12 @@ class WMTMOrchestrator:
 
         # 5. Utility tracking
         self.utility.tick(self.store, self._cycle)
+
+        # 5b. Reinforce: boost STI for items actually used this cycle
+        for item in self.store.get_active_set():
+            rec = self.utility.get_record(item.id)
+            if rec is not None and rec.use_count > 0 and rec.last_use_tick == self._cycle:
+                item.attention.boost(2.0)  # small STI boost for being useful
 
         # 6. Forgetting policy
         evicted_by_policy = self.forgetting.evaluate(self.store)
