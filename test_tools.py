@@ -46,14 +46,30 @@ def test_send_unknown_channel():
 
 
 def test_petta_journal_append_and_recall():
-    """petta_append + petta_recall should round-trip a note."""
+    """petta_append + petta_recall should round-trip a note.
+
+    Uses a temp journal directory (JOURNAL_DIR env var) to avoid polluting
+    the production journal.  The _petta_journal module is loaded fresh on
+    every call via spec_from_file_location, so the env var is picked up
+    automatically without any reload.
+    """
+    import os as _os
     sys.path.insert(0, str(PROJECT_ROOT / "tools"))
     import petta_append
     import petta_recall
-    marker = f"TEST_MARKER_{os.getpid()}_autonomous_coverage"
-    petta_append.run(f"Test note from test_tools.py: {marker}")
-    recalled = petta_recall.run(limit=50)
-    assert isinstance(recalled, str), f"Expected string, got {type(recalled)}"
+    marker = f"TEST_MARKER_{_os.getpid()}_autonomous_coverage"
+
+    original_journal_dir = _os.environ.get("JOURNAL_DIR")
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        _os.environ["JOURNAL_DIR"] = tmp_dir
+        petta_append.run(f"Test note from test_tools.py: {marker}")
+        recalled = petta_recall.run(limit=50)
+        assert isinstance(recalled, str), f"Expected string, got {type(recalled)}"
+        assert marker in recalled, f"Expected marker {marker!r} in recalled output"
+    if original_journal_dir is not None:
+        _os.environ["JOURNAL_DIR"] = original_journal_dir
+    else:
+        _os.environ.pop("JOURNAL_DIR", None)
     sys.path.pop(0)
 
 
