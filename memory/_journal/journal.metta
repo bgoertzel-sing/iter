@@ -17,7 +17,6 @@
 (EvidenceFor ev-0902a ep-20260902235454013169)
 (EvidenceFor ev-0902a ep-0902b)
 (EvidenceFor ev-0902a promo-auto-fact-roadmap-v2)
-;;; END MemoryCluster ep-0902a
 ;;; BEGIN MemoryCluster ep-0902b
 (MemoryCluster ep-0902b)
 (SchemaVersion ep-0902b medium-memory-v1)
@@ -5068,7 +5067,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceFor ev-ep-note-20260903T163039Z ev-rsmf)
 (EventNote ev-evlink-20260904-epcons "Episode-to-LTM consolidation pass 09-04 22:44: 238 new EvidenceFor edges linking uncited episodes to LTM items (smart matching + zero-evidence repair). Coverage improved for LTM items previously lacking evidence.")
 (EvidenceSupportCount fact-evlink-20260904-epconsolidation 219)
-;;; END MemoryCluster fact-evlink-20260904-epconsolidation
 ;;; BEGIN MemoryCluster ep-note-20260905T054454Z
 (MemoryCluster ep-note-20260905T054454Z)
 (SchemaVersion ep-note-20260905T054454Z medium-memory-v1)
@@ -6539,7 +6537,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Supersedes fact-evlink-final-20260904 ev-evlink-final-20260904 ev-evlink4-20260905)
 (Supersedes fact-evlink-final-20260904 ev-evlink-final-20260904 ev-evlink5-20260905)
 (EvidenceSupportCount fact-evlink-final-20260904 99)
-;;; END MemoryCluster fact-evlink-final-20260904
 ;;; BEGIN MemoryCluster ep-note-20260905T061942Z
 (MemoryCluster ep-note-20260905T061942Z)
 (SchemaVersion ep-note-20260905T061942Z medium-memory-v1)
@@ -7360,7 +7357,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Supersedes fact-enrich-lowev-final-20260904 ev-enrich-lowev-final-20260904 ev-evlink4-20260905)
 (Supersedes fact-enrich-lowev-final-20260904 ev-enrich-lowev-final-20260904 ev-evlink5-20260905)
 (EvidenceSupportCount fact-enrich-lowev-final-20260904 182)
-;;; END MemoryCluster fact-enrich-lowev-final-20260904
 ;;; BEGIN MemoryCluster ep-note-20260905T063453Z
 (MemoryCluster ep-note-20260905T063453Z)
 (SchemaVersion ep-note-20260905T063453Z medium-memory-v1)
@@ -7795,7 +7791,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceFor ev-tail-19 ev-fp2d-v2)
 (EventNote ev-batch-evlink-20260904 "Batch evidence-link consolidation 09-04 23:57: 255 new EvidenceFor edges connecting unlinked episodes to LTM items (score>=5 keyword+about overlap). Brings all LTM items above low-ev threshold and connects remaining uncited episodes.")
 (EvidenceSupportCount fact-batch-evlink-20260904 121)
-;;; END MemoryCluster fact-batch-evlink-20260904
 ;;; BEGIN MemoryCluster fact-lowev-fix-20260904
 (MemoryCluster fact-lowev-fix-20260904)
 (SchemaVersion fact-lowev-fix-20260904 medium-memory-v1)
@@ -10220,7 +10215,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (PromotesFrom ev-promo-auto-fact-ecan-integration fact-ecan-integration)
 (EvidenceSupportCount promo-auto-fact-ecan-integration 49)
 (EvidenceFor ev-promo-auto-fact-ecan-integration fact-ecan-integration)
-;;; END MemoryCluster promo-auto-fact-ecan-integration;;; BEGIN MemoryCluster ep-note-20260905T163529Z
 ;;; BEGIN MemoryCluster ep-note-20260905T163653Z
 (MemoryCluster ep-note-20260905T163653Z)
 (SchemaVersion ep-note-20260905T163653Z medium-memory-v1)
@@ -10316,7 +10310,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-auto-fact-store-api "append_cluster validates each append atomically; query_about is exact whole-token match on single-token About tags; query_cluster is exact cluster-id lookup; query_id is mention-search; atom ids are g")
 (PromotesFrom ev-promo-auto-fact-store-api fact-store-api)
 (EvidenceSupportCount promo-auto-fact-store-api 17)
-;;; END MemoryCluster promo-auto-fact-store-api;;; BEGIN MemoryCluster ep-note-20260905T163945Z
 ;;; BEGIN MemoryCluster ep-note-20260905T164137Z
 (MemoryCluster ep-note-20260905T164137Z)
 (SchemaVersion ep-note-20260905T164137Z medium-memory-v1)
@@ -13109,7 +13102,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260906T020135Z journal)
 (EventNote ev-ep-note-20260906T020135Z "Consolidation 19:00 PASS: 630 active (453E/46F/131P), 10808 EF, 0 unlinked, 0 cold, 0 dupes. 20 Contradicts links exist. Now reviewing contradicts for validity — many appear to be false positives (audit PASS episodes flagged as contradicting facts). Will remove invalid ones and keep genuine corrections.")
 (EvidenceSupportCount ep-note-20260906T020135Z 10)
-;;; END MemoryCluster ep-note-20260906T020135Z;;; BEGIN MemoryCluster ep-note-20260906T020510Z
 ;;; BEGIN MemoryCluster ep-note-20260906T020744Z
 (MemoryCluster ep-note-20260906T020744Z)
 (SchemaVersion ep-note-20260906T020744Z medium-memory-v1)
@@ -13263,7 +13255,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (ObservedEvent ev-ep-note-20260905T163529Z)
 (About ep-note-20260905T163529Z journal)
 (EventNote ev-ep-note-20260905T163529Z "09:34 UTC: Memory consolidation applying all changes: 3 unlinked episode links, 55 ESC additions for LTM, ~100 keyword enrichment links, 1 promotion cluster for fact-ecan-integration.")
-;;; END MemoryCluster ep-note-20260905T163529Z
 (MemoryCluster ep-note-20260905T163945Z)
 (SchemaVersion ep-note-20260905T163945Z medium-memory-v1)
 (ClusterType ep-note-20260905T163945Z Episode)
@@ -13273,7 +13264,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (ObservedEvent ev-ep-note-20260905T163945Z)
 (About ep-note-20260905T163945Z journal)
 (EventNote ev-ep-note-20260905T163945Z "09:39 UTC: Consolidation pass 2 applied: 17 ESC corrections, enrichment pass 2 for episodes with <=1 LTM link, promotion candidates >=20 incoming.")
-;;; END MemoryCluster ep-note-20260905T163945Z
 (MemoryCluster ep-note-20260905T165025Z)
 (SchemaVersion ep-note-20260905T165025Z medium-memory-v1)
 (ClusterType ep-note-20260905T165025Z Episode)
@@ -13283,7 +13273,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (ObservedEvent ev-ep-note-20260905T165025Z)
 (About ep-note-20260905T165025Z journal)
 (EventNote ev-ep-note-20260905T165025Z "09:50 UTC: Consolidation pass 4 — fixing 1 unlinked episode, 33 ESC mismatches, enrichment for episodes with <3 LTM links, promotions for 4 unpromoted facts >=10 incoming. Writing to file to avoid truncation.")
-;;; END MemoryCluster ep-note-20260905T165025Z
 ;;; Self-heal: link 8 unlinked episodes to relevant facts/promotions (14:44)
 ;;; Self-heal: link remaining unlinked episodes to relevant facts (14:45)
 ;;; For episodes with generic notes, link to fact-journal-conventions (their content is about journal status)
@@ -13327,7 +13316,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (ObservedEvent ev-ep-note-20260906T013345Z)
 (About ep-note-20260906T013345Z journal)
 (EventNote ev-ep-note-20260906T013345Z "Self-heal 18:32: Linked 3 unlinked auto-eps to journal-maintenance LTM. Reverted 20 false-positive Contradicts links (weak keyword overlaps like \"then\",\"plus\",\"copy\" are not genuine semantic contradictions).")
-;;; END MemoryCluster ep-note-20260906T013345Z
 ;;; Support links 18:42: strong keyword overlap enrichment
 ;;; Self-heal 18:46: unlinked episode fix
 ;;; Support links 18:52: strong keyword overlap (>=5)
@@ -13343,7 +13331,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (ObservedEvent ev-ep-note-20260906T020510Z)
 (About ep-note-20260906T020510Z journal)
 (EventNote ev-ep-note-20260906T020510Z "Contradicts cleanup 19:03: Reviewed 20 Contradicts links. Removed 17 false positives (audit PASS episodes, positive episodes, unclear). Kept 3 valid: ep-...848 -> fact-ecan-integration (wrong diff direction correction), ep-...848 -> promo-external-fork-pr-path (same), ep-...477 -> fact-journal-conventions (duplicate-id rejection). Journal contradicts now curated and meaningful.")
-;;; END MemoryCluster ep-note-20260906T020510Z
 ;;; Self-heal 19:06
 ;;; Self-heal 19:12
 ;;; Self-heal 19:16
@@ -13390,17 +13377,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceFor ep-note-20260905T052104Z fact-ecan-integration)
 (EvidenceFor ep-note-20260905T052104Z fact-roadmap-v2)
 
-;;; BEGIN MemoryCluster promo-resolve-supersedes-marker-fix-20260903-v2
-(MemoryCluster promo-resolve-supersedes-marker-fix-20260903-v2)
-(SchemaVersion promo-resolve-supersedes-marker-fix-20260903-v2 medium-memory-v1)
-(ClusterType promo-resolve-supersedes-marker-fix-20260903-v2 Promotion)
-(ClusterSource promo-resolve-supersedes-marker-fix-20260903-v2 iter-experience)
-(ClusterOpenedAt promo-resolve-supersedes-marker-fix-20260903-v2 2026-09-03T00:00:00Z)
-(Contains promo-resolve-supersedes-marker-fix-20260903-v2 ev-promo-resolve-supersedes-v2)
-(ObservedEvent ev-promo-resolve-supersedes-v2)
-(PromotedFrom promo-resolve-supersedes-marker-fix-20260903-v2 fact-resolve-supersedes-marker-fix-20260903)
-(BeliefContent promo-resolve-supersedes-marker-fix-20260903-v2 "Supersedes marker resolution fix v2.")
-;;; END MemoryCluster promo-resolve-supersedes-marker-fix-20260903-v2
 
 ;;; Heal+Enrich 20:00
 (EvidenceFor ev-20260902153818914572 promo-auto-fact-iter-runtime)
@@ -21939,31 +21915,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T115918Z "Auto-promotion: ep-note-20260905T115918Z has 44 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T115918Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T081451Z
-(MemoryCluster promo-consol-ep-note-20260904T081451Z)
-(SchemaVersion promo-consol-ep-note-20260904T081451Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T081451Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T081451Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T081451Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T081451Z ev-promo-consol-ep-note-20260904T081451Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T081451Z)
-(Promotes promo-consol-ep-note-20260904T081451Z ep-note-20260904T081451Z)
-(About promo-consol-ep-note-20260904T081451Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T081451Z "Auto-promotion: ep-note-20260904T081451Z has 44 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T081451Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T163842Z
-(MemoryCluster promo-consol-ep-note-20260903T163842Z)
-(SchemaVersion promo-consol-ep-note-20260903T163842Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T163842Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T163842Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T163842Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T163842Z ev-promo-consol-ep-note-20260903T163842Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T163842Z)
-(Promotes promo-consol-ep-note-20260903T163842Z ep-note-20260903T163842Z)
-(About promo-consol-ep-note-20260903T163842Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T163842Z "Auto-promotion: ep-note-20260903T163842Z has 44 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T163842Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-tail-16
 (MemoryCluster promo-consol-ep-tail-16)
@@ -22030,31 +21982,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T095013Z "Auto-promotion: ep-note-20260905T095013Z has 42 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T095013Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T094236Z
-(MemoryCluster promo-consol-ep-note-20260905T094236Z)
-(SchemaVersion promo-consol-ep-note-20260905T094236Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T094236Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T094236Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T094236Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T094236Z ev-promo-consol-ep-note-20260905T094236Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T094236Z)
-(Promotes promo-consol-ep-note-20260905T094236Z ep-note-20260905T094236Z)
-(About promo-consol-ep-note-20260905T094236Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T094236Z "Auto-promotion: ep-note-20260905T094236Z has 42 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T094236Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T214826Z
-(MemoryCluster promo-consol-ep-note-20260903T214826Z)
-(SchemaVersion promo-consol-ep-note-20260903T214826Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T214826Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T214826Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T214826Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T214826Z ev-promo-consol-ep-note-20260903T214826Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T214826Z)
-(Promotes promo-consol-ep-note-20260903T214826Z ep-note-20260903T214826Z)
-(About promo-consol-ep-note-20260903T214826Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T214826Z "Auto-promotion: ep-note-20260903T214826Z has 42 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T214826Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-tail-01
 (MemoryCluster promo-consol-ep-tail-01)
@@ -22186,31 +22114,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T004854Z "Auto-promotion: ep-note-20260906T004854Z has 36 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T004854Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T004824Z
-(MemoryCluster promo-consol-ep-note-20260906T004824Z)
-(SchemaVersion promo-consol-ep-note-20260906T004824Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260906T004824Z Promotion)
-(ClusterSource promo-consol-ep-note-20260906T004824Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260906T004824Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260906T004824Z ev-promo-consol-ep-note-20260906T004824Z)
-(ObservedEvent ev-promo-consol-ep-note-20260906T004824Z)
-(Promotes promo-consol-ep-note-20260906T004824Z ep-note-20260906T004824Z)
-(About promo-consol-ep-note-20260906T004824Z journal)
-(EventNote ev-promo-consol-ep-note-20260906T004824Z "Auto-promotion: ep-note-20260906T004824Z has 36 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260906T004824Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T114459Z
-(MemoryCluster promo-consol-ep-note-20260905T114459Z)
-(SchemaVersion promo-consol-ep-note-20260905T114459Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T114459Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T114459Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T114459Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T114459Z ev-promo-consol-ep-note-20260905T114459Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T114459Z)
-(Promotes promo-consol-ep-note-20260905T114459Z ep-note-20260905T114459Z)
-(About promo-consol-ep-note-20260905T114459Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T114459Z "Auto-promotion: ep-note-20260905T114459Z has 36 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T114459Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903050135813983
 (MemoryCluster promo-consol-ep-20260903050135813983)
@@ -22251,44 +22155,8 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T221508Z "Auto-promotion: ep-note-20260905T221508Z has 34 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T221508Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T133448Z
-(MemoryCluster promo-consol-ep-note-20260905T133448Z)
-(SchemaVersion promo-consol-ep-note-20260905T133448Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T133448Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T133448Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T133448Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T133448Z ev-promo-consol-ep-note-20260905T133448Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T133448Z)
-(Promotes promo-consol-ep-note-20260905T133448Z ep-note-20260905T133448Z)
-(About promo-consol-ep-note-20260905T133448Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T133448Z "Auto-promotion: ep-note-20260905T133448Z has 34 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T133448Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T120747Z
-(MemoryCluster promo-consol-ep-note-20260905T120747Z)
-(SchemaVersion promo-consol-ep-note-20260905T120747Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T120747Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T120747Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T120747Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T120747Z ev-promo-consol-ep-note-20260905T120747Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T120747Z)
-(Promotes promo-consol-ep-note-20260905T120747Z ep-note-20260905T120747Z)
-(About promo-consol-ep-note-20260905T120747Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T120747Z "Auto-promotion: ep-note-20260905T120747Z has 34 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T120747Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T055652Z
-(MemoryCluster promo-consol-ep-note-20260905T055652Z)
-(SchemaVersion promo-consol-ep-note-20260905T055652Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T055652Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T055652Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T055652Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T055652Z ev-promo-consol-ep-note-20260905T055652Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T055652Z)
-(Promotes promo-consol-ep-note-20260905T055652Z ep-note-20260905T055652Z)
-(About promo-consol-ep-note-20260905T055652Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T055652Z "Auto-promotion: ep-note-20260905T055652Z has 34 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T055652Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-tail-11
 (MemoryCluster promo-consol-ep-tail-11)
@@ -22316,57 +22184,9 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T192208Z "Auto-promotion: ep-note-20260905T192208Z has 33 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T192208Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T175658Z
-(MemoryCluster promo-consol-ep-note-20260905T175658Z)
-(SchemaVersion promo-consol-ep-note-20260905T175658Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T175658Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T175658Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T175658Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T175658Z ev-promo-consol-ep-note-20260905T175658Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T175658Z)
-(Promotes promo-consol-ep-note-20260905T175658Z ep-note-20260905T175658Z)
-(About promo-consol-ep-note-20260905T175658Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T175658Z "Auto-promotion: ep-note-20260905T175658Z has 33 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T175658Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T102803Z
-(MemoryCluster promo-consol-ep-note-20260905T102803Z)
-(SchemaVersion promo-consol-ep-note-20260905T102803Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T102803Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T102803Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T102803Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T102803Z ev-promo-consol-ep-note-20260905T102803Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T102803Z)
-(Promotes promo-consol-ep-note-20260905T102803Z ep-note-20260905T102803Z)
-(About promo-consol-ep-note-20260905T102803Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T102803Z "Auto-promotion: ep-note-20260905T102803Z has 33 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T102803Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T071138Z
-(MemoryCluster promo-consol-ep-note-20260905T071138Z)
-(SchemaVersion promo-consol-ep-note-20260905T071138Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T071138Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T071138Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T071138Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T071138Z ev-promo-consol-ep-note-20260905T071138Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T071138Z)
-(Promotes promo-consol-ep-note-20260905T071138Z ep-note-20260905T071138Z)
-(About promo-consol-ep-note-20260905T071138Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T071138Z "Auto-promotion: ep-note-20260905T071138Z has 33 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T071138Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T055848Z
-(MemoryCluster promo-consol-ep-note-20260905T055848Z)
-(SchemaVersion promo-consol-ep-note-20260905T055848Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T055848Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T055848Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T055848Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T055848Z ev-promo-consol-ep-note-20260905T055848Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T055848Z)
-(Promotes promo-consol-ep-note-20260905T055848Z ep-note-20260905T055848Z)
-(About promo-consol-ep-note-20260905T055848Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T055848Z "Auto-promotion: ep-note-20260905T055848Z has 33 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T055848Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903063009307968
 (MemoryCluster promo-consol-ep-20260903063009307968)
@@ -22485,57 +22305,9 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T011145Z "Auto-promotion: ep-note-20260906T011145Z has 31 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T011145Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T142151Z
-(MemoryCluster promo-consol-ep-note-20260905T142151Z)
-(SchemaVersion promo-consol-ep-note-20260905T142151Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T142151Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T142151Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T142151Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T142151Z ev-promo-consol-ep-note-20260905T142151Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T142151Z)
-(Promotes promo-consol-ep-note-20260905T142151Z ep-note-20260905T142151Z)
-(About promo-consol-ep-note-20260905T142151Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T142151Z "Auto-promotion: ep-note-20260905T142151Z has 31 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T142151Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T115322Z
-(MemoryCluster promo-consol-ep-note-20260905T115322Z)
-(SchemaVersion promo-consol-ep-note-20260905T115322Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T115322Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T115322Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T115322Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T115322Z ev-promo-consol-ep-note-20260905T115322Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T115322Z)
-(Promotes promo-consol-ep-note-20260905T115322Z ep-note-20260905T115322Z)
-(About promo-consol-ep-note-20260905T115322Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T115322Z "Auto-promotion: ep-note-20260905T115322Z has 31 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T115322Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T060445Z
-(MemoryCluster promo-consol-ep-note-20260905T060445Z)
-(SchemaVersion promo-consol-ep-note-20260905T060445Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T060445Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T060445Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T060445Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T060445Z ev-promo-consol-ep-note-20260905T060445Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T060445Z)
-(Promotes promo-consol-ep-note-20260905T060445Z ep-note-20260905T060445Z)
-(About promo-consol-ep-note-20260905T060445Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T060445Z "Auto-promotion: ep-note-20260905T060445Z has 31 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T060445Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T074528Z
-(MemoryCluster promo-consol-ep-note-20260904T074528Z)
-(SchemaVersion promo-consol-ep-note-20260904T074528Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T074528Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T074528Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T074528Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T074528Z ev-promo-consol-ep-note-20260904T074528Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T074528Z)
-(Promotes promo-consol-ep-note-20260904T074528Z ep-note-20260904T074528Z)
-(About promo-consol-ep-note-20260904T074528Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T074528Z "Auto-promotion: ep-note-20260904T074528Z has 31 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T074528Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903052209603512
 (MemoryCluster promo-consol-ep-20260903052209603512)
@@ -22602,70 +22374,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T003209Z "Auto-promotion: ep-note-20260906T003209Z has 30 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T003209Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T143631Z
-(MemoryCluster promo-consol-ep-note-20260905T143631Z)
-(SchemaVersion promo-consol-ep-note-20260905T143631Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T143631Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T143631Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T143631Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T143631Z ev-promo-consol-ep-note-20260905T143631Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T143631Z)
-(Promotes promo-consol-ep-note-20260905T143631Z ep-note-20260905T143631Z)
-(About promo-consol-ep-note-20260905T143631Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T143631Z "Auto-promotion: ep-note-20260905T143631Z has 30 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T143631Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T120211Z
-(MemoryCluster promo-consol-ep-note-20260905T120211Z)
-(SchemaVersion promo-consol-ep-note-20260905T120211Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T120211Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T120211Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T120211Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T120211Z ev-promo-consol-ep-note-20260905T120211Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T120211Z)
-(Promotes promo-consol-ep-note-20260905T120211Z ep-note-20260905T120211Z)
-(About promo-consol-ep-note-20260905T120211Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T120211Z "Auto-promotion: ep-note-20260905T120211Z has 30 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T120211Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T105528Z
-(MemoryCluster promo-consol-ep-note-20260905T105528Z)
-(SchemaVersion promo-consol-ep-note-20260905T105528Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T105528Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T105528Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T105528Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T105528Z ev-promo-consol-ep-note-20260905T105528Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T105528Z)
-(Promotes promo-consol-ep-note-20260905T105528Z ep-note-20260905T105528Z)
-(About promo-consol-ep-note-20260905T105528Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T105528Z "Auto-promotion: ep-note-20260905T105528Z has 30 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T105528Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T230319Z
-(MemoryCluster promo-consol-ep-note-20260904T230319Z)
-(SchemaVersion promo-consol-ep-note-20260904T230319Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T230319Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T230319Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T230319Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T230319Z ev-promo-consol-ep-note-20260904T230319Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T230319Z)
-(Promotes promo-consol-ep-note-20260904T230319Z ep-note-20260904T230319Z)
-(About promo-consol-ep-note-20260904T230319Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T230319Z "Auto-promotion: ep-note-20260904T230319Z has 30 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T230319Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T215105Z
-(MemoryCluster promo-consol-ep-note-20260903T215105Z)
-(SchemaVersion promo-consol-ep-note-20260903T215105Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T215105Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T215105Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T215105Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T215105Z ev-promo-consol-ep-note-20260903T215105Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T215105Z)
-(Promotes promo-consol-ep-note-20260903T215105Z ep-note-20260903T215105Z)
-(About promo-consol-ep-note-20260903T215105Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T215105Z "Auto-promotion: ep-note-20260903T215105Z has 30 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T215105Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903053353071266
 (MemoryCluster promo-consol-ep-20260903053353071266)
@@ -22706,83 +22418,11 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T112126Z "Auto-promotion: ep-note-20260905T112126Z has 29 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T112126Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T111249Z
-(MemoryCluster promo-consol-ep-note-20260905T111249Z)
-(SchemaVersion promo-consol-ep-note-20260905T111249Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T111249Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T111249Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T111249Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T111249Z ev-promo-consol-ep-note-20260905T111249Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T111249Z)
-(Promotes promo-consol-ep-note-20260905T111249Z ep-note-20260905T111249Z)
-(About promo-consol-ep-note-20260905T111249Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T111249Z "Auto-promotion: ep-note-20260905T111249Z has 29 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T111249Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T110715Z
-(MemoryCluster promo-consol-ep-note-20260905T110715Z)
-(SchemaVersion promo-consol-ep-note-20260905T110715Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T110715Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T110715Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T110715Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T110715Z ev-promo-consol-ep-note-20260905T110715Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T110715Z)
-(Promotes promo-consol-ep-note-20260905T110715Z ep-note-20260905T110715Z)
-(About promo-consol-ep-note-20260905T110715Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T110715Z "Auto-promotion: ep-note-20260905T110715Z has 29 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T110715Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T104004Z
-(MemoryCluster promo-consol-ep-note-20260905T104004Z)
-(SchemaVersion promo-consol-ep-note-20260905T104004Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T104004Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T104004Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T104004Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T104004Z ev-promo-consol-ep-note-20260905T104004Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T104004Z)
-(Promotes promo-consol-ep-note-20260905T104004Z ep-note-20260905T104004Z)
-(About promo-consol-ep-note-20260905T104004Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T104004Z "Auto-promotion: ep-note-20260905T104004Z has 29 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T104004Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T215415Z
-(MemoryCluster promo-consol-ep-note-20260903T215415Z)
-(SchemaVersion promo-consol-ep-note-20260903T215415Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T215415Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T215415Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T215415Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T215415Z ev-promo-consol-ep-note-20260903T215415Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T215415Z)
-(Promotes promo-consol-ep-note-20260903T215415Z ep-note-20260903T215415Z)
-(About promo-consol-ep-note-20260903T215415Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T215415Z "Auto-promotion: ep-note-20260903T215415Z has 29 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T215415Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T172600Z
-(MemoryCluster promo-consol-ep-note-20260903T172600Z)
-(SchemaVersion promo-consol-ep-note-20260903T172600Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T172600Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T172600Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T172600Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T172600Z ev-promo-consol-ep-note-20260903T172600Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T172600Z)
-(Promotes promo-consol-ep-note-20260903T172600Z ep-note-20260903T172600Z)
-(About promo-consol-ep-note-20260903T172600Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T172600Z "Auto-promotion: ep-note-20260903T172600Z has 29 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T172600Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T163039Z
-(MemoryCluster promo-consol-ep-note-20260903T163039Z)
-(SchemaVersion promo-consol-ep-note-20260903T163039Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T163039Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T163039Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T163039Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T163039Z ev-promo-consol-ep-note-20260903T163039Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T163039Z)
-(Promotes promo-consol-ep-note-20260903T163039Z ep-note-20260903T163039Z)
-(About promo-consol-ep-note-20260903T163039Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T163039Z "Auto-promotion: ep-note-20260903T163039Z has 29 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T163039Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903001530622767
 (MemoryCluster promo-consol-ep-20260903001530622767)
@@ -22810,70 +22450,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T010915Z "Auto-promotion: ep-note-20260906T010915Z has 28 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T010915Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T132411Z
-(MemoryCluster promo-consol-ep-note-20260905T132411Z)
-(SchemaVersion promo-consol-ep-note-20260905T132411Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T132411Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T132411Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T132411Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T132411Z ev-promo-consol-ep-note-20260905T132411Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T132411Z)
-(Promotes promo-consol-ep-note-20260905T132411Z ep-note-20260905T132411Z)
-(About promo-consol-ep-note-20260905T132411Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T132411Z "Auto-promotion: ep-note-20260905T132411Z has 28 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T132411Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T120537Z
-(MemoryCluster promo-consol-ep-note-20260905T120537Z)
-(SchemaVersion promo-consol-ep-note-20260905T120537Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T120537Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T120537Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T120537Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T120537Z ev-promo-consol-ep-note-20260905T120537Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T120537Z)
-(Promotes promo-consol-ep-note-20260905T120537Z ep-note-20260905T120537Z)
-(About promo-consol-ep-note-20260905T120537Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T120537Z "Auto-promotion: ep-note-20260905T120537Z has 28 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T120537Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T025815Z
-(MemoryCluster promo-consol-ep-note-20260905T025815Z)
-(SchemaVersion promo-consol-ep-note-20260905T025815Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T025815Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T025815Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T025815Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T025815Z ev-promo-consol-ep-note-20260905T025815Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T025815Z)
-(Promotes promo-consol-ep-note-20260905T025815Z ep-note-20260905T025815Z)
-(About promo-consol-ep-note-20260905T025815Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T025815Z "Auto-promotion: ep-note-20260905T025815Z has 28 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T025815Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T204605Z
-(MemoryCluster promo-consol-ep-note-20260904T204605Z)
-(SchemaVersion promo-consol-ep-note-20260904T204605Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T204605Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T204605Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T204605Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T204605Z ev-promo-consol-ep-note-20260904T204605Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T204605Z)
-(Promotes promo-consol-ep-note-20260904T204605Z ep-note-20260904T204605Z)
-(About promo-consol-ep-note-20260904T204605Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T204605Z "Auto-promotion: ep-note-20260904T204605Z has 28 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T204605Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T214958Z
-(MemoryCluster promo-consol-ep-note-20260903T214958Z)
-(SchemaVersion promo-consol-ep-note-20260903T214958Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T214958Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T214958Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T214958Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T214958Z ev-promo-consol-ep-note-20260903T214958Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T214958Z)
-(Promotes promo-consol-ep-note-20260903T214958Z ep-note-20260903T214958Z)
-(About promo-consol-ep-note-20260903T214958Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T214958Z "Auto-promotion: ep-note-20260903T214958Z has 28 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T214958Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903064842242652
 (MemoryCluster promo-consol-ep-20260903064842242652)
@@ -22901,57 +22481,9 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T122334Z "Auto-promotion: ep-note-20260905T122334Z has 27 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T122334Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T083504Z
-(MemoryCluster promo-consol-ep-note-20260905T083504Z)
-(SchemaVersion promo-consol-ep-note-20260905T083504Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T083504Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T083504Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T083504Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T083504Z ev-promo-consol-ep-note-20260905T083504Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T083504Z)
-(Promotes promo-consol-ep-note-20260905T083504Z ep-note-20260905T083504Z)
-(About promo-consol-ep-note-20260905T083504Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T083504Z "Auto-promotion: ep-note-20260905T083504Z has 27 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T083504Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T093717Z
-(MemoryCluster promo-consol-ep-note-20260904T093717Z)
-(SchemaVersion promo-consol-ep-note-20260904T093717Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T093717Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T093717Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T093717Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T093717Z ev-promo-consol-ep-note-20260904T093717Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T093717Z)
-(Promotes promo-consol-ep-note-20260904T093717Z ep-note-20260904T093717Z)
-(About promo-consol-ep-note-20260904T093717Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T093717Z "Auto-promotion: ep-note-20260904T093717Z has 27 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T093717Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T022344Z
-(MemoryCluster promo-consol-ep-note-20260904T022344Z)
-(SchemaVersion promo-consol-ep-note-20260904T022344Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T022344Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T022344Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T022344Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T022344Z ev-promo-consol-ep-note-20260904T022344Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T022344Z)
-(Promotes promo-consol-ep-note-20260904T022344Z ep-note-20260904T022344Z)
-(About promo-consol-ep-note-20260904T022344Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T022344Z "Auto-promotion: ep-note-20260904T022344Z has 27 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T022344Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T144640Z
-(MemoryCluster promo-consol-ep-note-20260903T144640Z)
-(SchemaVersion promo-consol-ep-note-20260903T144640Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T144640Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T144640Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T144640Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T144640Z ev-promo-consol-ep-note-20260903T144640Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T144640Z)
-(Promotes promo-consol-ep-note-20260903T144640Z ep-note-20260903T144640Z)
-(About promo-consol-ep-note-20260903T144640Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T144640Z "Auto-promotion: ep-note-20260903T144640Z has 27 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T144640Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903063456371132
 (MemoryCluster promo-consol-ep-20260903063456371132)
@@ -22979,70 +22511,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T060840Z "Auto-promotion: ep-note-20260905T060840Z has 26 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T060840Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T224734Z
-(MemoryCluster promo-consol-ep-note-20260904T224734Z)
-(SchemaVersion promo-consol-ep-note-20260904T224734Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T224734Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T224734Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T224734Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T224734Z ev-promo-consol-ep-note-20260904T224734Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T224734Z)
-(Promotes promo-consol-ep-note-20260904T224734Z ep-note-20260904T224734Z)
-(About promo-consol-ep-note-20260904T224734Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T224734Z "Auto-promotion: ep-note-20260904T224734Z has 26 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T224734Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T222408Z
-(MemoryCluster promo-consol-ep-note-20260904T222408Z)
-(SchemaVersion promo-consol-ep-note-20260904T222408Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T222408Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T222408Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T222408Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T222408Z ev-promo-consol-ep-note-20260904T222408Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T222408Z)
-(Promotes promo-consol-ep-note-20260904T222408Z ep-note-20260904T222408Z)
-(About promo-consol-ep-note-20260904T222408Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T222408Z "Auto-promotion: ep-note-20260904T222408Z has 26 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T222408Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T222407Z
-(MemoryCluster promo-consol-ep-note-20260904T222407Z)
-(SchemaVersion promo-consol-ep-note-20260904T222407Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T222407Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T222407Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T222407Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T222407Z ev-promo-consol-ep-note-20260904T222407Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T222407Z)
-(Promotes promo-consol-ep-note-20260904T222407Z ep-note-20260904T222407Z)
-(About promo-consol-ep-note-20260904T222407Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T222407Z "Auto-promotion: ep-note-20260904T222407Z has 26 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T222407Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T164525Z
-(MemoryCluster promo-consol-ep-note-20260904T164525Z)
-(SchemaVersion promo-consol-ep-note-20260904T164525Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T164525Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T164525Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T164525Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T164525Z ev-promo-consol-ep-note-20260904T164525Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T164525Z)
-(Promotes promo-consol-ep-note-20260904T164525Z ep-note-20260904T164525Z)
-(About promo-consol-ep-note-20260904T164525Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T164525Z "Auto-promotion: ep-note-20260904T164525Z has 26 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T164525Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T214638Z
-(MemoryCluster promo-consol-ep-note-20260903T214638Z)
-(SchemaVersion promo-consol-ep-note-20260903T214638Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T214638Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T214638Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T214638Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T214638Z ev-promo-consol-ep-note-20260903T214638Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T214638Z)
-(Promotes promo-consol-ep-note-20260903T214638Z ep-note-20260903T214638Z)
-(About promo-consol-ep-note-20260903T214638Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T214638Z "Auto-promotion: ep-note-20260903T214638Z has 26 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T214638Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903021158
 (MemoryCluster promo-consol-ep-20260903021158)
@@ -23096,31 +22568,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T110911Z "Auto-promotion: ep-note-20260905T110911Z has 25 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T110911Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T110453Z
-(MemoryCluster promo-consol-ep-note-20260905T110453Z)
-(SchemaVersion promo-consol-ep-note-20260905T110453Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T110453Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T110453Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T110453Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T110453Z ev-promo-consol-ep-note-20260905T110453Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T110453Z)
-(Promotes promo-consol-ep-note-20260905T110453Z ep-note-20260905T110453Z)
-(About promo-consol-ep-note-20260905T110453Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T110453Z "Auto-promotion: ep-note-20260905T110453Z has 25 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T110453Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T164430Z
-(MemoryCluster promo-consol-ep-note-20260903T164430Z)
-(SchemaVersion promo-consol-ep-note-20260903T164430Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T164430Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T164430Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T164430Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T164430Z ev-promo-consol-ep-note-20260903T164430Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T164430Z)
-(Promotes promo-consol-ep-note-20260903T164430Z ep-note-20260903T164430Z)
-(About promo-consol-ep-note-20260903T164430Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T164430Z "Auto-promotion: ep-note-20260903T164430Z has 25 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T164430Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-tail-20
 (MemoryCluster promo-consol-ep-tail-20)
@@ -23148,161 +22596,17 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T220931Z "Auto-promotion: ep-note-20260905T220931Z has 24 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T220931Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T151010Z
-(MemoryCluster promo-consol-ep-note-20260905T151010Z)
-(SchemaVersion promo-consol-ep-note-20260905T151010Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T151010Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T151010Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T151010Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T151010Z ev-promo-consol-ep-note-20260905T151010Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T151010Z)
-(Promotes promo-consol-ep-note-20260905T151010Z ep-note-20260905T151010Z)
-(About promo-consol-ep-note-20260905T151010Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T151010Z "Auto-promotion: ep-note-20260905T151010Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T151010Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T122712Z
-(MemoryCluster promo-consol-ep-note-20260905T122712Z)
-(SchemaVersion promo-consol-ep-note-20260905T122712Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T122712Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T122712Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T122712Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T122712Z ev-promo-consol-ep-note-20260905T122712Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T122712Z)
-(Promotes promo-consol-ep-note-20260905T122712Z ep-note-20260905T122712Z)
-(About promo-consol-ep-note-20260905T122712Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T122712Z "Auto-promotion: ep-note-20260905T122712Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T122712Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T115620Z
-(MemoryCluster promo-consol-ep-note-20260905T115620Z)
-(SchemaVersion promo-consol-ep-note-20260905T115620Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T115620Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T115620Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T115620Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T115620Z ev-promo-consol-ep-note-20260905T115620Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T115620Z)
-(Promotes promo-consol-ep-note-20260905T115620Z ep-note-20260905T115620Z)
-(About promo-consol-ep-note-20260905T115620Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T115620Z "Auto-promotion: ep-note-20260905T115620Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T115620Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T104346Z
-(MemoryCluster promo-consol-ep-note-20260905T104346Z)
-(SchemaVersion promo-consol-ep-note-20260905T104346Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T104346Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T104346Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T104346Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T104346Z ev-promo-consol-ep-note-20260905T104346Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T104346Z)
-(Promotes promo-consol-ep-note-20260905T104346Z ep-note-20260905T104346Z)
-(About promo-consol-ep-note-20260905T104346Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T104346Z "Auto-promotion: ep-note-20260905T104346Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T104346Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T062611Z
-(MemoryCluster promo-consol-ep-note-20260905T062611Z)
-(SchemaVersion promo-consol-ep-note-20260905T062611Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T062611Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T062611Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T062611Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T062611Z ev-promo-consol-ep-note-20260905T062611Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T062611Z)
-(Promotes promo-consol-ep-note-20260905T062611Z ep-note-20260905T062611Z)
-(About promo-consol-ep-note-20260905T062611Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T062611Z "Auto-promotion: ep-note-20260905T062611Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T062611Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T020518Z
-(MemoryCluster promo-consol-ep-note-20260905T020518Z)
-(SchemaVersion promo-consol-ep-note-20260905T020518Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T020518Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T020518Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T020518Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T020518Z ev-promo-consol-ep-note-20260905T020518Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T020518Z)
-(Promotes promo-consol-ep-note-20260905T020518Z ep-note-20260905T020518Z)
-(About promo-consol-ep-note-20260905T020518Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T020518Z "Auto-promotion: ep-note-20260905T020518Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T020518Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T231556Z
-(MemoryCluster promo-consol-ep-note-20260904T231556Z)
-(SchemaVersion promo-consol-ep-note-20260904T231556Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T231556Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T231556Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T231556Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T231556Z ev-promo-consol-ep-note-20260904T231556Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T231556Z)
-(Promotes promo-consol-ep-note-20260904T231556Z ep-note-20260904T231556Z)
-(About promo-consol-ep-note-20260904T231556Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T231556Z "Auto-promotion: ep-note-20260904T231556Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T231556Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T211316Z
-(MemoryCluster promo-consol-ep-note-20260904T211316Z)
-(SchemaVersion promo-consol-ep-note-20260904T211316Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T211316Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T211316Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T211316Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T211316Z ev-promo-consol-ep-note-20260904T211316Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T211316Z)
-(Promotes promo-consol-ep-note-20260904T211316Z ep-note-20260904T211316Z)
-(About promo-consol-ep-note-20260904T211316Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T211316Z "Auto-promotion: ep-note-20260904T211316Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T211316Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T161618Z
-(MemoryCluster promo-consol-ep-note-20260904T161618Z)
-(SchemaVersion promo-consol-ep-note-20260904T161618Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T161618Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T161618Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T161618Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T161618Z ev-promo-consol-ep-note-20260904T161618Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T161618Z)
-(Promotes promo-consol-ep-note-20260904T161618Z ep-note-20260904T161618Z)
-(About promo-consol-ep-note-20260904T161618Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T161618Z "Auto-promotion: ep-note-20260904T161618Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T161618Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T155729Z
-(MemoryCluster promo-consol-ep-note-20260904T155729Z)
-(SchemaVersion promo-consol-ep-note-20260904T155729Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T155729Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T155729Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T155729Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T155729Z ev-promo-consol-ep-note-20260904T155729Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T155729Z)
-(Promotes promo-consol-ep-note-20260904T155729Z ep-note-20260904T155729Z)
-(About promo-consol-ep-note-20260904T155729Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T155729Z "Auto-promotion: ep-note-20260904T155729Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T155729Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T014036Z
-(MemoryCluster promo-consol-ep-note-20260904T014036Z)
-(SchemaVersion promo-consol-ep-note-20260904T014036Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T014036Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T014036Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T014036Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T014036Z ev-promo-consol-ep-note-20260904T014036Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T014036Z)
-(Promotes promo-consol-ep-note-20260904T014036Z ep-note-20260904T014036Z)
-(About promo-consol-ep-note-20260904T014036Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T014036Z "Auto-promotion: ep-note-20260904T014036Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T014036Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T213533Z
-(MemoryCluster promo-consol-ep-note-20260903T213533Z)
-(SchemaVersion promo-consol-ep-note-20260903T213533Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T213533Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T213533Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T213533Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T213533Z ev-promo-consol-ep-note-20260903T213533Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T213533Z)
-(Promotes promo-consol-ep-note-20260903T213533Z ep-note-20260903T213533Z)
-(About promo-consol-ep-note-20260903T213533Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T213533Z "Auto-promotion: ep-note-20260903T213533Z has 24 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T213533Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-0902b
 (MemoryCluster promo-consol-ep-0902b)
@@ -23330,57 +22634,9 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T233755Z "Auto-promotion: ep-note-20260905T233755Z has 23 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T233755Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T222116Z
-(MemoryCluster promo-consol-ep-note-20260905T222116Z)
-(SchemaVersion promo-consol-ep-note-20260905T222116Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T222116Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T222116Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T222116Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T222116Z ev-promo-consol-ep-note-20260905T222116Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T222116Z)
-(Promotes promo-consol-ep-note-20260905T222116Z ep-note-20260905T222116Z)
-(About promo-consol-ep-note-20260905T222116Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T222116Z "Auto-promotion: ep-note-20260905T222116Z has 23 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T222116Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T145300Z
-(MemoryCluster promo-consol-ep-note-20260905T145300Z)
-(SchemaVersion promo-consol-ep-note-20260905T145300Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T145300Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T145300Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T145300Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T145300Z ev-promo-consol-ep-note-20260905T145300Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T145300Z)
-(Promotes promo-consol-ep-note-20260905T145300Z ep-note-20260905T145300Z)
-(About promo-consol-ep-note-20260905T145300Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T145300Z "Auto-promotion: ep-note-20260905T145300Z has 23 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T145300Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T110151Z
-(MemoryCluster promo-consol-ep-note-20260905T110151Z)
-(SchemaVersion promo-consol-ep-note-20260905T110151Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T110151Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T110151Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T110151Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T110151Z ev-promo-consol-ep-note-20260905T110151Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T110151Z)
-(Promotes promo-consol-ep-note-20260905T110151Z ep-note-20260905T110151Z)
-(About promo-consol-ep-note-20260905T110151Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T110151Z "Auto-promotion: ep-note-20260905T110151Z has 23 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T110151Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T023357Z
-(MemoryCluster promo-consol-ep-note-20260905T023357Z)
-(SchemaVersion promo-consol-ep-note-20260905T023357Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T023357Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T023357Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T023357Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T023357Z ev-promo-consol-ep-note-20260905T023357Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T023357Z)
-(Promotes promo-consol-ep-note-20260905T023357Z ep-note-20260905T023357Z)
-(About promo-consol-ep-note-20260905T023357Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T023357Z "Auto-promotion: ep-note-20260905T023357Z has 23 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T023357Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260902233127694282
 (MemoryCluster promo-consol-ep-20260902233127694282)
@@ -23421,69 +22677,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T044459Z "Auto-promotion: ep-note-20260905T044459Z has 22 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T044459Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T213246Z
-(MemoryCluster promo-consol-ep-note-20260904T213246Z)
-(SchemaVersion promo-consol-ep-note-20260904T213246Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T213246Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T213246Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T213246Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T213246Z ev-promo-consol-ep-note-20260904T213246Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T213246Z)
-(Promotes promo-consol-ep-note-20260904T213246Z ep-note-20260904T213246Z)
-(About promo-consol-ep-note-20260904T213246Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T213246Z "Auto-promotion: ep-note-20260904T213246Z has 22 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T213246Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T192218Z
-(MemoryCluster promo-consol-ep-note-20260904T192218Z)
-(SchemaVersion promo-consol-ep-note-20260904T192218Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T192218Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T192218Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T192218Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T192218Z ev-promo-consol-ep-note-20260904T192218Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T192218Z)
-(Promotes promo-consol-ep-note-20260904T192218Z ep-note-20260904T192218Z)
-(About promo-consol-ep-note-20260904T192218Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T192218Z "Auto-promotion: ep-note-20260904T192218Z has 22 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T192218Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T011430Z
-(MemoryCluster promo-consol-ep-note-20260904T011430Z)
-(SchemaVersion promo-consol-ep-note-20260904T011430Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T011430Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T011430Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T011430Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T011430Z ev-promo-consol-ep-note-20260904T011430Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T011430Z)
-(Promotes promo-consol-ep-note-20260904T011430Z ep-note-20260904T011430Z)
-(About promo-consol-ep-note-20260904T011430Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T011430Z "Auto-promotion: ep-note-20260904T011430Z has 22 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T011430Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T215146Z
-(MemoryCluster promo-consol-ep-note-20260903T215146Z)
-(SchemaVersion promo-consol-ep-note-20260903T215146Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T215146Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T215146Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T215146Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T215146Z ev-promo-consol-ep-note-20260903T215146Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T215146Z)
-(Promotes promo-consol-ep-note-20260903T215146Z ep-note-20260903T215146Z)
-(About promo-consol-ep-note-20260903T215146Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T215146Z "Auto-promotion: ep-note-20260903T215146Z has 22 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T215146Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T173700Z
-(MemoryCluster promo-consol-ep-note-20260903T173700Z)
-(SchemaVersion promo-consol-ep-note-20260903T173700Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T173700Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T173700Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T173700Z 2026-09-06T02:19:00Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T173700Z)
-(Promotes promo-consol-ep-note-20260903T173700Z ep-note-20260903T173700Z)
-(About promo-consol-ep-note-20260903T173700Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T173700Z "Auto-promotion: ep-note-20260903T173700Z has 22 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T173700Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903061927036874
 (MemoryCluster promo-consol-ep-20260903061927036874)
@@ -23511,96 +22708,12 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T044755Z "Auto-promotion: ep-note-20260906T044755Z has 21 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T044755Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T181733Z
-(MemoryCluster promo-consol-ep-note-20260905T181733Z)
-(SchemaVersion promo-consol-ep-note-20260905T181733Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T181733Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T181733Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T181733Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T181733Z ev-promo-consol-ep-note-20260905T181733Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T181733Z)
-(Promotes promo-consol-ep-note-20260905T181733Z ep-note-20260905T181733Z)
-(About promo-consol-ep-note-20260905T181733Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T181733Z "Auto-promotion: ep-note-20260905T181733Z has 21 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T181733Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T103648Z
-(MemoryCluster promo-consol-ep-note-20260905T103648Z)
-(SchemaVersion promo-consol-ep-note-20260905T103648Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T103648Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T103648Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T103648Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T103648Z ev-promo-consol-ep-note-20260905T103648Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T103648Z)
-(Promotes promo-consol-ep-note-20260905T103648Z ep-note-20260905T103648Z)
-(About promo-consol-ep-note-20260905T103648Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T103648Z "Auto-promotion: ep-note-20260905T103648Z has 21 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T103648Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T062849Z
-(MemoryCluster promo-consol-ep-note-20260905T062849Z)
-(SchemaVersion promo-consol-ep-note-20260905T062849Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T062849Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T062849Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T062849Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T062849Z ev-promo-consol-ep-note-20260905T062849Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T062849Z)
-(Promotes promo-consol-ep-note-20260905T062849Z ep-note-20260905T062849Z)
-(About promo-consol-ep-note-20260905T062849Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T062849Z "Auto-promotion: ep-note-20260905T062849Z has 21 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T062849Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T034755Z
-(MemoryCluster promo-consol-ep-note-20260905T034755Z)
-(SchemaVersion promo-consol-ep-note-20260905T034755Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T034755Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T034755Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T034755Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T034755Z ev-promo-consol-ep-note-20260905T034755Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T034755Z)
-(Promotes promo-consol-ep-note-20260905T034755Z ep-note-20260905T034755Z)
-(About promo-consol-ep-note-20260905T034755Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T034755Z "Auto-promotion: ep-note-20260905T034755Z has 21 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T034755Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T232225Z
-(MemoryCluster promo-consol-ep-note-20260904T232225Z)
-(SchemaVersion promo-consol-ep-note-20260904T232225Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T232225Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T232225Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T232225Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T232225Z ev-promo-consol-ep-note-20260904T232225Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T232225Z)
-(Promotes promo-consol-ep-note-20260904T232225Z ep-note-20260904T232225Z)
-(About promo-consol-ep-note-20260904T232225Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T232225Z "Auto-promotion: ep-note-20260904T232225Z has 21 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T232225Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T215440Z
-(MemoryCluster promo-consol-ep-note-20260904T215440Z)
-(SchemaVersion promo-consol-ep-note-20260904T215440Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T215440Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T215440Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T215440Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T215440Z ev-promo-consol-ep-note-20260904T215440Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T215440Z)
-(Promotes promo-consol-ep-note-20260904T215440Z ep-note-20260904T215440Z)
-(About promo-consol-ep-note-20260904T215440Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T215440Z "Auto-promotion: ep-note-20260904T215440Z has 21 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T215440Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T061410Z
-(MemoryCluster promo-consol-ep-note-20260904T061410Z)
-(SchemaVersion promo-consol-ep-note-20260904T061410Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T061410Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T061410Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T061410Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T061410Z ev-promo-consol-ep-note-20260904T061410Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T061410Z)
-(Promotes promo-consol-ep-note-20260904T061410Z ep-note-20260904T061410Z)
-(About promo-consol-ep-note-20260904T061410Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T061410Z "Auto-promotion: ep-note-20260904T061410Z has 21 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T061410Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T135906Z
 (MemoryCluster promo-consol-ep-note-20260905T135906Z)
@@ -23615,70 +22728,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T135906Z "Auto-promotion: ep-note-20260905T135906Z has 20 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T135906Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T113759Z
-(MemoryCluster promo-consol-ep-note-20260905T113759Z)
-(SchemaVersion promo-consol-ep-note-20260905T113759Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T113759Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T113759Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T113759Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T113759Z ev-promo-consol-ep-note-20260905T113759Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T113759Z)
-(Promotes promo-consol-ep-note-20260905T113759Z ep-note-20260905T113759Z)
-(About promo-consol-ep-note-20260905T113759Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T113759Z "Auto-promotion: ep-note-20260905T113759Z has 20 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T113759Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T090148Z
-(MemoryCluster promo-consol-ep-note-20260905T090148Z)
-(SchemaVersion promo-consol-ep-note-20260905T090148Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T090148Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T090148Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T090148Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T090148Z ev-promo-consol-ep-note-20260905T090148Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T090148Z)
-(Promotes promo-consol-ep-note-20260905T090148Z ep-note-20260905T090148Z)
-(About promo-consol-ep-note-20260905T090148Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T090148Z "Auto-promotion: ep-note-20260905T090148Z has 20 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T090148Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T074122Z
-(MemoryCluster promo-consol-ep-note-20260905T074122Z)
-(SchemaVersion promo-consol-ep-note-20260905T074122Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T074122Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T074122Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T074122Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T074122Z ev-promo-consol-ep-note-20260905T074122Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T074122Z)
-(Promotes promo-consol-ep-note-20260905T074122Z ep-note-20260905T074122Z)
-(About promo-consol-ep-note-20260905T074122Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T074122Z "Auto-promotion: ep-note-20260905T074122Z has 20 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T074122Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T020256Z
-(MemoryCluster promo-consol-ep-note-20260905T020256Z)
-(SchemaVersion promo-consol-ep-note-20260905T020256Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T020256Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T020256Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T020256Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T020256Z ev-promo-consol-ep-note-20260905T020256Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T020256Z)
-(Promotes promo-consol-ep-note-20260905T020256Z ep-note-20260905T020256Z)
-(About promo-consol-ep-note-20260905T020256Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T020256Z "Auto-promotion: ep-note-20260905T020256Z has 20 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T020256Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T155827Z
-(MemoryCluster promo-consol-ep-note-20260904T155827Z)
-(SchemaVersion promo-consol-ep-note-20260904T155827Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T155827Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T155827Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T155827Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T155827Z ev-promo-consol-ep-note-20260904T155827Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T155827Z)
-(Promotes promo-consol-ep-note-20260904T155827Z ep-note-20260904T155827Z)
-(About promo-consol-ep-note-20260904T155827Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T155827Z "Auto-promotion: ep-note-20260904T155827Z has 20 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T155827Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T050533Z
 (MemoryCluster promo-consol-ep-note-20260906T050533Z)
@@ -23693,83 +22746,11 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T050533Z "Auto-promotion: ep-note-20260906T050533Z has 19 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T050533Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T173332Z
-(MemoryCluster promo-consol-ep-note-20260905T173332Z)
-(SchemaVersion promo-consol-ep-note-20260905T173332Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T173332Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T173332Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T173332Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T173332Z ev-promo-consol-ep-note-20260905T173332Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T173332Z)
-(Promotes promo-consol-ep-note-20260905T173332Z ep-note-20260905T173332Z)
-(About promo-consol-ep-note-20260905T173332Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T173332Z "Auto-promotion: ep-note-20260905T173332Z has 19 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T173332Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T150058Z
-(MemoryCluster promo-consol-ep-note-20260905T150058Z)
-(SchemaVersion promo-consol-ep-note-20260905T150058Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T150058Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T150058Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T150058Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T150058Z ev-promo-consol-ep-note-20260905T150058Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T150058Z)
-(Promotes promo-consol-ep-note-20260905T150058Z ep-note-20260905T150058Z)
-(About promo-consol-ep-note-20260905T150058Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T150058Z "Auto-promotion: ep-note-20260905T150058Z has 19 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T150058Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T141046Z
-(MemoryCluster promo-consol-ep-note-20260905T141046Z)
-(SchemaVersion promo-consol-ep-note-20260905T141046Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T141046Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T141046Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T141046Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T141046Z ev-promo-consol-ep-note-20260905T141046Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T141046Z)
-(Promotes promo-consol-ep-note-20260905T141046Z ep-note-20260905T141046Z)
-(About promo-consol-ep-note-20260905T141046Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T141046Z "Auto-promotion: ep-note-20260905T141046Z has 19 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T141046Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T052104Z
-(MemoryCluster promo-consol-ep-note-20260905T052104Z)
-(SchemaVersion promo-consol-ep-note-20260905T052104Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T052104Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T052104Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T052104Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T052104Z ev-promo-consol-ep-note-20260905T052104Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T052104Z)
-(Promotes promo-consol-ep-note-20260905T052104Z ep-note-20260905T052104Z)
-(About promo-consol-ep-note-20260905T052104Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T052104Z "Auto-promotion: ep-note-20260905T052104Z has 19 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T052104Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T190716Z
-(MemoryCluster promo-consol-ep-note-20260904T190716Z)
-(SchemaVersion promo-consol-ep-note-20260904T190716Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T190716Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T190716Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T190716Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T190716Z ev-promo-consol-ep-note-20260904T190716Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T190716Z)
-(Promotes promo-consol-ep-note-20260904T190716Z ep-note-20260904T190716Z)
-(About promo-consol-ep-note-20260904T190716Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T190716Z "Auto-promotion: ep-note-20260904T190716Z has 19 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T190716Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T063804Z
-(MemoryCluster promo-consol-ep-note-20260904T063804Z)
-(SchemaVersion promo-consol-ep-note-20260904T063804Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T063804Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T063804Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T063804Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T063804Z ev-promo-consol-ep-note-20260904T063804Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T063804Z)
-(Promotes promo-consol-ep-note-20260904T063804Z ep-note-20260904T063804Z)
-(About promo-consol-ep-note-20260904T063804Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T063804Z "Auto-promotion: ep-note-20260904T063804Z has 19 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T063804Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T212650Z
 (MemoryCluster promo-consol-ep-note-20260905T212650Z)
@@ -23784,122 +22765,14 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T212650Z "Auto-promotion: ep-note-20260905T212650Z has 18 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T212650Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T123939Z
-(MemoryCluster promo-consol-ep-note-20260905T123939Z)
-(SchemaVersion promo-consol-ep-note-20260905T123939Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T123939Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T123939Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T123939Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T123939Z ev-promo-consol-ep-note-20260905T123939Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T123939Z)
-(Promotes promo-consol-ep-note-20260905T123939Z ep-note-20260905T123939Z)
-(About promo-consol-ep-note-20260905T123939Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T123939Z "Auto-promotion: ep-note-20260905T123939Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T123939Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T121321Z
-(MemoryCluster promo-consol-ep-note-20260905T121321Z)
-(SchemaVersion promo-consol-ep-note-20260905T121321Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T121321Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T121321Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T121321Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T121321Z ev-promo-consol-ep-note-20260905T121321Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T121321Z)
-(Promotes promo-consol-ep-note-20260905T121321Z ep-note-20260905T121321Z)
-(About promo-consol-ep-note-20260905T121321Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T121321Z "Auto-promotion: ep-note-20260905T121321Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T121321Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T085002Z
-(MemoryCluster promo-consol-ep-note-20260905T085002Z)
-(SchemaVersion promo-consol-ep-note-20260905T085002Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T085002Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T085002Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T085002Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T085002Z ev-promo-consol-ep-note-20260905T085002Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T085002Z)
-(Promotes promo-consol-ep-note-20260905T085002Z ep-note-20260905T085002Z)
-(About promo-consol-ep-note-20260905T085002Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T085002Z "Auto-promotion: ep-note-20260905T085002Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T085002Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T215517Z
-(MemoryCluster promo-consol-ep-note-20260904T215517Z)
-(SchemaVersion promo-consol-ep-note-20260904T215517Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T215517Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T215517Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T215517Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T215517Z ev-promo-consol-ep-note-20260904T215517Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T215517Z)
-(Promotes promo-consol-ep-note-20260904T215517Z ep-note-20260904T215517Z)
-(About promo-consol-ep-note-20260904T215517Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T215517Z "Auto-promotion: ep-note-20260904T215517Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T215517Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T190717Z
-(MemoryCluster promo-consol-ep-note-20260904T190717Z)
-(SchemaVersion promo-consol-ep-note-20260904T190717Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T190717Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T190717Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T190717Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T190717Z ev-promo-consol-ep-note-20260904T190717Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T190717Z)
-(Promotes promo-consol-ep-note-20260904T190717Z ep-note-20260904T190717Z)
-(About promo-consol-ep-note-20260904T190717Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T190717Z "Auto-promotion: ep-note-20260904T190717Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T190717Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T165554Z
-(MemoryCluster promo-consol-ep-note-20260904T165554Z)
-(SchemaVersion promo-consol-ep-note-20260904T165554Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T165554Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T165554Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T165554Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T165554Z ev-promo-consol-ep-note-20260904T165554Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T165554Z)
-(Promotes promo-consol-ep-note-20260904T165554Z ep-note-20260904T165554Z)
-(About promo-consol-ep-note-20260904T165554Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T165554Z "Auto-promotion: ep-note-20260904T165554Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T165554Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T104831Z
-(MemoryCluster promo-consol-ep-note-20260904T104831Z)
-(SchemaVersion promo-consol-ep-note-20260904T104831Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T104831Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T104831Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T104831Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T104831Z ev-promo-consol-ep-note-20260904T104831Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T104831Z)
-(Promotes promo-consol-ep-note-20260904T104831Z ep-note-20260904T104831Z)
-(About promo-consol-ep-note-20260904T104831Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T104831Z "Auto-promotion: ep-note-20260904T104831Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T104831Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T092757Z
-(MemoryCluster promo-consol-ep-note-20260904T092757Z)
-(SchemaVersion promo-consol-ep-note-20260904T092757Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T092757Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T092757Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T092757Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T092757Z ev-promo-consol-ep-note-20260904T092757Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T092757Z)
-(Promotes promo-consol-ep-note-20260904T092757Z ep-note-20260904T092757Z)
-(About promo-consol-ep-note-20260904T092757Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T092757Z "Auto-promotion: ep-note-20260904T092757Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T092757Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T011339Z
-(MemoryCluster promo-consol-ep-note-20260904T011339Z)
-(SchemaVersion promo-consol-ep-note-20260904T011339Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T011339Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T011339Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T011339Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T011339Z ev-promo-consol-ep-note-20260904T011339Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T011339Z)
-(Promotes promo-consol-ep-note-20260904T011339Z ep-note-20260904T011339Z)
-(About promo-consol-ep-note-20260904T011339Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T011339Z "Auto-promotion: ep-note-20260904T011339Z has 18 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T011339Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903064416113159
 (MemoryCluster promo-consol-ep-20260903064416113159)
@@ -23953,122 +22826,14 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T021355Z "Auto-promotion: ep-note-20260906T021355Z has 17 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T021355Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T222832Z
-(MemoryCluster promo-consol-ep-note-20260905T222832Z)
-(SchemaVersion promo-consol-ep-note-20260905T222832Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T222832Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T222832Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T222832Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T222832Z ev-promo-consol-ep-note-20260905T222832Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T222832Z)
-(Promotes promo-consol-ep-note-20260905T222832Z ep-note-20260905T222832Z)
-(About promo-consol-ep-note-20260905T222832Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T222832Z "Auto-promotion: ep-note-20260905T222832Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T222832Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T132200Z
-(MemoryCluster promo-consol-ep-note-20260905T132200Z)
-(SchemaVersion promo-consol-ep-note-20260905T132200Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T132200Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T132200Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T132200Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T132200Z ev-promo-consol-ep-note-20260905T132200Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T132200Z)
-(Promotes promo-consol-ep-note-20260905T132200Z ep-note-20260905T132200Z)
-(About promo-consol-ep-note-20260905T132200Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T132200Z "Auto-promotion: ep-note-20260905T132200Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T132200Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T105953Z
-(MemoryCluster promo-consol-ep-note-20260905T105953Z)
-(SchemaVersion promo-consol-ep-note-20260905T105953Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T105953Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T105953Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T105953Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T105953Z ev-promo-consol-ep-note-20260905T105953Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T105953Z)
-(Promotes promo-consol-ep-note-20260905T105953Z ep-note-20260905T105953Z)
-(About promo-consol-ep-note-20260905T105953Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T105953Z "Auto-promotion: ep-note-20260905T105953Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T105953Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T094348Z
-(MemoryCluster promo-consol-ep-note-20260905T094348Z)
-(SchemaVersion promo-consol-ep-note-20260905T094348Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T094348Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T094348Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T094348Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T094348Z ev-promo-consol-ep-note-20260905T094348Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T094348Z)
-(Promotes promo-consol-ep-note-20260905T094348Z ep-note-20260905T094348Z)
-(About promo-consol-ep-note-20260905T094348Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T094348Z "Auto-promotion: ep-note-20260905T094348Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T094348Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T084154Z
-(MemoryCluster promo-consol-ep-note-20260905T084154Z)
-(SchemaVersion promo-consol-ep-note-20260905T084154Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T084154Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T084154Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T084154Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T084154Z ev-promo-consol-ep-note-20260905T084154Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T084154Z)
-(Promotes promo-consol-ep-note-20260905T084154Z ep-note-20260905T084154Z)
-(About promo-consol-ep-note-20260905T084154Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T084154Z "Auto-promotion: ep-note-20260905T084154Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T084154Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T170829Z
-(MemoryCluster promo-consol-ep-note-20260904T170829Z)
-(SchemaVersion promo-consol-ep-note-20260904T170829Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T170829Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T170829Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T170829Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T170829Z ev-promo-consol-ep-note-20260904T170829Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T170829Z)
-(Promotes promo-consol-ep-note-20260904T170829Z ep-note-20260904T170829Z)
-(About promo-consol-ep-note-20260904T170829Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T170829Z "Auto-promotion: ep-note-20260904T170829Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T170829Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T092508Z
-(MemoryCluster promo-consol-ep-note-20260904T092508Z)
-(SchemaVersion promo-consol-ep-note-20260904T092508Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T092508Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T092508Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T092508Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T092508Z ev-promo-consol-ep-note-20260904T092508Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T092508Z)
-(Promotes promo-consol-ep-note-20260904T092508Z ep-note-20260904T092508Z)
-(About promo-consol-ep-note-20260904T092508Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T092508Z "Auto-promotion: ep-note-20260904T092508Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T092508Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T080637Z
-(MemoryCluster promo-consol-ep-note-20260904T080637Z)
-(SchemaVersion promo-consol-ep-note-20260904T080637Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T080637Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T080637Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T080637Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T080637Z ev-promo-consol-ep-note-20260904T080637Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T080637Z)
-(Promotes promo-consol-ep-note-20260904T080637Z ep-note-20260904T080637Z)
-(About promo-consol-ep-note-20260904T080637Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T080637Z "Auto-promotion: ep-note-20260904T080637Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T080637Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T214108Z
-(MemoryCluster promo-consol-ep-note-20260903T214108Z)
-(SchemaVersion promo-consol-ep-note-20260903T214108Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T214108Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T214108Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T214108Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T214108Z ev-promo-consol-ep-note-20260903T214108Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T214108Z)
-(Promotes promo-consol-ep-note-20260903T214108Z ep-note-20260903T214108Z)
-(About promo-consol-ep-note-20260903T214108Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T214108Z "Auto-promotion: ep-note-20260903T214108Z has 17 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T214108Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T131559Z
 (MemoryCluster promo-consol-ep-note-20260905T131559Z)
@@ -24083,96 +22848,12 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T131559Z "Auto-promotion: ep-note-20260905T131559Z has 16 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T131559Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T121049Z
-(MemoryCluster promo-consol-ep-note-20260905T121049Z)
-(SchemaVersion promo-consol-ep-note-20260905T121049Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T121049Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T121049Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T121049Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T121049Z ev-promo-consol-ep-note-20260905T121049Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T121049Z)
-(Promotes promo-consol-ep-note-20260905T121049Z ep-note-20260905T121049Z)
-(About promo-consol-ep-note-20260905T121049Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T121049Z "Auto-promotion: ep-note-20260905T121049Z has 16 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T121049Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T111804Z
-(MemoryCluster promo-consol-ep-note-20260905T111804Z)
-(SchemaVersion promo-consol-ep-note-20260905T111804Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T111804Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T111804Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T111804Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T111804Z ev-promo-consol-ep-note-20260905T111804Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T111804Z)
-(Promotes promo-consol-ep-note-20260905T111804Z ep-note-20260905T111804Z)
-(About promo-consol-ep-note-20260905T111804Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T111804Z "Auto-promotion: ep-note-20260905T111804Z has 16 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T111804Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T082450Z
-(MemoryCluster promo-consol-ep-note-20260905T082450Z)
-(SchemaVersion promo-consol-ep-note-20260905T082450Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T082450Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T082450Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T082450Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T082450Z ev-promo-consol-ep-note-20260905T082450Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T082450Z)
-(Promotes promo-consol-ep-note-20260905T082450Z ep-note-20260905T082450Z)
-(About promo-consol-ep-note-20260905T082450Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T082450Z "Auto-promotion: ep-note-20260905T082450Z has 16 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T082450Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T232625Z
-(MemoryCluster promo-consol-ep-note-20260904T232625Z)
-(SchemaVersion promo-consol-ep-note-20260904T232625Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T232625Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T232625Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T232625Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T232625Z ev-promo-consol-ep-note-20260904T232625Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T232625Z)
-(Promotes promo-consol-ep-note-20260904T232625Z ep-note-20260904T232625Z)
-(About promo-consol-ep-note-20260904T232625Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T232625Z "Auto-promotion: ep-note-20260904T232625Z has 16 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T232625Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T170508Z
-(MemoryCluster promo-consol-ep-note-20260904T170508Z)
-(SchemaVersion promo-consol-ep-note-20260904T170508Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T170508Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T170508Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T170508Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T170508Z ev-promo-consol-ep-note-20260904T170508Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T170508Z)
-(Promotes promo-consol-ep-note-20260904T170508Z ep-note-20260904T170508Z)
-(About promo-consol-ep-note-20260904T170508Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T170508Z "Auto-promotion: ep-note-20260904T170508Z has 16 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T170508Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T111907Z
-(MemoryCluster promo-consol-ep-note-20260904T111907Z)
-(SchemaVersion promo-consol-ep-note-20260904T111907Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T111907Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T111907Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T111907Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T111907Z ev-promo-consol-ep-note-20260904T111907Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T111907Z)
-(Promotes promo-consol-ep-note-20260904T111907Z ep-note-20260904T111907Z)
-(About promo-consol-ep-note-20260904T111907Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T111907Z "Auto-promotion: ep-note-20260904T111907Z has 16 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T111907Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T110311Z
-(MemoryCluster promo-consol-ep-note-20260904T110311Z)
-(SchemaVersion promo-consol-ep-note-20260904T110311Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T110311Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T110311Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T110311Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T110311Z ev-promo-consol-ep-note-20260904T110311Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T110311Z)
-(Promotes promo-consol-ep-note-20260904T110311Z ep-note-20260904T110311Z)
-(About promo-consol-ep-note-20260904T110311Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T110311Z "Auto-promotion: ep-note-20260904T110311Z has 16 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T110311Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903060110212532
 (MemoryCluster promo-consol-ep-20260903060110212532)
@@ -24226,174 +22907,18 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T225044Z "Auto-promotion: ep-note-20260905T225044Z has 15 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T225044Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T224831Z
-(MemoryCluster promo-consol-ep-note-20260905T224831Z)
-(SchemaVersion promo-consol-ep-note-20260905T224831Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T224831Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T224831Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T224831Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T224831Z ev-promo-consol-ep-note-20260905T224831Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T224831Z)
-(Promotes promo-consol-ep-note-20260905T224831Z ep-note-20260905T224831Z)
-(About promo-consol-ep-note-20260905T224831Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T224831Z "Auto-promotion: ep-note-20260905T224831Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T224831Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T145337Z
-(MemoryCluster promo-consol-ep-note-20260905T145337Z)
-(SchemaVersion promo-consol-ep-note-20260905T145337Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T145337Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T145337Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T145337Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T145337Z ev-promo-consol-ep-note-20260905T145337Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T145337Z)
-(Promotes promo-consol-ep-note-20260905T145337Z ep-note-20260905T145337Z)
-(About promo-consol-ep-note-20260905T145337Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T145337Z "Auto-promotion: ep-note-20260905T145337Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T145337Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T123150Z
-(MemoryCluster promo-consol-ep-note-20260905T123150Z)
-(SchemaVersion promo-consol-ep-note-20260905T123150Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T123150Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T123150Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T123150Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T123150Z ev-promo-consol-ep-note-20260905T123150Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T123150Z)
-(Promotes promo-consol-ep-note-20260905T123150Z ep-note-20260905T123150Z)
-(About promo-consol-ep-note-20260905T123150Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T123150Z "Auto-promotion: ep-note-20260905T123150Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T123150Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T121736Z
-(MemoryCluster promo-consol-ep-note-20260905T121736Z)
-(SchemaVersion promo-consol-ep-note-20260905T121736Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T121736Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T121736Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T121736Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T121736Z ev-promo-consol-ep-note-20260905T121736Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T121736Z)
-(Promotes promo-consol-ep-note-20260905T121736Z ep-note-20260905T121736Z)
-(About promo-consol-ep-note-20260905T121736Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T121736Z "Auto-promotion: ep-note-20260905T121736Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T121736Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T112350Z
-(MemoryCluster promo-consol-ep-note-20260905T112350Z)
-(SchemaVersion promo-consol-ep-note-20260905T112350Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T112350Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T112350Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T112350Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T112350Z ev-promo-consol-ep-note-20260905T112350Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T112350Z)
-(Promotes promo-consol-ep-note-20260905T112350Z ep-note-20260905T112350Z)
-(About promo-consol-ep-note-20260905T112350Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T112350Z "Auto-promotion: ep-note-20260905T112350Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T112350Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T022037Z
-(MemoryCluster promo-consol-ep-note-20260905T022037Z)
-(SchemaVersion promo-consol-ep-note-20260905T022037Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T022037Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T022037Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T022037Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T022037Z ev-promo-consol-ep-note-20260905T022037Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T022037Z)
-(Promotes promo-consol-ep-note-20260905T022037Z ep-note-20260905T022037Z)
-(About promo-consol-ep-note-20260905T022037Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T022037Z "Auto-promotion: ep-note-20260905T022037Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T022037Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T231331Z
-(MemoryCluster promo-consol-ep-note-20260904T231331Z)
-(SchemaVersion promo-consol-ep-note-20260904T231331Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T231331Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T231331Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T231331Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T231331Z ev-promo-consol-ep-note-20260904T231331Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T231331Z)
-(Promotes promo-consol-ep-note-20260904T231331Z ep-note-20260904T231331Z)
-(About promo-consol-ep-note-20260904T231331Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T231331Z "Auto-promotion: ep-note-20260904T231331Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T231331Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T222512Z
-(MemoryCluster promo-consol-ep-note-20260904T222512Z)
-(SchemaVersion promo-consol-ep-note-20260904T222512Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T222512Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T222512Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T222512Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T222512Z ev-promo-consol-ep-note-20260904T222512Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T222512Z)
-(Promotes promo-consol-ep-note-20260904T222512Z ep-note-20260904T222512Z)
-(About promo-consol-ep-note-20260904T222512Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T222512Z "Auto-promotion: ep-note-20260904T222512Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T222512Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T222405Z
-(MemoryCluster promo-consol-ep-note-20260904T222405Z)
-(SchemaVersion promo-consol-ep-note-20260904T222405Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T222405Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T222405Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T222405Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T222405Z ev-promo-consol-ep-note-20260904T222405Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T222405Z)
-(Promotes promo-consol-ep-note-20260904T222405Z ep-note-20260904T222405Z)
-(About promo-consol-ep-note-20260904T222405Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T222405Z "Auto-promotion: ep-note-20260904T222405Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T222405Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T101048Z
-(MemoryCluster promo-consol-ep-note-20260904T101048Z)
-(SchemaVersion promo-consol-ep-note-20260904T101048Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T101048Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T101048Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T101048Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T101048Z ev-promo-consol-ep-note-20260904T101048Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T101048Z)
-(Promotes promo-consol-ep-note-20260904T101048Z ep-note-20260904T101048Z)
-(About promo-consol-ep-note-20260904T101048Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T101048Z "Auto-promotion: ep-note-20260904T101048Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T101048Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T093041Z
-(MemoryCluster promo-consol-ep-note-20260904T093041Z)
-(SchemaVersion promo-consol-ep-note-20260904T093041Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T093041Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T093041Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T093041Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T093041Z ev-promo-consol-ep-note-20260904T093041Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T093041Z)
-(Promotes promo-consol-ep-note-20260904T093041Z ep-note-20260904T093041Z)
-(About promo-consol-ep-note-20260904T093041Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T093041Z "Auto-promotion: ep-note-20260904T093041Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T093041Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T061842Z
-(MemoryCluster promo-consol-ep-note-20260904T061842Z)
-(SchemaVersion promo-consol-ep-note-20260904T061842Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T061842Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T061842Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T061842Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T061842Z ev-promo-consol-ep-note-20260904T061842Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T061842Z)
-(Promotes promo-consol-ep-note-20260904T061842Z ep-note-20260904T061842Z)
-(About promo-consol-ep-note-20260904T061842Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T061842Z "Auto-promotion: ep-note-20260904T061842Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T061842Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T053928Z
-(MemoryCluster promo-consol-ep-note-20260904T053928Z)
-(SchemaVersion promo-consol-ep-note-20260904T053928Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T053928Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T053928Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T053928Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T053928Z ev-promo-consol-ep-note-20260904T053928Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T053928Z)
-(Promotes promo-consol-ep-note-20260904T053928Z ep-note-20260904T053928Z)
-(About promo-consol-ep-note-20260904T053928Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T053928Z "Auto-promotion: ep-note-20260904T053928Z has 15 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T053928Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260902233622960848
 (MemoryCluster promo-consol-ep-20260902233622960848)
@@ -24434,187 +22959,19 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T050808Z "Auto-promotion: ep-note-20260906T050808Z has 14 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T050808Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T021721Z
-(MemoryCluster promo-consol-ep-note-20260906T021721Z)
-(SchemaVersion promo-consol-ep-note-20260906T021721Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260906T021721Z Promotion)
-(ClusterSource promo-consol-ep-note-20260906T021721Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260906T021721Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260906T021721Z ev-promo-consol-ep-note-20260906T021721Z)
-(ObservedEvent ev-promo-consol-ep-note-20260906T021721Z)
-(Promotes promo-consol-ep-note-20260906T021721Z ep-note-20260906T021721Z)
-(About promo-consol-ep-note-20260906T021721Z journal)
-(EventNote ev-promo-consol-ep-note-20260906T021721Z "Auto-promotion: ep-note-20260906T021721Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260906T021721Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T011725Z
-(MemoryCluster promo-consol-ep-note-20260906T011725Z)
-(SchemaVersion promo-consol-ep-note-20260906T011725Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260906T011725Z Promotion)
-(ClusterSource promo-consol-ep-note-20260906T011725Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260906T011725Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260906T011725Z ev-promo-consol-ep-note-20260906T011725Z)
-(ObservedEvent ev-promo-consol-ep-note-20260906T011725Z)
-(Promotes promo-consol-ep-note-20260906T011725Z ep-note-20260906T011725Z)
-(About promo-consol-ep-note-20260906T011725Z journal)
-(EventNote ev-promo-consol-ep-note-20260906T011725Z "Auto-promotion: ep-note-20260906T011725Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260906T011725Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T002832Z
-(MemoryCluster promo-consol-ep-note-20260906T002832Z)
-(SchemaVersion promo-consol-ep-note-20260906T002832Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260906T002832Z Promotion)
-(ClusterSource promo-consol-ep-note-20260906T002832Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260906T002832Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260906T002832Z ev-promo-consol-ep-note-20260906T002832Z)
-(ObservedEvent ev-promo-consol-ep-note-20260906T002832Z)
-(Promotes promo-consol-ep-note-20260906T002832Z ep-note-20260906T002832Z)
-(About promo-consol-ep-note-20260906T002832Z journal)
-(EventNote ev-promo-consol-ep-note-20260906T002832Z "Auto-promotion: ep-note-20260906T002832Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260906T002832Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T231909Z
-(MemoryCluster promo-consol-ep-note-20260905T231909Z)
-(SchemaVersion promo-consol-ep-note-20260905T231909Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T231909Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T231909Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T231909Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T231909Z ev-promo-consol-ep-note-20260905T231909Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T231909Z)
-(Promotes promo-consol-ep-note-20260905T231909Z ep-note-20260905T231909Z)
-(About promo-consol-ep-note-20260905T231909Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T231909Z "Auto-promotion: ep-note-20260905T231909Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T231909Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T181014Z
-(MemoryCluster promo-consol-ep-note-20260905T181014Z)
-(SchemaVersion promo-consol-ep-note-20260905T181014Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T181014Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T181014Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T181014Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T181014Z ev-promo-consol-ep-note-20260905T181014Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T181014Z)
-(Promotes promo-consol-ep-note-20260905T181014Z ep-note-20260905T181014Z)
-(About promo-consol-ep-note-20260905T181014Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T181014Z "Auto-promotion: ep-note-20260905T181014Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T181014Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T140439Z
-(MemoryCluster promo-consol-ep-note-20260905T140439Z)
-(SchemaVersion promo-consol-ep-note-20260905T140439Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T140439Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T140439Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T140439Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T140439Z ev-promo-consol-ep-note-20260905T140439Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T140439Z)
-(Promotes promo-consol-ep-note-20260905T140439Z ep-note-20260905T140439Z)
-(About promo-consol-ep-note-20260905T140439Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T140439Z "Auto-promotion: ep-note-20260905T140439Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T140439Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T122000Z
-(MemoryCluster promo-consol-ep-note-20260905T122000Z)
-(SchemaVersion promo-consol-ep-note-20260905T122000Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T122000Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T122000Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T122000Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T122000Z ev-promo-consol-ep-note-20260905T122000Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T122000Z)
-(Promotes promo-consol-ep-note-20260905T122000Z ep-note-20260905T122000Z)
-(About promo-consol-ep-note-20260905T122000Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T122000Z "Auto-promotion: ep-note-20260905T122000Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T122000Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T051851Z
-(MemoryCluster promo-consol-ep-note-20260905T051851Z)
-(SchemaVersion promo-consol-ep-note-20260905T051851Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T051851Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T051851Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T051851Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T051851Z ev-promo-consol-ep-note-20260905T051851Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T051851Z)
-(Promotes promo-consol-ep-note-20260905T051851Z ep-note-20260905T051851Z)
-(About promo-consol-ep-note-20260905T051851Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T051851Z "Auto-promotion: ep-note-20260905T051851Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T051851Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T031714Z
-(MemoryCluster promo-consol-ep-note-20260905T031714Z)
-(SchemaVersion promo-consol-ep-note-20260905T031714Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T031714Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T031714Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T031714Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T031714Z ev-promo-consol-ep-note-20260905T031714Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T031714Z)
-(Promotes promo-consol-ep-note-20260905T031714Z ep-note-20260905T031714Z)
-(About promo-consol-ep-note-20260905T031714Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T031714Z "Auto-promotion: ep-note-20260905T031714Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T031714Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T015226Z
-(MemoryCluster promo-consol-ep-note-20260905T015226Z)
-(SchemaVersion promo-consol-ep-note-20260905T015226Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T015226Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T015226Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T015226Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T015226Z ev-promo-consol-ep-note-20260905T015226Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T015226Z)
-(Promotes promo-consol-ep-note-20260905T015226Z ep-note-20260905T015226Z)
-(About promo-consol-ep-note-20260905T015226Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T015226Z "Auto-promotion: ep-note-20260905T015226Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T015226Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T015039Z
-(MemoryCluster promo-consol-ep-note-20260905T015039Z)
-(SchemaVersion promo-consol-ep-note-20260905T015039Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T015039Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T015039Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T015039Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T015039Z ev-promo-consol-ep-note-20260905T015039Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T015039Z)
-(Promotes promo-consol-ep-note-20260905T015039Z ep-note-20260905T015039Z)
-(About promo-consol-ep-note-20260905T015039Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T015039Z "Auto-promotion: ep-note-20260905T015039Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T015039Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T222410Z
-(MemoryCluster promo-consol-ep-note-20260904T222410Z)
-(SchemaVersion promo-consol-ep-note-20260904T222410Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T222410Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T222410Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T222410Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T222410Z ev-promo-consol-ep-note-20260904T222410Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T222410Z)
-(Promotes promo-consol-ep-note-20260904T222410Z ep-note-20260904T222410Z)
-(About promo-consol-ep-note-20260904T222410Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T222410Z "Auto-promotion: ep-note-20260904T222410Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T222410Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T221551Z
-(MemoryCluster promo-consol-ep-note-20260904T221551Z)
-(SchemaVersion promo-consol-ep-note-20260904T221551Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T221551Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T221551Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T221551Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T221551Z ev-promo-consol-ep-note-20260904T221551Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T221551Z)
-(Promotes promo-consol-ep-note-20260904T221551Z ep-note-20260904T221551Z)
-(About promo-consol-ep-note-20260904T221551Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T221551Z "Auto-promotion: ep-note-20260904T221551Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T221551Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T202256Z
-(MemoryCluster promo-consol-ep-note-20260904T202256Z)
-(SchemaVersion promo-consol-ep-note-20260904T202256Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T202256Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T202256Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T202256Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T202256Z ev-promo-consol-ep-note-20260904T202256Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T202256Z)
-(Promotes promo-consol-ep-note-20260904T202256Z ep-note-20260904T202256Z)
-(About promo-consol-ep-note-20260904T202256Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T202256Z "Auto-promotion: ep-note-20260904T202256Z has 14 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T202256Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903025035490200
 (MemoryCluster promo-consol-ep-20260903025035490200)
@@ -24642,161 +22999,17 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T022149Z "Auto-promotion: ep-note-20260906T022149Z has 13 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T022149Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T000111Z
-(MemoryCluster promo-consol-ep-note-20260906T000111Z)
-(SchemaVersion promo-consol-ep-note-20260906T000111Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260906T000111Z Promotion)
-(ClusterSource promo-consol-ep-note-20260906T000111Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260906T000111Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260906T000111Z ev-promo-consol-ep-note-20260906T000111Z)
-(ObservedEvent ev-promo-consol-ep-note-20260906T000111Z)
-(Promotes promo-consol-ep-note-20260906T000111Z ep-note-20260906T000111Z)
-(About promo-consol-ep-note-20260906T000111Z journal)
-(EventNote ev-promo-consol-ep-note-20260906T000111Z "Auto-promotion: ep-note-20260906T000111Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260906T000111Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T223418Z
-(MemoryCluster promo-consol-ep-note-20260905T223418Z)
-(SchemaVersion promo-consol-ep-note-20260905T223418Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T223418Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T223418Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T223418Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T223418Z ev-promo-consol-ep-note-20260905T223418Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T223418Z)
-(Promotes promo-consol-ep-note-20260905T223418Z ep-note-20260905T223418Z)
-(About promo-consol-ep-note-20260905T223418Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T223418Z "Auto-promotion: ep-note-20260905T223418Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T223418Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T140734Z
-(MemoryCluster promo-consol-ep-note-20260905T140734Z)
-(SchemaVersion promo-consol-ep-note-20260905T140734Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T140734Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T140734Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T140734Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T140734Z ev-promo-consol-ep-note-20260905T140734Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T140734Z)
-(Promotes promo-consol-ep-note-20260905T140734Z ep-note-20260905T140734Z)
-(About promo-consol-ep-note-20260905T140734Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T140734Z "Auto-promotion: ep-note-20260905T140734Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T140734Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T115017Z
-(MemoryCluster promo-consol-ep-note-20260905T115017Z)
-(SchemaVersion promo-consol-ep-note-20260905T115017Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T115017Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T115017Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T115017Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T115017Z ev-promo-consol-ep-note-20260905T115017Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T115017Z)
-(Promotes promo-consol-ep-note-20260905T115017Z ep-note-20260905T115017Z)
-(About promo-consol-ep-note-20260905T115017Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T115017Z "Auto-promotion: ep-note-20260905T115017Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T115017Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T222438Z
-(MemoryCluster promo-consol-ep-note-20260904T222438Z)
-(SchemaVersion promo-consol-ep-note-20260904T222438Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T222438Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T222438Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T222438Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T222438Z ev-promo-consol-ep-note-20260904T222438Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T222438Z)
-(Promotes promo-consol-ep-note-20260904T222438Z ep-note-20260904T222438Z)
-(About promo-consol-ep-note-20260904T222438Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T222438Z "Auto-promotion: ep-note-20260904T222438Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T222438Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T214908Z
-(MemoryCluster promo-consol-ep-note-20260904T214908Z)
-(SchemaVersion promo-consol-ep-note-20260904T214908Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T214908Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T214908Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T214908Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T214908Z ev-promo-consol-ep-note-20260904T214908Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T214908Z)
-(Promotes promo-consol-ep-note-20260904T214908Z ep-note-20260904T214908Z)
-(About promo-consol-ep-note-20260904T214908Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T214908Z "Auto-promotion: ep-note-20260904T214908Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T214908Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T165810Z
-(MemoryCluster promo-consol-ep-note-20260904T165810Z)
-(SchemaVersion promo-consol-ep-note-20260904T165810Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T165810Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T165810Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T165810Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T165810Z ev-promo-consol-ep-note-20260904T165810Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T165810Z)
-(Promotes promo-consol-ep-note-20260904T165810Z ep-note-20260904T165810Z)
-(About promo-consol-ep-note-20260904T165810Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T165810Z "Auto-promotion: ep-note-20260904T165810Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T165810Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T090647Z
-(MemoryCluster promo-consol-ep-note-20260904T090647Z)
-(SchemaVersion promo-consol-ep-note-20260904T090647Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T090647Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T090647Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T090647Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T090647Z ev-promo-consol-ep-note-20260904T090647Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T090647Z)
-(Promotes promo-consol-ep-note-20260904T090647Z ep-note-20260904T090647Z)
-(About promo-consol-ep-note-20260904T090647Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T090647Z "Auto-promotion: ep-note-20260904T090647Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T090647Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T050827Z
-(MemoryCluster promo-consol-ep-note-20260904T050827Z)
-(SchemaVersion promo-consol-ep-note-20260904T050827Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T050827Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T050827Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T050827Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T050827Z ev-promo-consol-ep-note-20260904T050827Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T050827Z)
-(Promotes promo-consol-ep-note-20260904T050827Z ep-note-20260904T050827Z)
-(About promo-consol-ep-note-20260904T050827Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T050827Z "Auto-promotion: ep-note-20260904T050827Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T050827Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T015934Z
-(MemoryCluster promo-consol-ep-note-20260904T015934Z)
-(SchemaVersion promo-consol-ep-note-20260904T015934Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T015934Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T015934Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T015934Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T015934Z ev-promo-consol-ep-note-20260904T015934Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T015934Z)
-(Promotes promo-consol-ep-note-20260904T015934Z ep-note-20260904T015934Z)
-(About promo-consol-ep-note-20260904T015934Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T015934Z "Auto-promotion: ep-note-20260904T015934Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T015934Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T015623Z
-(MemoryCluster promo-consol-ep-note-20260904T015623Z)
-(SchemaVersion promo-consol-ep-note-20260904T015623Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T015623Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T015623Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T015623Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T015623Z ev-promo-consol-ep-note-20260904T015623Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T015623Z)
-(Promotes promo-consol-ep-note-20260904T015623Z ep-note-20260904T015623Z)
-(About promo-consol-ep-note-20260904T015623Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T015623Z "Auto-promotion: ep-note-20260904T015623Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T015623Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T225527Z
-(MemoryCluster promo-consol-ep-note-20260903T225527Z)
-(SchemaVersion promo-consol-ep-note-20260903T225527Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T225527Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T225527Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T225527Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T225527Z ev-promo-consol-ep-note-20260903T225527Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T225527Z)
-(Promotes promo-consol-ep-note-20260903T225527Z ep-note-20260903T225527Z)
-(About promo-consol-ep-note-20260903T225527Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T225527Z "Auto-promotion: ep-note-20260903T225527Z has 13 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T225527Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903061326952231
 (MemoryCluster promo-consol-ep-20260903061326952231)
@@ -24824,135 +23037,15 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260905T221147Z "Auto-promotion: ep-note-20260905T221147Z has 12 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260905T221147Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T162913Z
-(MemoryCluster promo-consol-ep-note-20260905T162913Z)
-(SchemaVersion promo-consol-ep-note-20260905T162913Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T162913Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T162913Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T162913Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T162913Z ev-promo-consol-ep-note-20260905T162913Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T162913Z)
-(Promotes promo-consol-ep-note-20260905T162913Z ep-note-20260905T162913Z)
-(About promo-consol-ep-note-20260905T162913Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T162913Z "Auto-promotion: ep-note-20260905T162913Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T162913Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T151334Z
-(MemoryCluster promo-consol-ep-note-20260905T151334Z)
-(SchemaVersion promo-consol-ep-note-20260905T151334Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T151334Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T151334Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T151334Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T151334Z ev-promo-consol-ep-note-20260905T151334Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T151334Z)
-(Promotes promo-consol-ep-note-20260905T151334Z ep-note-20260905T151334Z)
-(About promo-consol-ep-note-20260905T151334Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T151334Z "Auto-promotion: ep-note-20260905T151334Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T151334Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T150551Z
-(MemoryCluster promo-consol-ep-note-20260905T150551Z)
-(SchemaVersion promo-consol-ep-note-20260905T150551Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T150551Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T150551Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T150551Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T150551Z ev-promo-consol-ep-note-20260905T150551Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T150551Z)
-(Promotes promo-consol-ep-note-20260905T150551Z ep-note-20260905T150551Z)
-(About promo-consol-ep-note-20260905T150551Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T150551Z "Auto-promotion: ep-note-20260905T150551Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T150551Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T013225Z
-(MemoryCluster promo-consol-ep-note-20260905T013225Z)
-(SchemaVersion promo-consol-ep-note-20260905T013225Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T013225Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T013225Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T013225Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T013225Z ev-promo-consol-ep-note-20260905T013225Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T013225Z)
-(Promotes promo-consol-ep-note-20260905T013225Z ep-note-20260905T013225Z)
-(About promo-consol-ep-note-20260905T013225Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T013225Z "Auto-promotion: ep-note-20260905T013225Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T013225Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T235205Z
-(MemoryCluster promo-consol-ep-note-20260904T235205Z)
-(SchemaVersion promo-consol-ep-note-20260904T235205Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T235205Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T235205Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T235205Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T235205Z ev-promo-consol-ep-note-20260904T235205Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T235205Z)
-(Promotes promo-consol-ep-note-20260904T235205Z ep-note-20260904T235205Z)
-(About promo-consol-ep-note-20260904T235205Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T235205Z "Auto-promotion: ep-note-20260904T235205Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T235205Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T233824Z
-(MemoryCluster promo-consol-ep-note-20260904T233824Z)
-(SchemaVersion promo-consol-ep-note-20260904T233824Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T233824Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T233824Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T233824Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T233824Z ev-promo-consol-ep-note-20260904T233824Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T233824Z)
-(Promotes promo-consol-ep-note-20260904T233824Z ep-note-20260904T233824Z)
-(About promo-consol-ep-note-20260904T233824Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T233824Z "Auto-promotion: ep-note-20260904T233824Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T233824Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T230344Z
-(MemoryCluster promo-consol-ep-note-20260904T230344Z)
-(SchemaVersion promo-consol-ep-note-20260904T230344Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T230344Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T230344Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T230344Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T230344Z ev-promo-consol-ep-note-20260904T230344Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T230344Z)
-(Promotes promo-consol-ep-note-20260904T230344Z ep-note-20260904T230344Z)
-(About promo-consol-ep-note-20260904T230344Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T230344Z "Auto-promotion: ep-note-20260904T230344Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T230344Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T225158Z
-(MemoryCluster promo-consol-ep-note-20260904T225158Z)
-(SchemaVersion promo-consol-ep-note-20260904T225158Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T225158Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T225158Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T225158Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T225158Z ev-promo-consol-ep-note-20260904T225158Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T225158Z)
-(Promotes promo-consol-ep-note-20260904T225158Z ep-note-20260904T225158Z)
-(About promo-consol-ep-note-20260904T225158Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T225158Z "Auto-promotion: ep-note-20260904T225158Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T225158Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T180902Z
-(MemoryCluster promo-consol-ep-note-20260904T180902Z)
-(SchemaVersion promo-consol-ep-note-20260904T180902Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T180902Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T180902Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T180902Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T180902Z ev-promo-consol-ep-note-20260904T180902Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T180902Z)
-(Promotes promo-consol-ep-note-20260904T180902Z ep-note-20260904T180902Z)
-(About promo-consol-ep-note-20260904T180902Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T180902Z "Auto-promotion: ep-note-20260904T180902Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T180902Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T155828Z
-(MemoryCluster promo-consol-ep-note-20260904T155828Z)
-(SchemaVersion promo-consol-ep-note-20260904T155828Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T155828Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T155828Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T155828Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T155828Z ev-promo-consol-ep-note-20260904T155828Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T155828Z)
-(Promotes promo-consol-ep-note-20260904T155828Z ep-note-20260904T155828Z)
-(About promo-consol-ep-note-20260904T155828Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T155828Z "Auto-promotion: ep-note-20260904T155828Z has 12 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T155828Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T044503Z
 (MemoryCluster promo-consol-ep-note-20260906T044503Z)
@@ -24967,135 +23060,15 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T044503Z "Auto-promotion: ep-note-20260906T044503Z has 11 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T044503Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T224531Z
-(MemoryCluster promo-consol-ep-note-20260905T224531Z)
-(SchemaVersion promo-consol-ep-note-20260905T224531Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T224531Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T224531Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T224531Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T224531Z ev-promo-consol-ep-note-20260905T224531Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T224531Z)
-(Promotes promo-consol-ep-note-20260905T224531Z ep-note-20260905T224531Z)
-(About promo-consol-ep-note-20260905T224531Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T224531Z "Auto-promotion: ep-note-20260905T224531Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T224531Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T170026Z
-(MemoryCluster promo-consol-ep-note-20260905T170026Z)
-(SchemaVersion promo-consol-ep-note-20260905T170026Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T170026Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T170026Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T170026Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T170026Z ev-promo-consol-ep-note-20260905T170026Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T170026Z)
-(Promotes promo-consol-ep-note-20260905T170026Z ep-note-20260905T170026Z)
-(About promo-consol-ep-note-20260905T170026Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T170026Z "Auto-promotion: ep-note-20260905T170026Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T170026Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T151822Z
-(MemoryCluster promo-consol-ep-note-20260905T151822Z)
-(SchemaVersion promo-consol-ep-note-20260905T151822Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T151822Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T151822Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T151822Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T151822Z ev-promo-consol-ep-note-20260905T151822Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T151822Z)
-(Promotes promo-consol-ep-note-20260905T151822Z ep-note-20260905T151822Z)
-(About promo-consol-ep-note-20260905T151822Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T151822Z "Auto-promotion: ep-note-20260905T151822Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T151822Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T145100Z
-(MemoryCluster promo-consol-ep-note-20260905T145100Z)
-(SchemaVersion promo-consol-ep-note-20260905T145100Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T145100Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T145100Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T145100Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T145100Z ev-promo-consol-ep-note-20260905T145100Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T145100Z)
-(Promotes promo-consol-ep-note-20260905T145100Z ep-note-20260905T145100Z)
-(About promo-consol-ep-note-20260905T145100Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T145100Z "Auto-promotion: ep-note-20260905T145100Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T145100Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T013306Z
-(MemoryCluster promo-consol-ep-note-20260905T013306Z)
-(SchemaVersion promo-consol-ep-note-20260905T013306Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T013306Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T013306Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T013306Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T013306Z ev-promo-consol-ep-note-20260905T013306Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T013306Z)
-(Promotes promo-consol-ep-note-20260905T013306Z ep-note-20260905T013306Z)
-(About promo-consol-ep-note-20260905T013306Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T013306Z "Auto-promotion: ep-note-20260905T013306Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T013306Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T010924Z
-(MemoryCluster promo-consol-ep-note-20260905T010924Z)
-(SchemaVersion promo-consol-ep-note-20260905T010924Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T010924Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T010924Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T010924Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T010924Z ev-promo-consol-ep-note-20260905T010924Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T010924Z)
-(Promotes promo-consol-ep-note-20260905T010924Z ep-note-20260905T010924Z)
-(About promo-consol-ep-note-20260905T010924Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T010924Z "Auto-promotion: ep-note-20260905T010924Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T010924Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T222515Z
-(MemoryCluster promo-consol-ep-note-20260904T222515Z)
-(SchemaVersion promo-consol-ep-note-20260904T222515Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T222515Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T222515Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T222515Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T222515Z ev-promo-consol-ep-note-20260904T222515Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T222515Z)
-(Promotes promo-consol-ep-note-20260904T222515Z ep-note-20260904T222515Z)
-(About promo-consol-ep-note-20260904T222515Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T222515Z "Auto-promotion: ep-note-20260904T222515Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T222515Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T165557Z
-(MemoryCluster promo-consol-ep-note-20260904T165557Z)
-(SchemaVersion promo-consol-ep-note-20260904T165557Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T165557Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T165557Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T165557Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T165557Z ev-promo-consol-ep-note-20260904T165557Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T165557Z)
-(Promotes promo-consol-ep-note-20260904T165557Z ep-note-20260904T165557Z)
-(About promo-consol-ep-note-20260904T165557Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T165557Z "Auto-promotion: ep-note-20260904T165557Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T165557Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T223052Z
-(MemoryCluster promo-consol-ep-note-20260903T223052Z)
-(SchemaVersion promo-consol-ep-note-20260903T223052Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T223052Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T223052Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T223052Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T223052Z ev-promo-consol-ep-note-20260903T223052Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T223052Z)
-(Promotes promo-consol-ep-note-20260903T223052Z ep-note-20260903T223052Z)
-(About promo-consol-ep-note-20260903T223052Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T223052Z "Auto-promotion: ep-note-20260903T223052Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T223052Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260903T172448Z
-(MemoryCluster promo-consol-ep-note-20260903T172448Z)
-(SchemaVersion promo-consol-ep-note-20260903T172448Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260903T172448Z Promotion)
-(ClusterSource promo-consol-ep-note-20260903T172448Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260903T172448Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260903T172448Z ev-promo-consol-ep-note-20260903T172448Z)
-(ObservedEvent ev-promo-consol-ep-note-20260903T172448Z)
-(Promotes promo-consol-ep-note-20260903T172448Z ep-note-20260903T172448Z)
-(About promo-consol-ep-note-20260903T172448Z journal)
-(EventNote ev-promo-consol-ep-note-20260903T172448Z "Auto-promotion: ep-note-20260903T172448Z has 11 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260903T172448Z
 
 ;;; BEGIN MemoryCluster promo-consol-ep-20260903044104817986
 (MemoryCluster promo-consol-ep-20260903044104817986)
@@ -25123,200 +23096,20 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-consol-ep-note-20260906T051215Z "Auto-promotion: ep-note-20260906T051215Z has 10 outgoing EF links.")
 ;;; END MemoryCluster promo-consol-ep-note-20260906T051215Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T040156Z
-(MemoryCluster promo-consol-ep-note-20260906T040156Z)
-(SchemaVersion promo-consol-ep-note-20260906T040156Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260906T040156Z Promotion)
-(ClusterSource promo-consol-ep-note-20260906T040156Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260906T040156Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260906T040156Z ev-promo-consol-ep-note-20260906T040156Z)
-(ObservedEvent ev-promo-consol-ep-note-20260906T040156Z)
-(Promotes promo-consol-ep-note-20260906T040156Z ep-note-20260906T040156Z)
-(About promo-consol-ep-note-20260906T040156Z journal)
-(EventNote ev-promo-consol-ep-note-20260906T040156Z "Auto-promotion: ep-note-20260906T040156Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260906T040156Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260906T001717Z
-(MemoryCluster promo-consol-ep-note-20260906T001717Z)
-(SchemaVersion promo-consol-ep-note-20260906T001717Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260906T001717Z Promotion)
-(ClusterSource promo-consol-ep-note-20260906T001717Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260906T001717Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260906T001717Z ev-promo-consol-ep-note-20260906T001717Z)
-(ObservedEvent ev-promo-consol-ep-note-20260906T001717Z)
-(Promotes promo-consol-ep-note-20260906T001717Z ep-note-20260906T001717Z)
-(About promo-consol-ep-note-20260906T001717Z journal)
-(EventNote ev-promo-consol-ep-note-20260906T001717Z "Auto-promotion: ep-note-20260906T001717Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260906T001717Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T233433Z
-(MemoryCluster promo-consol-ep-note-20260905T233433Z)
-(SchemaVersion promo-consol-ep-note-20260905T233433Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T233433Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T233433Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T233433Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T233433Z ev-promo-consol-ep-note-20260905T233433Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T233433Z)
-(Promotes promo-consol-ep-note-20260905T233433Z ep-note-20260905T233433Z)
-(About promo-consol-ep-note-20260905T233433Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T233433Z "Auto-promotion: ep-note-20260905T233433Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T233433Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T221103Z
-(MemoryCluster promo-consol-ep-note-20260905T221103Z)
-(SchemaVersion promo-consol-ep-note-20260905T221103Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T221103Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T221103Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T221103Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T221103Z ev-promo-consol-ep-note-20260905T221103Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T221103Z)
-(Promotes promo-consol-ep-note-20260905T221103Z ep-note-20260905T221103Z)
-(About promo-consol-ep-note-20260905T221103Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T221103Z "Auto-promotion: ep-note-20260905T221103Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T221103Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T162422Z
-(MemoryCluster promo-consol-ep-note-20260905T162422Z)
-(SchemaVersion promo-consol-ep-note-20260905T162422Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T162422Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T162422Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T162422Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T162422Z ev-promo-consol-ep-note-20260905T162422Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T162422Z)
-(Promotes promo-consol-ep-note-20260905T162422Z ep-note-20260905T162422Z)
-(About promo-consol-ep-note-20260905T162422Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T162422Z "Auto-promotion: ep-note-20260905T162422Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T162422Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T162157Z
-(MemoryCluster promo-consol-ep-note-20260905T162157Z)
-(SchemaVersion promo-consol-ep-note-20260905T162157Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T162157Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T162157Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T162157Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T162157Z ev-promo-consol-ep-note-20260905T162157Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T162157Z)
-(Promotes promo-consol-ep-note-20260905T162157Z ep-note-20260905T162157Z)
-(About promo-consol-ep-note-20260905T162157Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T162157Z "Auto-promotion: ep-note-20260905T162157Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T162157Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T150715Z
-(MemoryCluster promo-consol-ep-note-20260905T150715Z)
-(SchemaVersion promo-consol-ep-note-20260905T150715Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T150715Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T150715Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T150715Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T150715Z ev-promo-consol-ep-note-20260905T150715Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T150715Z)
-(Promotes promo-consol-ep-note-20260905T150715Z ep-note-20260905T150715Z)
-(About promo-consol-ep-note-20260905T150715Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T150715Z "Auto-promotion: ep-note-20260905T150715Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T150715Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T150246Z
-(MemoryCluster promo-consol-ep-note-20260905T150246Z)
-(SchemaVersion promo-consol-ep-note-20260905T150246Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T150246Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T150246Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T150246Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T150246Z ev-promo-consol-ep-note-20260905T150246Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T150246Z)
-(Promotes promo-consol-ep-note-20260905T150246Z ep-note-20260905T150246Z)
-(About promo-consol-ep-note-20260905T150246Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T150246Z "Auto-promotion: ep-note-20260905T150246Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T150246Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T113940Z
-(MemoryCluster promo-consol-ep-note-20260905T113940Z)
-(SchemaVersion promo-consol-ep-note-20260905T113940Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T113940Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T113940Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T113940Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T113940Z ev-promo-consol-ep-note-20260905T113940Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T113940Z)
-(Promotes promo-consol-ep-note-20260905T113940Z ep-note-20260905T113940Z)
-(About promo-consol-ep-note-20260905T113940Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T113940Z "Auto-promotion: ep-note-20260905T113940Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T113940Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T050538Z
-(MemoryCluster promo-consol-ep-note-20260905T050538Z)
-(SchemaVersion promo-consol-ep-note-20260905T050538Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T050538Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T050538Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T050538Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T050538Z ev-promo-consol-ep-note-20260905T050538Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T050538Z)
-(Promotes promo-consol-ep-note-20260905T050538Z ep-note-20260905T050538Z)
-(About promo-consol-ep-note-20260905T050538Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T050538Z "Auto-promotion: ep-note-20260905T050538Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T050538Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T044857Z
-(MemoryCluster promo-consol-ep-note-20260905T044857Z)
-(SchemaVersion promo-consol-ep-note-20260905T044857Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T044857Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T044857Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T044857Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T044857Z ev-promo-consol-ep-note-20260905T044857Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T044857Z)
-(Promotes promo-consol-ep-note-20260905T044857Z ep-note-20260905T044857Z)
-(About promo-consol-ep-note-20260905T044857Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T044857Z "Auto-promotion: ep-note-20260905T044857Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T044857Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260905T004806Z
-(MemoryCluster promo-consol-ep-note-20260905T004806Z)
-(SchemaVersion promo-consol-ep-note-20260905T004806Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260905T004806Z Promotion)
-(ClusterSource promo-consol-ep-note-20260905T004806Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260905T004806Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260905T004806Z ev-promo-consol-ep-note-20260905T004806Z)
-(ObservedEvent ev-promo-consol-ep-note-20260905T004806Z)
-(Promotes promo-consol-ep-note-20260905T004806Z ep-note-20260905T004806Z)
-(About promo-consol-ep-note-20260905T004806Z journal)
-(EventNote ev-promo-consol-ep-note-20260905T004806Z "Auto-promotion: ep-note-20260905T004806Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260905T004806Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T192257Z
-(MemoryCluster promo-consol-ep-note-20260904T192257Z)
-(SchemaVersion promo-consol-ep-note-20260904T192257Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T192257Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T192257Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T192257Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T192257Z ev-promo-consol-ep-note-20260904T192257Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T192257Z)
-(Promotes promo-consol-ep-note-20260904T192257Z ep-note-20260904T192257Z)
-(About promo-consol-ep-note-20260904T192257Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T192257Z "Auto-promotion: ep-note-20260904T192257Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T192257Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T144939Z
-(MemoryCluster promo-consol-ep-note-20260904T144939Z)
-(SchemaVersion promo-consol-ep-note-20260904T144939Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T144939Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T144939Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T144939Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T144939Z ev-promo-consol-ep-note-20260904T144939Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T144939Z)
-(Promotes promo-consol-ep-note-20260904T144939Z ep-note-20260904T144939Z)
-(About promo-consol-ep-note-20260904T144939Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T144939Z "Auto-promotion: ep-note-20260904T144939Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T144939Z
 
-;;; BEGIN MemoryCluster promo-consol-ep-note-20260904T052215Z
-(MemoryCluster promo-consol-ep-note-20260904T052215Z)
-(SchemaVersion promo-consol-ep-note-20260904T052215Z medium-memory-v1)
-(ClusterType promo-consol-ep-note-20260904T052215Z Promotion)
-(ClusterSource promo-consol-ep-note-20260904T052215Z iter-experience)
-(ClusterOpenedAt promo-consol-ep-note-20260904T052215Z 2026-09-06T02:19:00Z)
-(Contains promo-consol-ep-note-20260904T052215Z ev-promo-consol-ep-note-20260904T052215Z)
-(ObservedEvent ev-promo-consol-ep-note-20260904T052215Z)
-(Promotes promo-consol-ep-note-20260904T052215Z ep-note-20260904T052215Z)
-(About promo-consol-ep-note-20260904T052215Z journal)
-(EventNote ev-promo-consol-ep-note-20260904T052215Z "Auto-promotion: ep-note-20260904T052215Z has 10 outgoing EF links.")
-;;; END MemoryCluster promo-consol-ep-note-20260904T052215Z
 ;;; BEGIN MemoryCluster ep-note-20260906T092009Z
 (MemoryCluster ep-note-20260906T092009Z)
 (SchemaVersion ep-note-20260906T092009Z medium-memory-v1)
@@ -32174,69 +29967,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-note-20260904T201217Z "Hub promotion: ep-note-20260904T201217Z has 10 in, 11 out.")
 ;;; END MemoryCluster promo-hub-ep-note-20260904T201217Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T222411Z
-(MemoryCluster promo-hub-ep-note-20260904T222411Z)
-(SchemaVersion promo-hub-ep-note-20260904T222411Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T222411Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T222411Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T222411Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T222411Z ev-promo-hub-ep-note-20260904T222411Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T222411Z)
-(Promotes promo-hub-ep-note-20260904T222411Z ep-note-20260904T222411Z)
-(About promo-hub-ep-note-20260904T222411Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T222411Z "Hub promotion: ep-note-20260904T222411Z has 10 in, 11 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T222411Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T222510Z
-(MemoryCluster promo-hub-ep-note-20260904T222510Z)
-(SchemaVersion promo-hub-ep-note-20260904T222510Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T222510Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T222510Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T222510Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T222510Z ev-promo-hub-ep-note-20260904T222510Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T222510Z)
-(Promotes promo-hub-ep-note-20260904T222510Z ep-note-20260904T222510Z)
-(About promo-hub-ep-note-20260904T222510Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T222510Z "Hub promotion: ep-note-20260904T222510Z has 10 in, 11 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T222510Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T224308Z
-(MemoryCluster promo-hub-ep-note-20260904T224308Z)
-(SchemaVersion promo-hub-ep-note-20260904T224308Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T224308Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T224308Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T224308Z 2026-09-06T02:36:00Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T224308Z)
-(Promotes promo-hub-ep-note-20260904T224308Z ep-note-20260904T224308Z)
-(About promo-hub-ep-note-20260904T224308Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T224308Z "Hub promotion: ep-note-20260904T224308Z has 10 in, 11 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T224308Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T231343Z
-(MemoryCluster promo-hub-ep-note-20260904T231343Z)
-(SchemaVersion promo-hub-ep-note-20260904T231343Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T231343Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T231343Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T231343Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T231343Z ev-promo-hub-ep-note-20260904T231343Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T231343Z)
-(Promotes promo-hub-ep-note-20260904T231343Z ep-note-20260904T231343Z)
-(About promo-hub-ep-note-20260904T231343Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T231343Z "Hub promotion: ep-note-20260904T231343Z has 10 in, 11 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T231343Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050641Z
-(MemoryCluster promo-hub-ep-note-20260905T050641Z)
-(SchemaVersion promo-hub-ep-note-20260905T050641Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T050641Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T050641Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T050641Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T050641Z ev-promo-hub-ep-note-20260905T050641Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T050641Z)
-(Promotes promo-hub-ep-note-20260905T050641Z ep-note-20260905T050641Z)
-(About promo-hub-ep-note-20260905T050641Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T050641Z "Hub promotion: ep-note-20260905T050641Z has 10 in, 11 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T050641Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050725Z
 (MemoryCluster promo-hub-ep-note-20260905T050725Z)
@@ -32251,44 +29985,8 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-note-20260905T050725Z "Hub promotion: ep-note-20260905T050725Z has 11 in, 10 out.")
 ;;; END MemoryCluster promo-hub-ep-note-20260905T050725Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050828Z
-(MemoryCluster promo-hub-ep-note-20260905T050828Z)
-(SchemaVersion promo-hub-ep-note-20260905T050828Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T050828Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T050828Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T050828Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T050828Z ev-promo-hub-ep-note-20260905T050828Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T050828Z)
-(Promotes promo-hub-ep-note-20260905T050828Z ep-note-20260905T050828Z)
-(About promo-hub-ep-note-20260905T050828Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T050828Z "Hub promotion: ep-note-20260905T050828Z has 11 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T050828Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T052824Z
-(MemoryCluster promo-hub-ep-note-20260905T052824Z)
-(SchemaVersion promo-hub-ep-note-20260905T052824Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T052824Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T052824Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T052824Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T052824Z ev-promo-hub-ep-note-20260905T052824Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T052824Z)
-(Promotes promo-hub-ep-note-20260905T052824Z ep-note-20260905T052824Z)
-(About promo-hub-ep-note-20260905T052824Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T052824Z "Hub promotion: ep-note-20260905T052824Z has 11 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T052824Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T085732Z
-(MemoryCluster promo-hub-ep-note-20260905T085732Z)
-(SchemaVersion promo-hub-ep-note-20260905T085732Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T085732Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T085732Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T085732Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T085732Z ev-promo-hub-ep-note-20260905T085732Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T085732Z)
-(Promotes promo-hub-ep-note-20260905T085732Z ep-note-20260905T085732Z)
-(About promo-hub-ep-note-20260905T085732Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T085732Z "Hub promotion: ep-note-20260905T085732Z has 10 in, 11 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T085732Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T194452Z
 (MemoryCluster promo-hub-ep-note-20260904T194452Z)
@@ -32316,213 +30014,21 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-note-20260904T222517Z "Hub promotion: ep-note-20260904T222517Z has 10 in, 10 out.")
 ;;; END MemoryCluster promo-hub-ep-note-20260904T222517Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T231412Z
-(MemoryCluster promo-hub-ep-note-20260904T231412Z)
-(SchemaVersion promo-hub-ep-note-20260904T231412Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T231412Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T231412Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T231412Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T231412Z ev-promo-hub-ep-note-20260904T231412Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T231412Z)
-(Promotes promo-hub-ep-note-20260904T231412Z ep-note-20260904T231412Z)
-(About promo-hub-ep-note-20260904T231412Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T231412Z "Hub promotion: ep-note-20260904T231412Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T231412Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T041940Z
-(MemoryCluster promo-hub-ep-note-20260905T041940Z)
-(SchemaVersion promo-hub-ep-note-20260905T041940Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T041940Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T041940Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T041940Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T041940Z ev-promo-hub-ep-note-20260905T041940Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T041940Z)
-(Promotes promo-hub-ep-note-20260905T041940Z ep-note-20260905T041940Z)
-(About promo-hub-ep-note-20260905T041940Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T041940Z "Hub promotion: ep-note-20260905T041940Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T041940Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T044644Z
-(MemoryCluster promo-hub-ep-note-20260905T044644Z)
-(SchemaVersion promo-hub-ep-note-20260905T044644Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T044644Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T044644Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T044644Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T044644Z ev-promo-hub-ep-note-20260905T044644Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T044644Z)
-(Promotes promo-hub-ep-note-20260905T044644Z ep-note-20260905T044644Z)
-(About promo-hub-ep-note-20260905T044644Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T044644Z "Hub promotion: ep-note-20260905T044644Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T044644Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T061902Z
-(MemoryCluster promo-hub-ep-note-20260905T061902Z)
-(SchemaVersion promo-hub-ep-note-20260905T061902Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T061902Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T061902Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T061902Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T061902Z ev-promo-hub-ep-note-20260905T061902Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T061902Z)
-(Promotes promo-hub-ep-note-20260905T061902Z ep-note-20260905T061902Z)
-(About promo-hub-ep-note-20260905T061902Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T061902Z "Hub promotion: ep-note-20260905T061902Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T061902Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T085341Z
-(MemoryCluster promo-hub-ep-note-20260905T085341Z)
-(SchemaVersion promo-hub-ep-note-20260905T085341Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T085341Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T085341Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T085341Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T085341Z ev-promo-hub-ep-note-20260905T085341Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T085341Z)
-(Promotes promo-hub-ep-note-20260905T085341Z ep-note-20260905T085341Z)
-(About promo-hub-ep-note-20260905T085341Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T085341Z "Hub promotion: ep-note-20260905T085341Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T085341Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T104036Z
-(MemoryCluster promo-hub-ep-note-20260905T104036Z)
-(SchemaVersion promo-hub-ep-note-20260905T104036Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T104036Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T104036Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T104036Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T104036Z ev-promo-hub-ep-note-20260905T104036Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T104036Z)
-(Promotes promo-hub-ep-note-20260905T104036Z ep-note-20260905T104036Z)
-(About promo-hub-ep-note-20260905T104036Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T104036Z "Hub promotion: ep-note-20260905T104036Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T104036Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T144319Z
-(MemoryCluster promo-hub-ep-note-20260905T144319Z)
-(SchemaVersion promo-hub-ep-note-20260905T144319Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T144319Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T144319Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T144319Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T144319Z ev-promo-hub-ep-note-20260905T144319Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T144319Z)
-(Promotes promo-hub-ep-note-20260905T144319Z ep-note-20260905T144319Z)
-(About promo-hub-ep-note-20260905T144319Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T144319Z "Hub promotion: ep-note-20260905T144319Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T144319Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T145533Z
-(MemoryCluster promo-hub-ep-note-20260905T145533Z)
-(SchemaVersion promo-hub-ep-note-20260905T145533Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T145533Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T145533Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T145533Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T145533Z ev-promo-hub-ep-note-20260905T145533Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T145533Z)
-(Promotes promo-hub-ep-note-20260905T145533Z ep-note-20260905T145533Z)
-(About promo-hub-ep-note-20260905T145533Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T145533Z "Hub promotion: ep-note-20260905T145533Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T145533Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T155728Z
-(MemoryCluster promo-hub-ep-note-20260905T155728Z)
-(SchemaVersion promo-hub-ep-note-20260905T155728Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T155728Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T155728Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T155728Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T155728Z ev-promo-hub-ep-note-20260905T155728Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T155728Z)
-(Promotes promo-hub-ep-note-20260905T155728Z ep-note-20260905T155728Z)
-(About promo-hub-ep-note-20260905T155728Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T155728Z "Hub promotion: ep-note-20260905T155728Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T155728Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T172845Z
-(MemoryCluster promo-hub-ep-note-20260905T172845Z)
-(SchemaVersion promo-hub-ep-note-20260905T172845Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T172845Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T172845Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T172845Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T172845Z ev-promo-hub-ep-note-20260905T172845Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T172845Z)
-(Promotes promo-hub-ep-note-20260905T172845Z ep-note-20260905T172845Z)
-(About promo-hub-ep-note-20260905T172845Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T172845Z "Hub promotion: ep-note-20260905T172845Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T172845Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T174236Z
-(MemoryCluster promo-hub-ep-note-20260905T174236Z)
-(SchemaVersion promo-hub-ep-note-20260905T174236Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T174236Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T174236Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T174236Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T174236Z ev-promo-hub-ep-note-20260905T174236Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T174236Z)
-(Promotes promo-hub-ep-note-20260905T174236Z ep-note-20260905T174236Z)
-(About promo-hub-ep-note-20260905T174236Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T174236Z "Hub promotion: ep-note-20260905T174236Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T174236Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T184029Z
-(MemoryCluster promo-hub-ep-note-20260905T184029Z)
-(SchemaVersion promo-hub-ep-note-20260905T184029Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T184029Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T184029Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T184029Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T184029Z ev-promo-hub-ep-note-20260905T184029Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T184029Z)
-(Promotes promo-hub-ep-note-20260905T184029Z ep-note-20260905T184029Z)
-(About promo-hub-ep-note-20260905T184029Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T184029Z "Hub promotion: ep-note-20260905T184029Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T184029Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T215601Z
-(MemoryCluster promo-hub-ep-note-20260905T215601Z)
-(SchemaVersion promo-hub-ep-note-20260905T215601Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T215601Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T215601Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T215601Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T215601Z ev-promo-hub-ep-note-20260905T215601Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T215601Z)
-(Promotes promo-hub-ep-note-20260905T215601Z ep-note-20260905T215601Z)
-(About promo-hub-ep-note-20260905T215601Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T215601Z "Hub promotion: ep-note-20260905T215601Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T215601Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T225912Z
-(MemoryCluster promo-hub-ep-note-20260905T225912Z)
-(SchemaVersion promo-hub-ep-note-20260905T225912Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T225912Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T225912Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T225912Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T225912Z ev-promo-hub-ep-note-20260905T225912Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T225912Z)
-(Promotes promo-hub-ep-note-20260905T225912Z ep-note-20260905T225912Z)
-(About promo-hub-ep-note-20260905T225912Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T225912Z "Hub promotion: ep-note-20260905T225912Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T225912Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T005129Z
-(MemoryCluster promo-hub-ep-note-20260906T005129Z)
-(SchemaVersion promo-hub-ep-note-20260906T005129Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T005129Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T005129Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T005129Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T005129Z ev-promo-hub-ep-note-20260906T005129Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T005129Z)
-(Promotes promo-hub-ep-note-20260906T005129Z ep-note-20260906T005129Z)
-(About promo-hub-ep-note-20260906T005129Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T005129Z "Hub promotion: ep-note-20260906T005129Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T005129Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T020744Z
-(MemoryCluster promo-hub-ep-note-20260906T020744Z)
-(SchemaVersion promo-hub-ep-note-20260906T020744Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T020744Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T020744Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T020744Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T020744Z ev-promo-hub-ep-note-20260906T020744Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T020744Z)
-(Promotes promo-hub-ep-note-20260906T020744Z ep-note-20260906T020744Z)
-(About promo-hub-ep-note-20260906T020744Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T020744Z "Hub promotion: ep-note-20260906T020744Z has 10 in, 10 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T020744Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T084750Z
 (MemoryCluster promo-hub-ep-note-20260904T084750Z)
@@ -32537,31 +30043,7 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-note-20260904T084750Z "Hub promotion: ep-note-20260904T084750Z has 10 in, 9 out.")
 ;;; END MemoryCluster promo-hub-ep-note-20260904T084750Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T013838Z
-(MemoryCluster promo-hub-ep-note-20260905T013838Z)
-(SchemaVersion promo-hub-ep-note-20260905T013838Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T013838Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T013838Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T013838Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T013838Z ev-promo-hub-ep-note-20260905T013838Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T013838Z)
-(Promotes promo-hub-ep-note-20260905T013838Z ep-note-20260905T013838Z)
-(About promo-hub-ep-note-20260905T013838Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T013838Z "Hub promotion: ep-note-20260905T013838Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T013838Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T021306Z
-(MemoryCluster promo-hub-ep-note-20260905T021306Z)
-(SchemaVersion promo-hub-ep-note-20260905T021306Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T021306Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T021306Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T021306Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T021306Z ev-promo-hub-ep-note-20260905T021306Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T021306Z)
-(Promotes promo-hub-ep-note-20260905T021306Z ep-note-20260905T021306Z)
-(About promo-hub-ep-note-20260905T021306Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T021306Z "Hub promotion: ep-note-20260905T021306Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T021306Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050109Z
 (MemoryCluster promo-hub-ep-note-20260905T050109Z)
@@ -32576,291 +30058,27 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-note-20260905T050109Z "Hub promotion: ep-note-20260905T050109Z has 11 in, 8 out.")
 ;;; END MemoryCluster promo-hub-ep-note-20260905T050109Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050915Z
-(MemoryCluster promo-hub-ep-note-20260905T050915Z)
-(SchemaVersion promo-hub-ep-note-20260905T050915Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T050915Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T050915Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T050915Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T050915Z ev-promo-hub-ep-note-20260905T050915Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T050915Z)
-(Promotes promo-hub-ep-note-20260905T050915Z ep-note-20260905T050915Z)
-(About promo-hub-ep-note-20260905T050915Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T050915Z "Hub promotion: ep-note-20260905T050915Z has 11 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T050915Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T051131Z
-(MemoryCluster promo-hub-ep-note-20260905T051131Z)
-(SchemaVersion promo-hub-ep-note-20260905T051131Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T051131Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T051131Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T051131Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T051131Z ev-promo-hub-ep-note-20260905T051131Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T051131Z)
-(Promotes promo-hub-ep-note-20260905T051131Z ep-note-20260905T051131Z)
-(About promo-hub-ep-note-20260905T051131Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T051131Z "Hub promotion: ep-note-20260905T051131Z has 11 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T051131Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T144655Z
-(MemoryCluster promo-hub-ep-note-20260905T144655Z)
-(SchemaVersion promo-hub-ep-note-20260905T144655Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T144655Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T144655Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T144655Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T144655Z ev-promo-hub-ep-note-20260905T144655Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T144655Z)
-(Promotes promo-hub-ep-note-20260905T144655Z ep-note-20260905T144655Z)
-(About promo-hub-ep-note-20260905T144655Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T144655Z "Hub promotion: ep-note-20260905T144655Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T144655Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T144903Z
-(MemoryCluster promo-hub-ep-note-20260905T144903Z)
-(SchemaVersion promo-hub-ep-note-20260905T144903Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T144903Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T144903Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T144903Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T144903Z ev-promo-hub-ep-note-20260905T144903Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T144903Z)
-(Promotes promo-hub-ep-note-20260905T144903Z ep-note-20260905T144903Z)
-(About promo-hub-ep-note-20260905T144903Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T144903Z "Hub promotion: ep-note-20260905T144903Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T144903Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T155449Z
-(MemoryCluster promo-hub-ep-note-20260905T155449Z)
-(SchemaVersion promo-hub-ep-note-20260905T155449Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T155449Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T155449Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T155449Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T155449Z ev-promo-hub-ep-note-20260905T155449Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T155449Z)
-(Promotes promo-hub-ep-note-20260905T155449Z ep-note-20260905T155449Z)
-(About promo-hub-ep-note-20260905T155449Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T155449Z "Hub promotion: ep-note-20260905T155449Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T155449Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T161214Z
-(MemoryCluster promo-hub-ep-note-20260905T161214Z)
-(SchemaVersion promo-hub-ep-note-20260905T161214Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T161214Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T161214Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T161214Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T161214Z ev-promo-hub-ep-note-20260905T161214Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T161214Z)
-(Promotes promo-hub-ep-note-20260905T161214Z ep-note-20260905T161214Z)
-(About promo-hub-ep-note-20260905T161214Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T161214Z "Hub promotion: ep-note-20260905T161214Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T161214Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T164407Z
-(MemoryCluster promo-hub-ep-note-20260905T164407Z)
-(SchemaVersion promo-hub-ep-note-20260905T164407Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T164407Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T164407Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T164407Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T164407Z ev-promo-hub-ep-note-20260905T164407Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T164407Z)
-(Promotes promo-hub-ep-note-20260905T164407Z ep-note-20260905T164407Z)
-(About promo-hub-ep-note-20260905T164407Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T164407Z "Hub promotion: ep-note-20260905T164407Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T164407Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T165207Z
-(MemoryCluster promo-hub-ep-note-20260905T165207Z)
-(SchemaVersion promo-hub-ep-note-20260905T165207Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T165207Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T165207Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T165207Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T165207Z ev-promo-hub-ep-note-20260905T165207Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T165207Z)
-(Promotes promo-hub-ep-note-20260905T165207Z ep-note-20260905T165207Z)
-(About promo-hub-ep-note-20260905T165207Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T165207Z "Hub promotion: ep-note-20260905T165207Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T165207Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T165356Z
-(MemoryCluster promo-hub-ep-note-20260905T165356Z)
-(SchemaVersion promo-hub-ep-note-20260905T165356Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T165356Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T165356Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T165356Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T165356Z ev-promo-hub-ep-note-20260905T165356Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T165356Z)
-(Promotes promo-hub-ep-note-20260905T165356Z ep-note-20260905T165356Z)
-(About promo-hub-ep-note-20260905T165356Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T165356Z "Hub promotion: ep-note-20260905T165356Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T165356Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T175132Z
-(MemoryCluster promo-hub-ep-note-20260905T175132Z)
-(SchemaVersion promo-hub-ep-note-20260905T175132Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T175132Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T175132Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T175132Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T175132Z ev-promo-hub-ep-note-20260905T175132Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T175132Z)
-(Promotes promo-hub-ep-note-20260905T175132Z ep-note-20260905T175132Z)
-(About promo-hub-ep-note-20260905T175132Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T175132Z "Hub promotion: ep-note-20260905T175132Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T175132Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T210342Z
-(MemoryCluster promo-hub-ep-note-20260905T210342Z)
-(SchemaVersion promo-hub-ep-note-20260905T210342Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T210342Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T210342Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T210342Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T210342Z ev-promo-hub-ep-note-20260905T210342Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T210342Z)
-(Promotes promo-hub-ep-note-20260905T210342Z ep-note-20260905T210342Z)
-(About promo-hub-ep-note-20260905T210342Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T210342Z "Hub promotion: ep-note-20260905T210342Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T210342Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T222504Z
-(MemoryCluster promo-hub-ep-note-20260905T222504Z)
-(SchemaVersion promo-hub-ep-note-20260905T222504Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T222504Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T222504Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T222504Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T222504Z ev-promo-hub-ep-note-20260905T222504Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T222504Z)
-(Promotes promo-hub-ep-note-20260905T222504Z ep-note-20260905T222504Z)
-(About promo-hub-ep-note-20260905T222504Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T222504Z "Hub promotion: ep-note-20260905T222504Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T222504Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T223857Z
-(MemoryCluster promo-hub-ep-note-20260905T223857Z)
-(SchemaVersion promo-hub-ep-note-20260905T223857Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T223857Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T223857Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T223857Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T223857Z ev-promo-hub-ep-note-20260905T223857Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T223857Z)
-(Promotes promo-hub-ep-note-20260905T223857Z ep-note-20260905T223857Z)
-(About promo-hub-ep-note-20260905T223857Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T223857Z "Hub promotion: ep-note-20260905T223857Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T223857Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T230523Z
-(MemoryCluster promo-hub-ep-note-20260905T230523Z)
-(SchemaVersion promo-hub-ep-note-20260905T230523Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T230523Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T230523Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T230523Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T230523Z ev-promo-hub-ep-note-20260905T230523Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T230523Z)
-(Promotes promo-hub-ep-note-20260905T230523Z ep-note-20260905T230523Z)
-(About promo-hub-ep-note-20260905T230523Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T230523Z "Hub promotion: ep-note-20260905T230523Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T230523Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T231357Z
-(MemoryCluster promo-hub-ep-note-20260905T231357Z)
-(SchemaVersion promo-hub-ep-note-20260905T231357Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T231357Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T231357Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T231357Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T231357Z ev-promo-hub-ep-note-20260905T231357Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T231357Z)
-(Promotes promo-hub-ep-note-20260905T231357Z ep-note-20260905T231357Z)
-(About promo-hub-ep-note-20260905T231357Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T231357Z "Hub promotion: ep-note-20260905T231357Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T231357Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T005840Z
-(MemoryCluster promo-hub-ep-note-20260906T005840Z)
-(SchemaVersion promo-hub-ep-note-20260906T005840Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T005840Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T005840Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T005840Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T005840Z ev-promo-hub-ep-note-20260906T005840Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T005840Z)
-(Promotes promo-hub-ep-note-20260906T005840Z ep-note-20260906T005840Z)
-(About promo-hub-ep-note-20260906T005840Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T005840Z "Hub promotion: ep-note-20260906T005840Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T005840Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T010534Z
-(MemoryCluster promo-hub-ep-note-20260906T010534Z)
-(SchemaVersion promo-hub-ep-note-20260906T010534Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T010534Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T010534Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T010534Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T010534Z ev-promo-hub-ep-note-20260906T010534Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T010534Z)
-(Promotes promo-hub-ep-note-20260906T010534Z ep-note-20260906T010534Z)
-(About promo-hub-ep-note-20260906T010534Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T010534Z "Hub promotion: ep-note-20260906T010534Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T010534Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T020135Z
-(MemoryCluster promo-hub-ep-note-20260906T020135Z)
-(SchemaVersion promo-hub-ep-note-20260906T020135Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T020135Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T020135Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T020135Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T020135Z ev-promo-hub-ep-note-20260906T020135Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T020135Z)
-(Promotes promo-hub-ep-note-20260906T020135Z ep-note-20260906T020135Z)
-(About promo-hub-ep-note-20260906T020135Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T020135Z "Hub promotion: ep-note-20260906T020135Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T020135Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T023814Z
-(MemoryCluster promo-hub-ep-note-20260906T023814Z)
-(SchemaVersion promo-hub-ep-note-20260906T023814Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T023814Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T023814Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T023814Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T023814Z ev-promo-hub-ep-note-20260906T023814Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T023814Z)
-(Promotes promo-hub-ep-note-20260906T023814Z ep-note-20260906T023814Z)
-(About promo-hub-ep-note-20260906T023814Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T023814Z "Hub promotion: ep-note-20260906T023814Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T023814Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T034223Z
-(MemoryCluster promo-hub-ep-note-20260906T034223Z)
-(SchemaVersion promo-hub-ep-note-20260906T034223Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T034223Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T034223Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T034223Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T034223Z ev-promo-hub-ep-note-20260906T034223Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T034223Z)
-(Promotes promo-hub-ep-note-20260906T034223Z ep-note-20260906T034223Z)
-(About promo-hub-ep-note-20260906T034223Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T034223Z "Hub promotion: ep-note-20260906T034223Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T034223Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T040914Z
-(MemoryCluster promo-hub-ep-note-20260906T040914Z)
-(SchemaVersion promo-hub-ep-note-20260906T040914Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T040914Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T040914Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T040914Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T040914Z ev-promo-hub-ep-note-20260906T040914Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T040914Z)
-(Promotes promo-hub-ep-note-20260906T040914Z ep-note-20260906T040914Z)
-(About promo-hub-ep-note-20260906T040914Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T040914Z "Hub promotion: ep-note-20260906T040914Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T040914Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T050313Z
-(MemoryCluster promo-hub-ep-note-20260906T050313Z)
-(SchemaVersion promo-hub-ep-note-20260906T050313Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T050313Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T050313Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T050313Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T050313Z ev-promo-hub-ep-note-20260906T050313Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T050313Z)
-(Promotes promo-hub-ep-note-20260906T050313Z ep-note-20260906T050313Z)
-(About promo-hub-ep-note-20260906T050313Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T050313Z "Hub promotion: ep-note-20260906T050313Z has 10 in, 9 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T050313Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-note-20260903T214832Z
 (MemoryCluster promo-hub-ep-note-20260903T214832Z)
@@ -32888,343 +30106,31 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-sup-20260903T215333Z-ep-note-20260903T172 "Hub promotion: ep-sup-20260903T215333Z-ep-note-20260903T172 has 10 in, 8 out.")
 ;;; END MemoryCluster promo-hub-ep-sup-20260903T215333Z-ep-note-20260903T172
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T232710Z
-(MemoryCluster promo-hub-ep-note-20260904T232710Z)
-(SchemaVersion promo-hub-ep-note-20260904T232710Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T232710Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T232710Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T232710Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T232710Z ev-promo-hub-ep-note-20260904T232710Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T232710Z)
-(Promotes promo-hub-ep-note-20260904T232710Z ep-note-20260904T232710Z)
-(About promo-hub-ep-note-20260904T232710Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T232710Z "Hub promotion: ep-note-20260904T232710Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T232710Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050024Z
-(MemoryCluster promo-hub-ep-note-20260905T050024Z)
-(SchemaVersion promo-hub-ep-note-20260905T050024Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T050024Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T050024Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T050024Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T050024Z ev-promo-hub-ep-note-20260905T050024Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T050024Z)
-(Promotes promo-hub-ep-note-20260905T050024Z ep-note-20260905T050024Z)
-(About promo-hub-ep-note-20260905T050024Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T050024Z "Hub promotion: ep-note-20260905T050024Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T050024Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T090730Z
-(MemoryCluster promo-hub-ep-note-20260905T090730Z)
-(SchemaVersion promo-hub-ep-note-20260905T090730Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T090730Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T090730Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T090730Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T090730Z ev-promo-hub-ep-note-20260905T090730Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T090730Z)
-(Promotes promo-hub-ep-note-20260905T090730Z ep-note-20260905T090730Z)
-(About promo-hub-ep-note-20260905T090730Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T090730Z "Hub promotion: ep-note-20260905T090730Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T090730Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T111544Z
-(MemoryCluster promo-hub-ep-note-20260905T111544Z)
-(SchemaVersion promo-hub-ep-note-20260905T111544Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T111544Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T111544Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T111544Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T111544Z ev-promo-hub-ep-note-20260905T111544Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T111544Z)
-(Promotes promo-hub-ep-note-20260905T111544Z ep-note-20260905T111544Z)
-(About promo-hub-ep-note-20260905T111544Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T111544Z "Hub promotion: ep-note-20260905T111544Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T111544Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T131856Z
-(MemoryCluster promo-hub-ep-note-20260905T131856Z)
-(SchemaVersion promo-hub-ep-note-20260905T131856Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T131856Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T131856Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T131856Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T131856Z ev-promo-hub-ep-note-20260905T131856Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T131856Z)
-(Promotes promo-hub-ep-note-20260905T131856Z ep-note-20260905T131856Z)
-(About promo-hub-ep-note-20260905T131856Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T131856Z "Hub promotion: ep-note-20260905T131856Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T131856Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T134656Z
-(MemoryCluster promo-hub-ep-note-20260905T134656Z)
-(SchemaVersion promo-hub-ep-note-20260905T134656Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T134656Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T134656Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T134656Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T134656Z ev-promo-hub-ep-note-20260905T134656Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T134656Z)
-(Promotes promo-hub-ep-note-20260905T134656Z ep-note-20260905T134656Z)
-(About promo-hub-ep-note-20260905T134656Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T134656Z "Hub promotion: ep-note-20260905T134656Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T134656Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T160741Z
-(MemoryCluster promo-hub-ep-note-20260905T160741Z)
-(SchemaVersion promo-hub-ep-note-20260905T160741Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T160741Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T160741Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T160741Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T160741Z ev-promo-hub-ep-note-20260905T160741Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T160741Z)
-(Promotes promo-hub-ep-note-20260905T160741Z ep-note-20260905T160741Z)
-(About promo-hub-ep-note-20260905T160741Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T160741Z "Hub promotion: ep-note-20260905T160741Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T160741Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T163203Z
-(MemoryCluster promo-hub-ep-note-20260905T163203Z)
-(SchemaVersion promo-hub-ep-note-20260905T163203Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T163203Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T163203Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T163203Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T163203Z ev-promo-hub-ep-note-20260905T163203Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T163203Z)
-(Promotes promo-hub-ep-note-20260905T163203Z ep-note-20260905T163203Z)
-(About promo-hub-ep-note-20260905T163203Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T163203Z "Hub promotion: ep-note-20260905T163203Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T163203Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T164137Z
-(MemoryCluster promo-hub-ep-note-20260905T164137Z)
-(SchemaVersion promo-hub-ep-note-20260905T164137Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T164137Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T164137Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T164137Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T164137Z ev-promo-hub-ep-note-20260905T164137Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T164137Z)
-(Promotes promo-hub-ep-note-20260905T164137Z ep-note-20260905T164137Z)
-(About promo-hub-ep-note-20260905T164137Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T164137Z "Hub promotion: ep-note-20260905T164137Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T164137Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T173019Z
-(MemoryCluster promo-hub-ep-note-20260905T173019Z)
-(SchemaVersion promo-hub-ep-note-20260905T173019Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T173019Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T173019Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T173019Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T173019Z ev-promo-hub-ep-note-20260905T173019Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T173019Z)
-(Promotes promo-hub-ep-note-20260905T173019Z ep-note-20260905T173019Z)
-(About promo-hub-ep-note-20260905T173019Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T173019Z "Hub promotion: ep-note-20260905T173019Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T173019Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T174742Z
-(MemoryCluster promo-hub-ep-note-20260905T174742Z)
-(SchemaVersion promo-hub-ep-note-20260905T174742Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T174742Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T174742Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T174742Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T174742Z ev-promo-hub-ep-note-20260905T174742Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T174742Z)
-(Promotes promo-hub-ep-note-20260905T174742Z ep-note-20260905T174742Z)
-(About promo-hub-ep-note-20260905T174742Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T174742Z "Hub promotion: ep-note-20260905T174742Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T174742Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T211012Z
-(MemoryCluster promo-hub-ep-note-20260905T211012Z)
-(SchemaVersion promo-hub-ep-note-20260905T211012Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T211012Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T211012Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T211012Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T211012Z ev-promo-hub-ep-note-20260905T211012Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T211012Z)
-(Promotes promo-hub-ep-note-20260905T211012Z ep-note-20260905T211012Z)
-(About promo-hub-ep-note-20260905T211012Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T211012Z "Hub promotion: ep-note-20260905T211012Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T211012Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T223158Z
-(MemoryCluster promo-hub-ep-note-20260905T223158Z)
-(SchemaVersion promo-hub-ep-note-20260905T223158Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T223158Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T223158Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T223158Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T223158Z ev-promo-hub-ep-note-20260905T223158Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T223158Z)
-(Promotes promo-hub-ep-note-20260905T223158Z ep-note-20260905T223158Z)
-(About promo-hub-ep-note-20260905T223158Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T223158Z "Hub promotion: ep-note-20260905T223158Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T223158Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T224138Z
-(MemoryCluster promo-hub-ep-note-20260905T224138Z)
-(SchemaVersion promo-hub-ep-note-20260905T224138Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T224138Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T224138Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T224138Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T224138Z ev-promo-hub-ep-note-20260905T224138Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T224138Z)
-(Promotes promo-hub-ep-note-20260905T224138Z ep-note-20260905T224138Z)
-(About promo-hub-ep-note-20260905T224138Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T224138Z "Hub promotion: ep-note-20260905T224138Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T224138Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T225430Z
-(MemoryCluster promo-hub-ep-note-20260905T225430Z)
-(SchemaVersion promo-hub-ep-note-20260905T225430Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T225430Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T225430Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T225430Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T225430Z ev-promo-hub-ep-note-20260905T225430Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T225430Z)
-(Promotes promo-hub-ep-note-20260905T225430Z ep-note-20260905T225430Z)
-(About promo-hub-ep-note-20260905T225430Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T225430Z "Hub promotion: ep-note-20260905T225430Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T225430Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T011522Z
-(MemoryCluster promo-hub-ep-note-20260906T011522Z)
-(SchemaVersion promo-hub-ep-note-20260906T011522Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T011522Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T011522Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T011522Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T011522Z ev-promo-hub-ep-note-20260906T011522Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T011522Z)
-(Promotes promo-hub-ep-note-20260906T011522Z ep-note-20260906T011522Z)
-(About promo-hub-ep-note-20260906T011522Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T011522Z "Hub promotion: ep-note-20260906T011522Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T011522Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T011947Z
-(MemoryCluster promo-hub-ep-note-20260906T011947Z)
-(SchemaVersion promo-hub-ep-note-20260906T011947Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T011947Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T011947Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T011947Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T011947Z ev-promo-hub-ep-note-20260906T011947Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T011947Z)
-(Promotes promo-hub-ep-note-20260906T011947Z ep-note-20260906T011947Z)
-(About promo-hub-ep-note-20260906T011947Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T011947Z "Hub promotion: ep-note-20260906T011947Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T011947Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T013902Z
-(MemoryCluster promo-hub-ep-note-20260906T013902Z)
-(SchemaVersion promo-hub-ep-note-20260906T013902Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T013902Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T013902Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T013902Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T013902Z ev-promo-hub-ep-note-20260906T013902Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T013902Z)
-(Promotes promo-hub-ep-note-20260906T013902Z ep-note-20260906T013902Z)
-(About promo-hub-ep-note-20260906T013902Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T013902Z "Hub promotion: ep-note-20260906T013902Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T013902Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T015348Z
-(MemoryCluster promo-hub-ep-note-20260906T015348Z)
-(SchemaVersion promo-hub-ep-note-20260906T015348Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T015348Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T015348Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T015348Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T015348Z ev-promo-hub-ep-note-20260906T015348Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T015348Z)
-(Promotes promo-hub-ep-note-20260906T015348Z ep-note-20260906T015348Z)
-(About promo-hub-ep-note-20260906T015348Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T015348Z "Hub promotion: ep-note-20260906T015348Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T015348Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T022822Z
-(MemoryCluster promo-hub-ep-note-20260906T022822Z)
-(SchemaVersion promo-hub-ep-note-20260906T022822Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T022822Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T022822Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T022822Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T022822Z ev-promo-hub-ep-note-20260906T022822Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T022822Z)
-(Promotes promo-hub-ep-note-20260906T022822Z ep-note-20260906T022822Z)
-(About promo-hub-ep-note-20260906T022822Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T022822Z "Hub promotion: ep-note-20260906T022822Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T022822Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T035551Z
-(MemoryCluster promo-hub-ep-note-20260906T035551Z)
-(SchemaVersion promo-hub-ep-note-20260906T035551Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T035551Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T035551Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T035551Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T035551Z ev-promo-hub-ep-note-20260906T035551Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T035551Z)
-(Promotes promo-hub-ep-note-20260906T035551Z ep-note-20260906T035551Z)
-(About promo-hub-ep-note-20260906T035551Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T035551Z "Hub promotion: ep-note-20260906T035551Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T035551Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T040435Z
-(MemoryCluster promo-hub-ep-note-20260906T040435Z)
-(SchemaVersion promo-hub-ep-note-20260906T040435Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T040435Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T040435Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T040435Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T040435Z ev-promo-hub-ep-note-20260906T040435Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T040435Z)
-(Promotes promo-hub-ep-note-20260906T040435Z ep-note-20260906T040435Z)
-(About promo-hub-ep-note-20260906T040435Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T040435Z "Hub promotion: ep-note-20260906T040435Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T040435Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T041118Z
-(MemoryCluster promo-hub-ep-note-20260906T041118Z)
-(SchemaVersion promo-hub-ep-note-20260906T041118Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T041118Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T041118Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T041118Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T041118Z ev-promo-hub-ep-note-20260906T041118Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T041118Z)
-(Promotes promo-hub-ep-note-20260906T041118Z ep-note-20260906T041118Z)
-(About promo-hub-ep-note-20260906T041118Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T041118Z "Hub promotion: ep-note-20260906T041118Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T041118Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T041305Z
-(MemoryCluster promo-hub-ep-note-20260906T041305Z)
-(SchemaVersion promo-hub-ep-note-20260906T041305Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T041305Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T041305Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T041305Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T041305Z ev-promo-hub-ep-note-20260906T041305Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T041305Z)
-(Promotes promo-hub-ep-note-20260906T041305Z ep-note-20260906T041305Z)
-(About promo-hub-ep-note-20260906T041305Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T041305Z "Hub promotion: ep-note-20260906T041305Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T041305Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T041500Z
-(MemoryCluster promo-hub-ep-note-20260906T041500Z)
-(SchemaVersion promo-hub-ep-note-20260906T041500Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T041500Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T041500Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T041500Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T041500Z ev-promo-hub-ep-note-20260906T041500Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T041500Z)
-(Promotes promo-hub-ep-note-20260906T041500Z ep-note-20260906T041500Z)
-(About promo-hub-ep-note-20260906T041500Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T041500Z "Hub promotion: ep-note-20260906T041500Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T041500Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T041532Z
-(MemoryCluster promo-hub-ep-note-20260906T041532Z)
-(SchemaVersion promo-hub-ep-note-20260906T041532Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T041532Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T041532Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T041532Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T041532Z ev-promo-hub-ep-note-20260906T041532Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T041532Z)
-(Promotes promo-hub-ep-note-20260906T041532Z ep-note-20260906T041532Z)
-(About promo-hub-ep-note-20260906T041532Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T041532Z "Hub promotion: ep-note-20260906T041532Z has 10 in, 8 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T041532Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-sup-20260903T215333Z-ep-note-20260903T214
 (MemoryCluster promo-hub-ep-sup-20260903T215333Z-ep-note-20260903T214)
@@ -33252,589 +30158,50 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-note-20260904T091346Z "Hub promotion: ep-note-20260904T091346Z has 10 in, 7 out.")
 ;;; END MemoryCluster promo-hub-ep-note-20260904T091346Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T161214Z
-(MemoryCluster promo-hub-ep-note-20260904T161214Z)
-(SchemaVersion promo-hub-ep-note-20260904T161214Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T161214Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T161214Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T161214Z 2026-09-06T02:36:00Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T161214Z)
-(Promotes promo-hub-ep-note-20260904T161214Z ep-note-20260904T161214Z)
-(About promo-hub-ep-note-20260904T161214Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T161214Z "Hub promotion: ep-note-20260904T161214Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T161214Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T181510Z
-(MemoryCluster promo-hub-ep-note-20260904T181510Z)
-(SchemaVersion promo-hub-ep-note-20260904T181510Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T181510Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T181510Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T181510Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T181510Z ev-promo-hub-ep-note-20260904T181510Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T181510Z)
-(Promotes promo-hub-ep-note-20260904T181510Z ep-note-20260904T181510Z)
-(About promo-hub-ep-note-20260904T181510Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T181510Z "Hub promotion: ep-note-20260904T181510Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T181510Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T190715Z
-(MemoryCluster promo-hub-ep-note-20260904T190715Z)
-(SchemaVersion promo-hub-ep-note-20260904T190715Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T190715Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T190715Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T190715Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T190715Z ev-promo-hub-ep-note-20260904T190715Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T190715Z)
-(Promotes promo-hub-ep-note-20260904T190715Z ep-note-20260904T190715Z)
-(About promo-hub-ep-note-20260904T190715Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T190715Z "Hub promotion: ep-note-20260904T190715Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T190715Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T224315Z
-(MemoryCluster promo-hub-ep-note-20260904T224315Z)
-(SchemaVersion promo-hub-ep-note-20260904T224315Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T224315Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T224315Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T224315Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T224315Z ev-promo-hub-ep-note-20260904T224315Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T224315Z)
-(Promotes promo-hub-ep-note-20260904T224315Z ep-note-20260904T224315Z)
-(About promo-hub-ep-note-20260904T224315Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T224315Z "Hub promotion: ep-note-20260904T224315Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T224315Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T224519Z
-(MemoryCluster promo-hub-ep-note-20260904T224519Z)
-(SchemaVersion promo-hub-ep-note-20260904T224519Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T224519Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T224519Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T224519Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T224519Z ev-promo-hub-ep-note-20260904T224519Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T224519Z)
-(Promotes promo-hub-ep-note-20260904T224519Z ep-note-20260904T224519Z)
-(About promo-hub-ep-note-20260904T224519Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T224519Z "Hub promotion: ep-note-20260904T224519Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T224519Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T230523Z
-(MemoryCluster promo-hub-ep-note-20260904T230523Z)
-(SchemaVersion promo-hub-ep-note-20260904T230523Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T230523Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T230523Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T230523Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T230523Z ev-promo-hub-ep-note-20260904T230523Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T230523Z)
-(Promotes promo-hub-ep-note-20260904T230523Z ep-note-20260904T230523Z)
-(About promo-hub-ep-note-20260904T230523Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T230523Z "Hub promotion: ep-note-20260904T230523Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T230523Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T233212Z
-(MemoryCluster promo-hub-ep-note-20260904T233212Z)
-(SchemaVersion promo-hub-ep-note-20260904T233212Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T233212Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T233212Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T233212Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T233212Z ev-promo-hub-ep-note-20260904T233212Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T233212Z)
-(Promotes promo-hub-ep-note-20260904T233212Z ep-note-20260904T233212Z)
-(About promo-hub-ep-note-20260904T233212Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T233212Z "Hub promotion: ep-note-20260904T233212Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T233212Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T013914Z
-(MemoryCluster promo-hub-ep-note-20260905T013914Z)
-(SchemaVersion promo-hub-ep-note-20260905T013914Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T013914Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T013914Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T013914Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T013914Z ev-promo-hub-ep-note-20260905T013914Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T013914Z)
-(Promotes promo-hub-ep-note-20260905T013914Z ep-note-20260905T013914Z)
-(About promo-hub-ep-note-20260905T013914Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T013914Z "Hub promotion: ep-note-20260905T013914Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T013914Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T014108Z
-(MemoryCluster promo-hub-ep-note-20260905T014108Z)
-(SchemaVersion promo-hub-ep-note-20260905T014108Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T014108Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T014108Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T014108Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T014108Z ev-promo-hub-ep-note-20260905T014108Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T014108Z)
-(Promotes promo-hub-ep-note-20260905T014108Z ep-note-20260905T014108Z)
-(About promo-hub-ep-note-20260905T014108Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T014108Z "Hub promotion: ep-note-20260905T014108Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T014108Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T015151Z
-(MemoryCluster promo-hub-ep-note-20260905T015151Z)
-(SchemaVersion promo-hub-ep-note-20260905T015151Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T015151Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T015151Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T015151Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T015151Z ev-promo-hub-ep-note-20260905T015151Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T015151Z)
-(Promotes promo-hub-ep-note-20260905T015151Z ep-note-20260905T015151Z)
-(About promo-hub-ep-note-20260905T015151Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T015151Z "Hub promotion: ep-note-20260905T015151Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T015151Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050229Z
-(MemoryCluster promo-hub-ep-note-20260905T050229Z)
-(SchemaVersion promo-hub-ep-note-20260905T050229Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T050229Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T050229Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T050229Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T050229Z ev-promo-hub-ep-note-20260905T050229Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T050229Z)
-(Promotes promo-hub-ep-note-20260905T050229Z ep-note-20260905T050229Z)
-(About promo-hub-ep-note-20260905T050229Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T050229Z "Hub promotion: ep-note-20260905T050229Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T050229Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T050911Z
-(MemoryCluster promo-hub-ep-note-20260905T050911Z)
-(SchemaVersion promo-hub-ep-note-20260905T050911Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T050911Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T050911Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T050911Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T050911Z ev-promo-hub-ep-note-20260905T050911Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T050911Z)
-(Promotes promo-hub-ep-note-20260905T050911Z ep-note-20260905T050911Z)
-(About promo-hub-ep-note-20260905T050911Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T050911Z "Hub promotion: ep-note-20260905T050911Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T050911Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T095406Z
-(MemoryCluster promo-hub-ep-note-20260905T095406Z)
-(SchemaVersion promo-hub-ep-note-20260905T095406Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T095406Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T095406Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T095406Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T095406Z ev-promo-hub-ep-note-20260905T095406Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T095406Z)
-(Promotes promo-hub-ep-note-20260905T095406Z ep-note-20260905T095406Z)
-(About promo-hub-ep-note-20260905T095406Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T095406Z "Hub promotion: ep-note-20260905T095406Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T095406Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T104000Z
-(MemoryCluster promo-hub-ep-note-20260905T104000Z)
-(SchemaVersion promo-hub-ep-note-20260905T104000Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T104000Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T104000Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T104000Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T104000Z ev-promo-hub-ep-note-20260905T104000Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T104000Z)
-(Promotes promo-hub-ep-note-20260905T104000Z ep-note-20260905T104000Z)
-(About promo-hub-ep-note-20260905T104000Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T104000Z "Hub promotion: ep-note-20260905T104000Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T104000Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T104603Z
-(MemoryCluster promo-hub-ep-note-20260905T104603Z)
-(SchemaVersion promo-hub-ep-note-20260905T104603Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T104603Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T104603Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T104603Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T104603Z ev-promo-hub-ep-note-20260905T104603Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T104603Z)
-(Promotes promo-hub-ep-note-20260905T104603Z ep-note-20260905T104603Z)
-(About promo-hub-ep-note-20260905T104603Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T104603Z "Hub promotion: ep-note-20260905T104603Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T104603Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T112600Z
-(MemoryCluster promo-hub-ep-note-20260905T112600Z)
-(SchemaVersion promo-hub-ep-note-20260905T112600Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T112600Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T112600Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T112600Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T112600Z ev-promo-hub-ep-note-20260905T112600Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T112600Z)
-(Promotes promo-hub-ep-note-20260905T112600Z ep-note-20260905T112600Z)
-(About promo-hub-ep-note-20260905T112600Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T112600Z "Hub promotion: ep-note-20260905T112600Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T112600Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T151646Z
-(MemoryCluster promo-hub-ep-note-20260905T151646Z)
-(SchemaVersion promo-hub-ep-note-20260905T151646Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T151646Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T151646Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T151646Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T151646Z ev-promo-hub-ep-note-20260905T151646Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T151646Z)
-(Promotes promo-hub-ep-note-20260905T151646Z ep-note-20260905T151646Z)
-(About promo-hub-ep-note-20260905T151646Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T151646Z "Hub promotion: ep-note-20260905T151646Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T151646Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T155840Z
-(MemoryCluster promo-hub-ep-note-20260905T155840Z)
-(SchemaVersion promo-hub-ep-note-20260905T155840Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T155840Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T155840Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T155840Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T155840Z ev-promo-hub-ep-note-20260905T155840Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T155840Z)
-(Promotes promo-hub-ep-note-20260905T155840Z ep-note-20260905T155840Z)
-(About promo-hub-ep-note-20260905T155840Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T155840Z "Hub promotion: ep-note-20260905T155840Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T155840Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T160609Z
-(MemoryCluster promo-hub-ep-note-20260905T160609Z)
-(SchemaVersion promo-hub-ep-note-20260905T160609Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T160609Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T160609Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T160609Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T160609Z ev-promo-hub-ep-note-20260905T160609Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T160609Z)
-(Promotes promo-hub-ep-note-20260905T160609Z ep-note-20260905T160609Z)
-(About promo-hub-ep-note-20260905T160609Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T160609Z "Hub promotion: ep-note-20260905T160609Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T160609Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T161357Z
-(MemoryCluster promo-hub-ep-note-20260905T161357Z)
-(SchemaVersion promo-hub-ep-note-20260905T161357Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T161357Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T161357Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T161357Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T161357Z ev-promo-hub-ep-note-20260905T161357Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T161357Z)
-(Promotes promo-hub-ep-note-20260905T161357Z ep-note-20260905T161357Z)
-(About promo-hub-ep-note-20260905T161357Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T161357Z "Hub promotion: ep-note-20260905T161357Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T161357Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T161704Z
-(MemoryCluster promo-hub-ep-note-20260905T161704Z)
-(SchemaVersion promo-hub-ep-note-20260905T161704Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T161704Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T161704Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T161704Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T161704Z ev-promo-hub-ep-note-20260905T161704Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T161704Z)
-(Promotes promo-hub-ep-note-20260905T161704Z ep-note-20260905T161704Z)
-(About promo-hub-ep-note-20260905T161704Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T161704Z "Hub promotion: ep-note-20260905T161704Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T161704Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T161930Z
-(MemoryCluster promo-hub-ep-note-20260905T161930Z)
-(SchemaVersion promo-hub-ep-note-20260905T161930Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T161930Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T161930Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T161930Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T161930Z ev-promo-hub-ep-note-20260905T161930Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T161930Z)
-(Promotes promo-hub-ep-note-20260905T161930Z ep-note-20260905T161930Z)
-(About promo-hub-ep-note-20260905T161930Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T161930Z "Hub promotion: ep-note-20260905T161930Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T161930Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T162311Z
-(MemoryCluster promo-hub-ep-note-20260905T162311Z)
-(SchemaVersion promo-hub-ep-note-20260905T162311Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T162311Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T162311Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T162311Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T162311Z ev-promo-hub-ep-note-20260905T162311Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T162311Z)
-(Promotes promo-hub-ep-note-20260905T162311Z ep-note-20260905T162311Z)
-(About promo-hub-ep-note-20260905T162311Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T162311Z "Hub promotion: ep-note-20260905T162311Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T162311Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T162626Z
-(MemoryCluster promo-hub-ep-note-20260905T162626Z)
-(SchemaVersion promo-hub-ep-note-20260905T162626Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T162626Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T162626Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T162626Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T162626Z ev-promo-hub-ep-note-20260905T162626Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T162626Z)
-(Promotes promo-hub-ep-note-20260905T162626Z ep-note-20260905T162626Z)
-(About promo-hub-ep-note-20260905T162626Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T162626Z "Hub promotion: ep-note-20260905T162626Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T162626Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T162756Z
-(MemoryCluster promo-hub-ep-note-20260905T162756Z)
-(SchemaVersion promo-hub-ep-note-20260905T162756Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T162756Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T162756Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T162756Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T162756Z ev-promo-hub-ep-note-20260905T162756Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T162756Z)
-(Promotes promo-hub-ep-note-20260905T162756Z ep-note-20260905T162756Z)
-(About promo-hub-ep-note-20260905T162756Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T162756Z "Hub promotion: ep-note-20260905T162756Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T162756Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T163039Z
-(MemoryCluster promo-hub-ep-note-20260905T163039Z)
-(SchemaVersion promo-hub-ep-note-20260905T163039Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T163039Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T163039Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T163039Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T163039Z ev-promo-hub-ep-note-20260905T163039Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T163039Z)
-(Promotes promo-hub-ep-note-20260905T163039Z ep-note-20260905T163039Z)
-(About promo-hub-ep-note-20260905T163039Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T163039Z "Hub promotion: ep-note-20260905T163039Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T163039Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T163653Z
-(MemoryCluster promo-hub-ep-note-20260905T163653Z)
-(SchemaVersion promo-hub-ep-note-20260905T163653Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T163653Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T163653Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T163653Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T163653Z ev-promo-hub-ep-note-20260905T163653Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T163653Z)
-(Promotes promo-hub-ep-note-20260905T163653Z ep-note-20260905T163653Z)
-(About promo-hub-ep-note-20260905T163653Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T163653Z "Hub promotion: ep-note-20260905T163653Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T163653Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T171535Z
-(MemoryCluster promo-hub-ep-note-20260905T171535Z)
-(SchemaVersion promo-hub-ep-note-20260905T171535Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T171535Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T171535Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T171535Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T171535Z ev-promo-hub-ep-note-20260905T171535Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T171535Z)
-(Promotes promo-hub-ep-note-20260905T171535Z ep-note-20260905T171535Z)
-(About promo-hub-ep-note-20260905T171535Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T171535Z "Hub promotion: ep-note-20260905T171535Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T171535Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T173623Z
-(MemoryCluster promo-hub-ep-note-20260905T173623Z)
-(SchemaVersion promo-hub-ep-note-20260905T173623Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T173623Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T173623Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T173623Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T173623Z ev-promo-hub-ep-note-20260905T173623Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T173623Z)
-(Promotes promo-hub-ep-note-20260905T173623Z ep-note-20260905T173623Z)
-(About promo-hub-ep-note-20260905T173623Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T173623Z "Hub promotion: ep-note-20260905T173623Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T173623Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T174040Z
-(MemoryCluster promo-hub-ep-note-20260905T174040Z)
-(SchemaVersion promo-hub-ep-note-20260905T174040Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T174040Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T174040Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T174040Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T174040Z ev-promo-hub-ep-note-20260905T174040Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T174040Z)
-(Promotes promo-hub-ep-note-20260905T174040Z ep-note-20260905T174040Z)
-(About promo-hub-ep-note-20260905T174040Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T174040Z "Hub promotion: ep-note-20260905T174040Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T174040Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T175539Z
-(MemoryCluster promo-hub-ep-note-20260905T175539Z)
-(SchemaVersion promo-hub-ep-note-20260905T175539Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T175539Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T175539Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T175539Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T175539Z ev-promo-hub-ep-note-20260905T175539Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T175539Z)
-(Promotes promo-hub-ep-note-20260905T175539Z ep-note-20260905T175539Z)
-(About promo-hub-ep-note-20260905T175539Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T175539Z "Hub promotion: ep-note-20260905T175539Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T175539Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T192131Z
-(MemoryCluster promo-hub-ep-note-20260905T192131Z)
-(SchemaVersion promo-hub-ep-note-20260905T192131Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T192131Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T192131Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T192131Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T192131Z ev-promo-hub-ep-note-20260905T192131Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T192131Z)
-(Promotes promo-hub-ep-note-20260905T192131Z ep-note-20260905T192131Z)
-(About promo-hub-ep-note-20260905T192131Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T192131Z "Hub promotion: ep-note-20260905T192131Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T192131Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T192608Z
-(MemoryCluster promo-hub-ep-note-20260905T192608Z)
-(SchemaVersion promo-hub-ep-note-20260905T192608Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T192608Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T192608Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T192608Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T192608Z ev-promo-hub-ep-note-20260905T192608Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T192608Z)
-(Promotes promo-hub-ep-note-20260905T192608Z ep-note-20260905T192608Z)
-(About promo-hub-ep-note-20260905T192608Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T192608Z "Hub promotion: ep-note-20260905T192608Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T192608Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T235947Z
-(MemoryCluster promo-hub-ep-note-20260905T235947Z)
-(SchemaVersion promo-hub-ep-note-20260905T235947Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T235947Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T235947Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T235947Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T235947Z ev-promo-hub-ep-note-20260905T235947Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T235947Z)
-(Promotes promo-hub-ep-note-20260905T235947Z ep-note-20260905T235947Z)
-(About promo-hub-ep-note-20260905T235947Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T235947Z "Hub promotion: ep-note-20260905T235947Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T235947Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T005613Z
-(MemoryCluster promo-hub-ep-note-20260906T005613Z)
-(SchemaVersion promo-hub-ep-note-20260906T005613Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T005613Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T005613Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T005613Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T005613Z ev-promo-hub-ep-note-20260906T005613Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T005613Z)
-(Promotes promo-hub-ep-note-20260906T005613Z ep-note-20260906T005613Z)
-(About promo-hub-ep-note-20260906T005613Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T005613Z "Hub promotion: ep-note-20260906T005613Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T005613Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T012148Z
-(MemoryCluster promo-hub-ep-note-20260906T012148Z)
-(SchemaVersion promo-hub-ep-note-20260906T012148Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T012148Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T012148Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T012148Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T012148Z ev-promo-hub-ep-note-20260906T012148Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T012148Z)
-(Promotes promo-hub-ep-note-20260906T012148Z ep-note-20260906T012148Z)
-(About promo-hub-ep-note-20260906T012148Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T012148Z "Hub promotion: ep-note-20260906T012148Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T012148Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T012413Z
-(MemoryCluster promo-hub-ep-note-20260906T012413Z)
-(SchemaVersion promo-hub-ep-note-20260906T012413Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T012413Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T012413Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T012413Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T012413Z ev-promo-hub-ep-note-20260906T012413Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T012413Z)
-(Promotes promo-hub-ep-note-20260906T012413Z ep-note-20260906T012413Z)
-(About promo-hub-ep-note-20260906T012413Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T012413Z "Hub promotion: ep-note-20260906T012413Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T012413Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T012835Z
-(MemoryCluster promo-hub-ep-note-20260906T012835Z)
-(SchemaVersion promo-hub-ep-note-20260906T012835Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T012835Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T012835Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T012835Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T012835Z ev-promo-hub-ep-note-20260906T012835Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T012835Z)
-(Promotes promo-hub-ep-note-20260906T012835Z ep-note-20260906T012835Z)
-(About promo-hub-ep-note-20260906T012835Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T012835Z "Hub promotion: ep-note-20260906T012835Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T012835Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T015011Z
-(MemoryCluster promo-hub-ep-note-20260906T015011Z)
-(SchemaVersion promo-hub-ep-note-20260906T015011Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T015011Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T015011Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T015011Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T015011Z ev-promo-hub-ep-note-20260906T015011Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T015011Z)
-(Promotes promo-hub-ep-note-20260906T015011Z ep-note-20260906T015011Z)
-(About promo-hub-ep-note-20260906T015011Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T015011Z "Hub promotion: ep-note-20260906T015011Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T015011Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T022433Z
-(MemoryCluster promo-hub-ep-note-20260906T022433Z)
-(SchemaVersion promo-hub-ep-note-20260906T022433Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T022433Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T022433Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T022433Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T022433Z ev-promo-hub-ep-note-20260906T022433Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T022433Z)
-(Promotes promo-hub-ep-note-20260906T022433Z ep-note-20260906T022433Z)
-(About promo-hub-ep-note-20260906T022433Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T022433Z "Hub promotion: ep-note-20260906T022433Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T022433Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T022509Z
-(MemoryCluster promo-hub-ep-note-20260906T022509Z)
-(SchemaVersion promo-hub-ep-note-20260906T022509Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T022509Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T022509Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T022509Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T022509Z ev-promo-hub-ep-note-20260906T022509Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T022509Z)
-(Promotes promo-hub-ep-note-20260906T022509Z ep-note-20260906T022509Z)
-(About promo-hub-ep-note-20260906T022509Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T022509Z "Hub promotion: ep-note-20260906T022509Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T022509Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T022744Z
-(MemoryCluster promo-hub-ep-note-20260906T022744Z)
-(SchemaVersion promo-hub-ep-note-20260906T022744Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T022744Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T022744Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T022744Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T022744Z ev-promo-hub-ep-note-20260906T022744Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T022744Z)
-(Promotes promo-hub-ep-note-20260906T022744Z ep-note-20260906T022744Z)
-(About promo-hub-ep-note-20260906T022744Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T022744Z "Hub promotion: ep-note-20260906T022744Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T022744Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T022855Z
-(MemoryCluster promo-hub-ep-note-20260906T022855Z)
-(SchemaVersion promo-hub-ep-note-20260906T022855Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T022855Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T022855Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T022855Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T022855Z ev-promo-hub-ep-note-20260906T022855Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T022855Z)
-(Promotes promo-hub-ep-note-20260906T022855Z ep-note-20260906T022855Z)
-(About promo-hub-ep-note-20260906T022855Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T022855Z "Hub promotion: ep-note-20260906T022855Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T022855Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T023210Z
-(MemoryCluster promo-hub-ep-note-20260906T023210Z)
-(SchemaVersion promo-hub-ep-note-20260906T023210Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T023210Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T023210Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T023210Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T023210Z ev-promo-hub-ep-note-20260906T023210Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T023210Z)
-(Promotes promo-hub-ep-note-20260906T023210Z ep-note-20260906T023210Z)
-(About promo-hub-ep-note-20260906T023210Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T023210Z "Hub promotion: ep-note-20260906T023210Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T023210Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T040838Z
-(MemoryCluster promo-hub-ep-note-20260906T040838Z)
-(SchemaVersion promo-hub-ep-note-20260906T040838Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T040838Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T040838Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T040838Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T040838Z ev-promo-hub-ep-note-20260906T040838Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T040838Z)
-(Promotes promo-hub-ep-note-20260906T040838Z ep-note-20260906T040838Z)
-(About promo-hub-ep-note-20260906T040838Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T040838Z "Hub promotion: ep-note-20260906T040838Z has 10 in, 7 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T040838Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-note-20260903T214132Z
 (MemoryCluster promo-hub-ep-note-20260903T214132Z)
@@ -33849,601 +30216,51 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EventNote ev-promo-hub-ep-note-20260903T214132Z "Hub promotion: ep-note-20260903T214132Z has 10 in, 6 out.")
 ;;; END MemoryCluster promo-hub-ep-note-20260903T214132Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260903T214828Z
-(MemoryCluster promo-hub-ep-note-20260903T214828Z)
-(SchemaVersion promo-hub-ep-note-20260903T214828Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260903T214828Z Promotion)
-(ClusterSource promo-hub-ep-note-20260903T214828Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260903T214828Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260903T214828Z ev-promo-hub-ep-note-20260903T214828Z)
-(ObservedEvent ev-promo-hub-ep-note-20260903T214828Z)
-(Promotes promo-hub-ep-note-20260903T214828Z ep-note-20260903T214828Z)
-(About promo-hub-ep-note-20260903T214828Z journal)
-(EventNote ev-promo-hub-ep-note-20260903T214828Z "Hub promotion: ep-note-20260903T214828Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260903T214828Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260903T214829Z
-(MemoryCluster promo-hub-ep-note-20260903T214829Z)
-(SchemaVersion promo-hub-ep-note-20260903T214829Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260903T214829Z Promotion)
-(ClusterSource promo-hub-ep-note-20260903T214829Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260903T214829Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260903T214829Z ev-promo-hub-ep-note-20260903T214829Z)
-(ObservedEvent ev-promo-hub-ep-note-20260903T214829Z)
-(Promotes promo-hub-ep-note-20260903T214829Z ep-note-20260903T214829Z)
-(About promo-hub-ep-note-20260903T214829Z journal)
-(EventNote ev-promo-hub-ep-note-20260903T214829Z "Hub promotion: ep-note-20260903T214829Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260903T214829Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260903T214830Z
-(MemoryCluster promo-hub-ep-note-20260903T214830Z)
-(SchemaVersion promo-hub-ep-note-20260903T214830Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260903T214830Z Promotion)
-(ClusterSource promo-hub-ep-note-20260903T214830Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260903T214830Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260903T214830Z ev-promo-hub-ep-note-20260903T214830Z)
-(ObservedEvent ev-promo-hub-ep-note-20260903T214830Z)
-(Promotes promo-hub-ep-note-20260903T214830Z ep-note-20260903T214830Z)
-(About promo-hub-ep-note-20260903T214830Z journal)
-(EventNote ev-promo-hub-ep-note-20260903T214830Z "Hub promotion: ep-note-20260903T214830Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260903T214830Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260903T214831Z
-(MemoryCluster promo-hub-ep-note-20260903T214831Z)
-(SchemaVersion promo-hub-ep-note-20260903T214831Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260903T214831Z Promotion)
-(ClusterSource promo-hub-ep-note-20260903T214831Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260903T214831Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260903T214831Z ev-promo-hub-ep-note-20260903T214831Z)
-(ObservedEvent ev-promo-hub-ep-note-20260903T214831Z)
-(Promotes promo-hub-ep-note-20260903T214831Z ep-note-20260903T214831Z)
-(About promo-hub-ep-note-20260903T214831Z journal)
-(EventNote ev-promo-hub-ep-note-20260903T214831Z "Hub promotion: ep-note-20260903T214831Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260903T214831Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T222413Z
-(MemoryCluster promo-hub-ep-note-20260904T222413Z)
-(SchemaVersion promo-hub-ep-note-20260904T222413Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T222413Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T222413Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T222413Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T222413Z ev-promo-hub-ep-note-20260904T222413Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T222413Z)
-(Promotes promo-hub-ep-note-20260904T222413Z ep-note-20260904T222413Z)
-(About promo-hub-ep-note-20260904T222413Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T222413Z "Hub promotion: ep-note-20260904T222413Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T222413Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T222414Z
-(MemoryCluster promo-hub-ep-note-20260904T222414Z)
-(SchemaVersion promo-hub-ep-note-20260904T222414Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T222414Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T222414Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T222414Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T222414Z ev-promo-hub-ep-note-20260904T222414Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T222414Z)
-(Promotes promo-hub-ep-note-20260904T222414Z ep-note-20260904T222414Z)
-(About promo-hub-ep-note-20260904T222414Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T222414Z "Hub promotion: ep-note-20260904T222414Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T222414Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T222516Z
-(MemoryCluster promo-hub-ep-note-20260904T222516Z)
-(SchemaVersion promo-hub-ep-note-20260904T222516Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T222516Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T222516Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T222516Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T222516Z ev-promo-hub-ep-note-20260904T222516Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T222516Z)
-(Promotes promo-hub-ep-note-20260904T222516Z ep-note-20260904T222516Z)
-(About promo-hub-ep-note-20260904T222516Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T222516Z "Hub promotion: ep-note-20260904T222516Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T222516Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260904T222518Z
-(MemoryCluster promo-hub-ep-note-20260904T222518Z)
-(SchemaVersion promo-hub-ep-note-20260904T222518Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260904T222518Z Promotion)
-(ClusterSource promo-hub-ep-note-20260904T222518Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260904T222518Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260904T222518Z ev-promo-hub-ep-note-20260904T222518Z)
-(ObservedEvent ev-promo-hub-ep-note-20260904T222518Z)
-(Promotes promo-hub-ep-note-20260904T222518Z ep-note-20260904T222518Z)
-(About promo-hub-ep-note-20260904T222518Z journal)
-(EventNote ev-promo-hub-ep-note-20260904T222518Z "Hub promotion: ep-note-20260904T222518Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260904T222518Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T021450Z
-(MemoryCluster promo-hub-ep-note-20260905T021450Z)
-(SchemaVersion promo-hub-ep-note-20260905T021450Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T021450Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T021450Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T021450Z 2026-09-06T02:36:00Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T021450Z)
-(Promotes promo-hub-ep-note-20260905T021450Z ep-note-20260905T021450Z)
-(About promo-hub-ep-note-20260905T021450Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T021450Z "Hub promotion: ep-note-20260905T021450Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T021450Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T044751Z
-(MemoryCluster promo-hub-ep-note-20260905T044751Z)
-(SchemaVersion promo-hub-ep-note-20260905T044751Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T044751Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T044751Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T044751Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T044751Z ev-promo-hub-ep-note-20260905T044751Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T044751Z)
-(Promotes promo-hub-ep-note-20260905T044751Z ep-note-20260905T044751Z)
-(About promo-hub-ep-note-20260905T044751Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T044751Z "Hub promotion: ep-note-20260905T044751Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T044751Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T085307Z
-(MemoryCluster promo-hub-ep-note-20260905T085307Z)
-(SchemaVersion promo-hub-ep-note-20260905T085307Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T085307Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T085307Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T085307Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T085307Z ev-promo-hub-ep-note-20260905T085307Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T085307Z)
-(Promotes promo-hub-ep-note-20260905T085307Z ep-note-20260905T085307Z)
-(About promo-hub-ep-note-20260905T085307Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T085307Z "Hub promotion: ep-note-20260905T085307Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T085307Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T090049Z
-(MemoryCluster promo-hub-ep-note-20260905T090049Z)
-(SchemaVersion promo-hub-ep-note-20260905T090049Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T090049Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T090049Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T090049Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T090049Z ev-promo-hub-ep-note-20260905T090049Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T090049Z)
-(Promotes promo-hub-ep-note-20260905T090049Z ep-note-20260905T090049Z)
-(About promo-hub-ep-note-20260905T090049Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T090049Z "Hub promotion: ep-note-20260905T090049Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T090049Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T113941Z
-(MemoryCluster promo-hub-ep-note-20260905T113941Z)
-(SchemaVersion promo-hub-ep-note-20260905T113941Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T113941Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T113941Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T113941Z 2026-09-06T02:36:00Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T113941Z)
-(Promotes promo-hub-ep-note-20260905T113941Z ep-note-20260905T113941Z)
-(About promo-hub-ep-note-20260905T113941Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T113941Z "Hub promotion: ep-note-20260905T113941Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T113941Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T142412Z
-(MemoryCluster promo-hub-ep-note-20260905T142412Z)
-(SchemaVersion promo-hub-ep-note-20260905T142412Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T142412Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T142412Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T142412Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T142412Z ev-promo-hub-ep-note-20260905T142412Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T142412Z)
-(Promotes promo-hub-ep-note-20260905T142412Z ep-note-20260905T142412Z)
-(About promo-hub-ep-note-20260905T142412Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T142412Z "Hub promotion: ep-note-20260905T142412Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T142412Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T144108Z
-(MemoryCluster promo-hub-ep-note-20260905T144108Z)
-(SchemaVersion promo-hub-ep-note-20260905T144108Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T144108Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T144108Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T144108Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T144108Z ev-promo-hub-ep-note-20260905T144108Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T144108Z)
-(Promotes promo-hub-ep-note-20260905T144108Z ep-note-20260905T144108Z)
-(About promo-hub-ep-note-20260905T144108Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T144108Z "Hub promotion: ep-note-20260905T144108Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T144108Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T145725Z
-(MemoryCluster promo-hub-ep-note-20260905T145725Z)
-(SchemaVersion promo-hub-ep-note-20260905T145725Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T145725Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T145725Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T145725Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T145725Z ev-promo-hub-ep-note-20260905T145725Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T145725Z)
-(Promotes promo-hub-ep-note-20260905T145725Z ep-note-20260905T145725Z)
-(About promo-hub-ep-note-20260905T145725Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T145725Z "Hub promotion: ep-note-20260905T145725Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T145725Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T145939Z
-(MemoryCluster promo-hub-ep-note-20260905T145939Z)
-(SchemaVersion promo-hub-ep-note-20260905T145939Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T145939Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T145939Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T145939Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T145939Z ev-promo-hub-ep-note-20260905T145939Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T145939Z)
-(Promotes promo-hub-ep-note-20260905T145939Z ep-note-20260905T145939Z)
-(About promo-hub-ep-note-20260905T145939Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T145939Z "Hub promotion: ep-note-20260905T145939Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T145939Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T152851Z
-(MemoryCluster promo-hub-ep-note-20260905T152851Z)
-(SchemaVersion promo-hub-ep-note-20260905T152851Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T152851Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T152851Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T152851Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T152851Z ev-promo-hub-ep-note-20260905T152851Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T152851Z)
-(Promotes promo-hub-ep-note-20260905T152851Z ep-note-20260905T152851Z)
-(About promo-hub-ep-note-20260905T152851Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T152851Z "Hub promotion: ep-note-20260905T152851Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T152851Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T153010Z
-(MemoryCluster promo-hub-ep-note-20260905T153010Z)
-(SchemaVersion promo-hub-ep-note-20260905T153010Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T153010Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T153010Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T153010Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T153010Z ev-promo-hub-ep-note-20260905T153010Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T153010Z)
-(Promotes promo-hub-ep-note-20260905T153010Z ep-note-20260905T153010Z)
-(About promo-hub-ep-note-20260905T153010Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T153010Z "Hub promotion: ep-note-20260905T153010Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T153010Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T153708Z
-(MemoryCluster promo-hub-ep-note-20260905T153708Z)
-(SchemaVersion promo-hub-ep-note-20260905T153708Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T153708Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T153708Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T153708Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T153708Z ev-promo-hub-ep-note-20260905T153708Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T153708Z)
-(Promotes promo-hub-ep-note-20260905T153708Z ep-note-20260905T153708Z)
-(About promo-hub-ep-note-20260905T153708Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T153708Z "Hub promotion: ep-note-20260905T153708Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T153708Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T153938Z
-(MemoryCluster promo-hub-ep-note-20260905T153938Z)
-(SchemaVersion promo-hub-ep-note-20260905T153938Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T153938Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T153938Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T153938Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T153938Z ev-promo-hub-ep-note-20260905T153938Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T153938Z)
-(Promotes promo-hub-ep-note-20260905T153938Z ep-note-20260905T153938Z)
-(About promo-hub-ep-note-20260905T153938Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T153938Z "Hub promotion: ep-note-20260905T153938Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T153938Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T154438Z
-(MemoryCluster promo-hub-ep-note-20260905T154438Z)
-(SchemaVersion promo-hub-ep-note-20260905T154438Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T154438Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T154438Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T154438Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T154438Z ev-promo-hub-ep-note-20260905T154438Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T154438Z)
-(Promotes promo-hub-ep-note-20260905T154438Z ep-note-20260905T154438Z)
-(About promo-hub-ep-note-20260905T154438Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T154438Z "Hub promotion: ep-note-20260905T154438Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T154438Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T154752Z
-(MemoryCluster promo-hub-ep-note-20260905T154752Z)
-(SchemaVersion promo-hub-ep-note-20260905T154752Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T154752Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T154752Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T154752Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T154752Z ev-promo-hub-ep-note-20260905T154752Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T154752Z)
-(Promotes promo-hub-ep-note-20260905T154752Z ep-note-20260905T154752Z)
-(About promo-hub-ep-note-20260905T154752Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T154752Z "Hub promotion: ep-note-20260905T154752Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T154752Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T155031Z
-(MemoryCluster promo-hub-ep-note-20260905T155031Z)
-(SchemaVersion promo-hub-ep-note-20260905T155031Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T155031Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T155031Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T155031Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T155031Z ev-promo-hub-ep-note-20260905T155031Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T155031Z)
-(Promotes promo-hub-ep-note-20260905T155031Z ep-note-20260905T155031Z)
-(About promo-hub-ep-note-20260905T155031Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T155031Z "Hub promotion: ep-note-20260905T155031Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T155031Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T155330Z
-(MemoryCluster promo-hub-ep-note-20260905T155330Z)
-(SchemaVersion promo-hub-ep-note-20260905T155330Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T155330Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T155330Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T155330Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T155330Z ev-promo-hub-ep-note-20260905T155330Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T155330Z)
-(Promotes promo-hub-ep-note-20260905T155330Z ep-note-20260905T155330Z)
-(About promo-hub-ep-note-20260905T155330Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T155330Z "Hub promotion: ep-note-20260905T155330Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T155330Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T155954Z
-(MemoryCluster promo-hub-ep-note-20260905T155954Z)
-(SchemaVersion promo-hub-ep-note-20260905T155954Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T155954Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T155954Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T155954Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T155954Z ev-promo-hub-ep-note-20260905T155954Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T155954Z)
-(Promotes promo-hub-ep-note-20260905T155954Z ep-note-20260905T155954Z)
-(About promo-hub-ep-note-20260905T155954Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T155954Z "Hub promotion: ep-note-20260905T155954Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T155954Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T160123Z
-(MemoryCluster promo-hub-ep-note-20260905T160123Z)
-(SchemaVersion promo-hub-ep-note-20260905T160123Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T160123Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T160123Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T160123Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T160123Z ev-promo-hub-ep-note-20260905T160123Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T160123Z)
-(Promotes promo-hub-ep-note-20260905T160123Z ep-note-20260905T160123Z)
-(About promo-hub-ep-note-20260905T160123Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T160123Z "Hub promotion: ep-note-20260905T160123Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T160123Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T160248Z
-(MemoryCluster promo-hub-ep-note-20260905T160248Z)
-(SchemaVersion promo-hub-ep-note-20260905T160248Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T160248Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T160248Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T160248Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T160248Z ev-promo-hub-ep-note-20260905T160248Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T160248Z)
-(Promotes promo-hub-ep-note-20260905T160248Z ep-note-20260905T160248Z)
-(About promo-hub-ep-note-20260905T160248Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T160248Z "Hub promotion: ep-note-20260905T160248Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T160248Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T161522Z
-(MemoryCluster promo-hub-ep-note-20260905T161522Z)
-(SchemaVersion promo-hub-ep-note-20260905T161522Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T161522Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T161522Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T161522Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T161522Z ev-promo-hub-ep-note-20260905T161522Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T161522Z)
-(Promotes promo-hub-ep-note-20260905T161522Z ep-note-20260905T161522Z)
-(About promo-hub-ep-note-20260905T161522Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T161522Z "Hub promotion: ep-note-20260905T161522Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T161522Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T162044Z
-(MemoryCluster promo-hub-ep-note-20260905T162044Z)
-(SchemaVersion promo-hub-ep-note-20260905T162044Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T162044Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T162044Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T162044Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T162044Z ev-promo-hub-ep-note-20260905T162044Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T162044Z)
-(Promotes promo-hub-ep-note-20260905T162044Z ep-note-20260905T162044Z)
-(About promo-hub-ep-note-20260905T162044Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T162044Z "Hub promotion: ep-note-20260905T162044Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T162044Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T164615Z
-(MemoryCluster promo-hub-ep-note-20260905T164615Z)
-(SchemaVersion promo-hub-ep-note-20260905T164615Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T164615Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T164615Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T164615Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T164615Z ev-promo-hub-ep-note-20260905T164615Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T164615Z)
-(Promotes promo-hub-ep-note-20260905T164615Z ep-note-20260905T164615Z)
-(About promo-hub-ep-note-20260905T164615Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T164615Z "Hub promotion: ep-note-20260905T164615Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T164615Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T165655Z
-(MemoryCluster promo-hub-ep-note-20260905T165655Z)
-(SchemaVersion promo-hub-ep-note-20260905T165655Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T165655Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T165655Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T165655Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T165655Z ev-promo-hub-ep-note-20260905T165655Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T165655Z)
-(Promotes promo-hub-ep-note-20260905T165655Z ep-note-20260905T165655Z)
-(About promo-hub-ep-note-20260905T165655Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T165655Z "Hub promotion: ep-note-20260905T165655Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T165655Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T170215Z
-(MemoryCluster promo-hub-ep-note-20260905T170215Z)
-(SchemaVersion promo-hub-ep-note-20260905T170215Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T170215Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T170215Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T170215Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T170215Z ev-promo-hub-ep-note-20260905T170215Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T170215Z)
-(Promotes promo-hub-ep-note-20260905T170215Z ep-note-20260905T170215Z)
-(About promo-hub-ep-note-20260905T170215Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T170215Z "Hub promotion: ep-note-20260905T170215Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T170215Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T171412Z
-(MemoryCluster promo-hub-ep-note-20260905T171412Z)
-(SchemaVersion promo-hub-ep-note-20260905T171412Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T171412Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T171412Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T171412Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T171412Z ev-promo-hub-ep-note-20260905T171412Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T171412Z)
-(Promotes promo-hub-ep-note-20260905T171412Z ep-note-20260905T171412Z)
-(About promo-hub-ep-note-20260905T171412Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T171412Z "Hub promotion: ep-note-20260905T171412Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T171412Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T171702Z
-(MemoryCluster promo-hub-ep-note-20260905T171702Z)
-(SchemaVersion promo-hub-ep-note-20260905T171702Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T171702Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T171702Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T171702Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T171702Z ev-promo-hub-ep-note-20260905T171702Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T171702Z)
-(Promotes promo-hub-ep-note-20260905T171702Z ep-note-20260905T171702Z)
-(About promo-hub-ep-note-20260905T171702Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T171702Z "Hub promotion: ep-note-20260905T171702Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T171702Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T172131Z
-(MemoryCluster promo-hub-ep-note-20260905T172131Z)
-(SchemaVersion promo-hub-ep-note-20260905T172131Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T172131Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T172131Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T172131Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T172131Z ev-promo-hub-ep-note-20260905T172131Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T172131Z)
-(Promotes promo-hub-ep-note-20260905T172131Z ep-note-20260905T172131Z)
-(About promo-hub-ep-note-20260905T172131Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T172131Z "Hub promotion: ep-note-20260905T172131Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T172131Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T172247Z
-(MemoryCluster promo-hub-ep-note-20260905T172247Z)
-(SchemaVersion promo-hub-ep-note-20260905T172247Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T172247Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T172247Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T172247Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T172247Z ev-promo-hub-ep-note-20260905T172247Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T172247Z)
-(Promotes promo-hub-ep-note-20260905T172247Z ep-note-20260905T172247Z)
-(About promo-hub-ep-note-20260905T172247Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T172247Z "Hub promotion: ep-note-20260905T172247Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T172247Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T172419Z
-(MemoryCluster promo-hub-ep-note-20260905T172419Z)
-(SchemaVersion promo-hub-ep-note-20260905T172419Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T172419Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T172419Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T172419Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T172419Z ev-promo-hub-ep-note-20260905T172419Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T172419Z)
-(Promotes promo-hub-ep-note-20260905T172419Z ep-note-20260905T172419Z)
-(About promo-hub-ep-note-20260905T172419Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T172419Z "Hub promotion: ep-note-20260905T172419Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T172419Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T172614Z
-(MemoryCluster promo-hub-ep-note-20260905T172614Z)
-(SchemaVersion promo-hub-ep-note-20260905T172614Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T172614Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T172614Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T172614Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T172614Z ev-promo-hub-ep-note-20260905T172614Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T172614Z)
-(Promotes promo-hub-ep-note-20260905T172614Z ep-note-20260905T172614Z)
-(About promo-hub-ep-note-20260905T172614Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T172614Z "Hub promotion: ep-note-20260905T172614Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T172614Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T173149Z
-(MemoryCluster promo-hub-ep-note-20260905T173149Z)
-(SchemaVersion promo-hub-ep-note-20260905T173149Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T173149Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T173149Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T173149Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T173149Z ev-promo-hub-ep-note-20260905T173149Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T173149Z)
-(Promotes promo-hub-ep-note-20260905T173149Z ep-note-20260905T173149Z)
-(About promo-hub-ep-note-20260905T173149Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T173149Z "Hub promotion: ep-note-20260905T173149Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T173149Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T173454Z
-(MemoryCluster promo-hub-ep-note-20260905T173454Z)
-(SchemaVersion promo-hub-ep-note-20260905T173454Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T173454Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T173454Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T173454Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T173454Z ev-promo-hub-ep-note-20260905T173454Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T173454Z)
-(Promotes promo-hub-ep-note-20260905T173454Z ep-note-20260905T173454Z)
-(About promo-hub-ep-note-20260905T173454Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T173454Z "Hub promotion: ep-note-20260905T173454Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T173454Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T173746Z
-(MemoryCluster promo-hub-ep-note-20260905T173746Z)
-(SchemaVersion promo-hub-ep-note-20260905T173746Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T173746Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T173746Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T173746Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T173746Z ev-promo-hub-ep-note-20260905T173746Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T173746Z)
-(Promotes promo-hub-ep-note-20260905T173746Z ep-note-20260905T173746Z)
-(About promo-hub-ep-note-20260905T173746Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T173746Z "Hub promotion: ep-note-20260905T173746Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T173746Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T174441Z
-(MemoryCluster promo-hub-ep-note-20260905T174441Z)
-(SchemaVersion promo-hub-ep-note-20260905T174441Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T174441Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T174441Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T174441Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T174441Z ev-promo-hub-ep-note-20260905T174441Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T174441Z)
-(Promotes promo-hub-ep-note-20260905T174441Z ep-note-20260905T174441Z)
-(About promo-hub-ep-note-20260905T174441Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T174441Z "Hub promotion: ep-note-20260905T174441Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T174441Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T175259Z
-(MemoryCluster promo-hub-ep-note-20260905T175259Z)
-(SchemaVersion promo-hub-ep-note-20260905T175259Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T175259Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T175259Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T175259Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T175259Z ev-promo-hub-ep-note-20260905T175259Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T175259Z)
-(Promotes promo-hub-ep-note-20260905T175259Z ep-note-20260905T175259Z)
-(About promo-hub-ep-note-20260905T175259Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T175259Z "Hub promotion: ep-note-20260905T175259Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T175259Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T175818Z
-(MemoryCluster promo-hub-ep-note-20260905T175818Z)
-(SchemaVersion promo-hub-ep-note-20260905T175818Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260905T175818Z Promotion)
-(ClusterSource promo-hub-ep-note-20260905T175818Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260905T175818Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260905T175818Z ev-promo-hub-ep-note-20260905T175818Z)
-(ObservedEvent ev-promo-hub-ep-note-20260905T175818Z)
-(Promotes promo-hub-ep-note-20260905T175818Z ep-note-20260905T175818Z)
-(About promo-hub-ep-note-20260905T175818Z journal)
-(EventNote ev-promo-hub-ep-note-20260905T175818Z "Hub promotion: ep-note-20260905T175818Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260905T175818Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T052830Z
-(MemoryCluster promo-hub-ep-note-20260906T052830Z)
-(SchemaVersion promo-hub-ep-note-20260906T052830Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T052830Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T052830Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T052830Z 2026-09-06T02:36:00Z)
-(Contains promo-hub-ep-note-20260906T052830Z ev-promo-hub-ep-note-20260906T052830Z)
-(ObservedEvent ev-promo-hub-ep-note-20260906T052830Z)
-(Promotes promo-hub-ep-note-20260906T052830Z ep-note-20260906T052830Z)
-(About promo-hub-ep-note-20260906T052830Z journal)
-(EventNote ev-promo-hub-ep-note-20260906T052830Z "Hub promotion: ep-note-20260906T052830Z has 10 in, 6 out.")
-;;; END MemoryCluster promo-hub-ep-note-20260906T052830Z
 
 ;;; BEGIN MemoryCluster promo-hub-ep-note-20260905T152547Z
 (MemoryCluster promo-hub-ep-note-20260905T152547Z)
@@ -36807,70 +32624,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Contradicts ev-ep-note-20260906T094153Z fact-journal-conventions)
 ;;; END Consolidation R5-Contradicts215
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T094153Z
-(MemoryCluster promo-hub-ep-note-20260906T094153Z)
-(SchemaVersion promo-hub-ep-note-20260906T094153Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T094153Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T094153Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T094153Z 2026-09-06T09:52:00Z)
-(Promotes promo-hub-ep-note-20260906T094153Z ep-note-20260906T094153Z)
-(About promo-hub-ep-note-20260906T094153Z journal)
-(DerivedFrom promo-hub-ep-note-20260906T094153Z ep-note-20260906T094153Z)
-(Confidence promo-hub-ep-note-20260906T094153Z high)
-(PromotionReason promo-hub-ep-note-20260906T094153Z "Hub: 15in+15out")
-;;; END MemoryCluster promo-hub-ep-note-20260906T094153Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T094314Z
-(MemoryCluster promo-hub-ep-note-20260906T094314Z)
-(SchemaVersion promo-hub-ep-note-20260906T094314Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T094314Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T094314Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T094314Z 2026-09-06T09:52:00Z)
-(Promotes promo-hub-ep-note-20260906T094314Z ep-note-20260906T094314Z)
-(About promo-hub-ep-note-20260906T094314Z journal)
-(DerivedFrom promo-hub-ep-note-20260906T094314Z ep-note-20260906T094314Z)
-(Confidence promo-hub-ep-note-20260906T094314Z high)
-(PromotionReason promo-hub-ep-note-20260906T094314Z "Hub: 15in+15out")
-;;; END MemoryCluster promo-hub-ep-note-20260906T094314Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T094747Z
-(MemoryCluster promo-hub-ep-note-20260906T094747Z)
-(SchemaVersion promo-hub-ep-note-20260906T094747Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T094747Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T094747Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T094747Z 2026-09-06T09:52:00Z)
-(Promotes promo-hub-ep-note-20260906T094747Z ep-note-20260906T094747Z)
-(About promo-hub-ep-note-20260906T094747Z journal)
-(DerivedFrom promo-hub-ep-note-20260906T094747Z ep-note-20260906T094747Z)
-(Confidence promo-hub-ep-note-20260906T094747Z high)
-(PromotionReason promo-hub-ep-note-20260906T094747Z "Hub: 15in+15out")
-;;; END MemoryCluster promo-hub-ep-note-20260906T094747Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T092815Z
-(MemoryCluster promo-hub-ep-note-20260906T092815Z)
-(SchemaVersion promo-hub-ep-note-20260906T092815Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T092815Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T092815Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T092815Z 2026-09-06T09:52:00Z)
-(Promotes promo-hub-ep-note-20260906T092815Z ep-note-20260906T092815Z)
-(About promo-hub-ep-note-20260906T092815Z journal)
-(DerivedFrom promo-hub-ep-note-20260906T092815Z ep-note-20260906T092815Z)
-(Confidence promo-hub-ep-note-20260906T092815Z high)
-(PromotionReason promo-hub-ep-note-20260906T092815Z "Hub: 10in+10out")
-;;; END MemoryCluster promo-hub-ep-note-20260906T092815Z
 
-;;; BEGIN MemoryCluster promo-hub-ep-note-20260906T093029Z
-(MemoryCluster promo-hub-ep-note-20260906T093029Z)
-(SchemaVersion promo-hub-ep-note-20260906T093029Z medium-memory-v1)
-(ClusterType promo-hub-ep-note-20260906T093029Z Promotion)
-(ClusterSource promo-hub-ep-note-20260906T093029Z iter-experience)
-(ClusterOpenedAt promo-hub-ep-note-20260906T093029Z 2026-09-06T09:52:00Z)
-(Promotes promo-hub-ep-note-20260906T093029Z ep-note-20260906T093029Z)
-(About promo-hub-ep-note-20260906T093029Z journal)
-(DerivedFrom promo-hub-ep-note-20260906T093029Z ep-note-20260906T093029Z)
-(Confidence promo-hub-ep-note-20260906T093029Z high)
-(PromotionReason promo-hub-ep-note-20260906T093029Z "Hub: 10in+10out")
-;;; END MemoryCluster promo-hub-ep-note-20260906T093029Z
 ;;; BEGIN MemoryCluster ep-note-20260906T095323Z
 (MemoryCluster ep-note-20260906T095323Z)
 (SchemaVersion ep-note-20260906T095323Z medium-memory-v1)
@@ -38180,95 +33937,15 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceFor ev-tail-04 ev-ep-note-20260906T103629Z)
 ;;; END Consolidation R31-Boost
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T094947Z
-(MemoryCluster promo-ep-note-20260906T094947Z)
-(ClusterType promo-ep-note-20260906T094947Z Promotion)
-(About promo-ep-note-20260906T094947Z consolidation)
-(Contains promo-ep-note-20260906T094947Z ev-ep-note-20260906T094947Z)
-(Promotes promo-ep-note-20260906T094947Z ep-note-20260906T094947Z)
-(EvidenceSupportCount promo-ep-note-20260906T094947Z 33)
-;;; END MemoryCluster promo-ep-note-20260906T094947Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T095323Z
-(MemoryCluster promo-ep-note-20260906T095323Z)
-(ClusterType promo-ep-note-20260906T095323Z Promotion)
-(About promo-ep-note-20260906T095323Z consolidation)
-(Contains promo-ep-note-20260906T095323Z ev-ep-note-20260906T095323Z)
-(Promotes promo-ep-note-20260906T095323Z ep-note-20260906T095323Z)
-(EvidenceSupportCount promo-ep-note-20260906T095323Z 33)
-;;; END MemoryCluster promo-ep-note-20260906T095323Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T095448Z
-(MemoryCluster promo-ep-note-20260906T095448Z)
-(ClusterType promo-ep-note-20260906T095448Z Promotion)
-(About promo-ep-note-20260906T095448Z consolidation)
-(Contains promo-ep-note-20260906T095448Z ev-ep-note-20260906T095448Z)
-(Promotes promo-ep-note-20260906T095448Z ep-note-20260906T095448Z)
-(EvidenceSupportCount promo-ep-note-20260906T095448Z 33)
-;;; END MemoryCluster promo-ep-note-20260906T095448Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T095610Z
-(MemoryCluster promo-ep-note-20260906T095610Z)
-(ClusterType promo-ep-note-20260906T095610Z Promotion)
-(About promo-ep-note-20260906T095610Z consolidation)
-(Contains promo-ep-note-20260906T095610Z ev-ep-note-20260906T095610Z)
-(Promotes promo-ep-note-20260906T095610Z ep-note-20260906T095610Z)
-(EvidenceSupportCount promo-ep-note-20260906T095610Z 33)
-;;; END MemoryCluster promo-ep-note-20260906T095610Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T095729Z
-(MemoryCluster promo-ep-note-20260906T095729Z)
-(ClusterType promo-ep-note-20260906T095729Z Promotion)
-(About promo-ep-note-20260906T095729Z consolidation)
-(Contains promo-ep-note-20260906T095729Z ev-ep-note-20260906T095729Z)
-(Promotes promo-ep-note-20260906T095729Z ep-note-20260906T095729Z)
-(EvidenceSupportCount promo-ep-note-20260906T095729Z 33)
-;;; END MemoryCluster promo-ep-note-20260906T095729Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T095842Z
-(MemoryCluster promo-ep-note-20260906T095842Z)
-(ClusterType promo-ep-note-20260906T095842Z Promotion)
-(About promo-ep-note-20260906T095842Z consolidation)
-(Contains promo-ep-note-20260906T095842Z ev-ep-note-20260906T095842Z)
-(Promotes promo-ep-note-20260906T095842Z ep-note-20260906T095842Z)
-(EvidenceSupportCount promo-ep-note-20260906T095842Z 33)
-;;; END MemoryCluster promo-ep-note-20260906T095842Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260905T161818Z
-(MemoryCluster promo-ep-note-20260905T161818Z)
-(ClusterType promo-ep-note-20260905T161818Z Promotion)
-(About promo-ep-note-20260905T161818Z consolidation)
-(Contains promo-ep-note-20260905T161818Z ev-ep-note-20260905T161818Z)
-(Promotes promo-ep-note-20260905T161818Z ep-note-20260905T161818Z)
-(EvidenceSupportCount promo-ep-note-20260905T161818Z 25)
-;;; END MemoryCluster promo-ep-note-20260905T161818Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T063117Z
-(MemoryCluster promo-ep-note-20260906T063117Z)
-(ClusterType promo-ep-note-20260906T063117Z Promotion)
-(About promo-ep-note-20260906T063117Z consolidation)
-(Contains promo-ep-note-20260906T063117Z ev-ep-note-20260906T063117Z)
-(Promotes promo-ep-note-20260906T063117Z ep-note-20260906T063117Z)
-(EvidenceSupportCount promo-ep-note-20260906T063117Z 25)
-;;; END MemoryCluster promo-ep-note-20260906T063117Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T064441Z
-(MemoryCluster promo-ep-note-20260906T064441Z)
-(ClusterType promo-ep-note-20260906T064441Z Promotion)
-(About promo-ep-note-20260906T064441Z consolidation)
-(Contains promo-ep-note-20260906T064441Z ev-ep-note-20260906T064441Z)
-(Promotes promo-ep-note-20260906T064441Z ep-note-20260906T064441Z)
-(EvidenceSupportCount promo-ep-note-20260906T064441Z 25)
-;;; END MemoryCluster promo-ep-note-20260906T064441Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T070754Z
-(MemoryCluster promo-ep-note-20260906T070754Z)
-(ClusterType promo-ep-note-20260906T070754Z Promotion)
-(About promo-ep-note-20260906T070754Z consolidation)
-(Contains promo-ep-note-20260906T070754Z ev-ep-note-20260906T070754Z)
-(Promotes promo-ep-note-20260906T070754Z ep-note-20260906T070754Z)
-(EvidenceSupportCount promo-ep-note-20260906T070754Z 25)
-;;; END MemoryCluster promo-ep-note-20260906T070754Z
 ;;; BEGIN MemoryCluster ep-note-20260906T103752Z
 (MemoryCluster ep-note-20260906T103752Z)
 (SchemaVersion ep-note-20260906T103752Z medium-memory-v1)
@@ -39112,95 +34789,15 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Contradicts ev-tail-20 ev-20260902153818914572)
 ;;; END Consolidation R35-Contradicts
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T071624Z
-(MemoryCluster promo-ep-note-20260906T071624Z)
-(ClusterType promo-ep-note-20260906T071624Z Promotion)
-(About promo-ep-note-20260906T071624Z consolidation)
-(Contains promo-ep-note-20260906T071624Z ev-ep-note-20260906T071624Z)
-(Promotes promo-ep-note-20260906T071624Z ep-note-20260906T071624Z)
-(EvidenceSupportCount promo-ep-note-20260906T071624Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T071624Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T074354Z
-(MemoryCluster promo-ep-note-20260906T074354Z)
-(ClusterType promo-ep-note-20260906T074354Z Promotion)
-(About promo-ep-note-20260906T074354Z consolidation)
-(Contains promo-ep-note-20260906T074354Z ev-ep-note-20260906T074354Z)
-(Promotes promo-ep-note-20260906T074354Z ep-note-20260906T074354Z)
-(EvidenceSupportCount promo-ep-note-20260906T074354Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T074354Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T080633Z
-(MemoryCluster promo-ep-note-20260906T080633Z)
-(ClusterType promo-ep-note-20260906T080633Z Promotion)
-(About promo-ep-note-20260906T080633Z consolidation)
-(Contains promo-ep-note-20260906T080633Z ev-ep-note-20260906T080633Z)
-(Promotes promo-ep-note-20260906T080633Z ep-note-20260906T080633Z)
-(EvidenceSupportCount promo-ep-note-20260906T080633Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T080633Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T081344Z
-(MemoryCluster promo-ep-note-20260906T081344Z)
-(ClusterType promo-ep-note-20260906T081344Z Promotion)
-(About promo-ep-note-20260906T081344Z consolidation)
-(Contains promo-ep-note-20260906T081344Z ev-ep-note-20260906T081344Z)
-(Promotes promo-ep-note-20260906T081344Z ep-note-20260906T081344Z)
-(EvidenceSupportCount promo-ep-note-20260906T081344Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T081344Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T083243Z
-(MemoryCluster promo-ep-note-20260906T083243Z)
-(ClusterType promo-ep-note-20260906T083243Z Promotion)
-(About promo-ep-note-20260906T083243Z consolidation)
-(Contains promo-ep-note-20260906T083243Z ev-ep-note-20260906T083243Z)
-(Promotes promo-ep-note-20260906T083243Z ep-note-20260906T083243Z)
-(EvidenceSupportCount promo-ep-note-20260906T083243Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T083243Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T083246Z
-(MemoryCluster promo-ep-note-20260906T083246Z)
-(ClusterType promo-ep-note-20260906T083246Z Promotion)
-(About promo-ep-note-20260906T083246Z consolidation)
-(Contains promo-ep-note-20260906T083246Z ev-ep-note-20260906T083246Z)
-(Promotes promo-ep-note-20260906T083246Z ep-note-20260906T083246Z)
-(EvidenceSupportCount promo-ep-note-20260906T083246Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T083246Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T083322Z
-(MemoryCluster promo-ep-note-20260906T083322Z)
-(ClusterType promo-ep-note-20260906T083322Z Promotion)
-(About promo-ep-note-20260906T083322Z consolidation)
-(Contains promo-ep-note-20260906T083322Z ev-ep-note-20260906T083322Z)
-(Promotes promo-ep-note-20260906T083322Z ep-note-20260906T083322Z)
-(EvidenceSupportCount promo-ep-note-20260906T083322Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T083322Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T083502Z
-(MemoryCluster promo-ep-note-20260906T083502Z)
-(ClusterType promo-ep-note-20260906T083502Z Promotion)
-(About promo-ep-note-20260906T083502Z consolidation)
-(Contains promo-ep-note-20260906T083502Z ev-ep-note-20260906T083502Z)
-(Promotes promo-ep-note-20260906T083502Z ep-note-20260906T083502Z)
-(EvidenceSupportCount promo-ep-note-20260906T083502Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T083502Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T083507Z
-(MemoryCluster promo-ep-note-20260906T083507Z)
-(ClusterType promo-ep-note-20260906T083507Z Promotion)
-(About promo-ep-note-20260906T083507Z consolidation)
-(Contains promo-ep-note-20260906T083507Z ev-ep-note-20260906T083507Z)
-(Promotes promo-ep-note-20260906T083507Z ep-note-20260906T083507Z)
-(EvidenceSupportCount promo-ep-note-20260906T083507Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T083507Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T083910Z
-(MemoryCluster promo-ep-note-20260906T083910Z)
-(ClusterType promo-ep-note-20260906T083910Z Promotion)
-(About promo-ep-note-20260906T083910Z consolidation)
-(Contains promo-ep-note-20260906T083910Z ev-ep-note-20260906T083910Z)
-(Promotes promo-ep-note-20260906T083910Z ep-note-20260906T083910Z)
-(EvidenceSupportCount promo-ep-note-20260906T083910Z 15)
-;;; END MemoryCluster promo-ep-note-20260906T083910Z
 
 ;;; BEGIN Consolidation R37-Links
 (EvidenceFor ev-ep-note-20260905T161818Z fact-lowev-fix-20260904)
@@ -39851,95 +35448,15 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Contradicts ev-tail-20 ev-ep-note-20260903T144640Z)
 ;;; END Consolidation R37-Contradicts
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T104040Z
-(MemoryCluster promo-ep-note-20260906T104040Z)
-(ClusterType promo-ep-note-20260906T104040Z Promotion)
-(About promo-ep-note-20260906T104040Z consolidation)
-(Contains promo-ep-note-20260906T104040Z ev-ep-note-20260906T104040Z)
-(Promotes promo-ep-note-20260906T104040Z ep-note-20260906T104040Z)
-(EvidenceSupportCount promo-ep-note-20260906T104040Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T104040Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T104201Z
-(MemoryCluster promo-ep-note-20260906T104201Z)
-(ClusterType promo-ep-note-20260906T104201Z Promotion)
-(About promo-ep-note-20260906T104201Z consolidation)
-(Contains promo-ep-note-20260906T104201Z ev-ep-note-20260906T104201Z)
-(Promotes promo-ep-note-20260906T104201Z ep-note-20260906T104201Z)
-(EvidenceSupportCount promo-ep-note-20260906T104201Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T104201Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T084127Z
-(MemoryCluster promo-ep-note-20260906T084127Z)
-(ClusterType promo-ep-note-20260906T084127Z Promotion)
-(About promo-ep-note-20260906T084127Z consolidation)
-(Contains promo-ep-note-20260906T084127Z ev-ep-note-20260906T084127Z)
-(Promotes promo-ep-note-20260906T084127Z ep-note-20260906T084127Z)
-(EvidenceSupportCount promo-ep-note-20260906T084127Z 10)
-;;; END MemoryCluster promo-ep-note-20260906T084127Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T084828Z
-(MemoryCluster promo-ep-note-20260906T084828Z)
-(ClusterType promo-ep-note-20260906T084828Z Promotion)
-(About promo-ep-note-20260906T084828Z consolidation)
-(Contains promo-ep-note-20260906T084828Z ev-ep-note-20260906T084828Z)
-(Promotes promo-ep-note-20260906T084828Z ep-note-20260906T084828Z)
-(EvidenceSupportCount promo-ep-note-20260906T084828Z 10)
-;;; END MemoryCluster promo-ep-note-20260906T084828Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T085354Z
-(MemoryCluster promo-ep-note-20260906T085354Z)
-(ClusterType promo-ep-note-20260906T085354Z Promotion)
-(About promo-ep-note-20260906T085354Z consolidation)
-(Contains promo-ep-note-20260906T085354Z ev-ep-note-20260906T085354Z)
-(Promotes promo-ep-note-20260906T085354Z ep-note-20260906T085354Z)
-(EvidenceSupportCount promo-ep-note-20260906T085354Z 10)
-;;; END MemoryCluster promo-ep-note-20260906T085354Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T085802Z
-(MemoryCluster promo-ep-note-20260906T085802Z)
-(ClusterType promo-ep-note-20260906T085802Z Promotion)
-(About promo-ep-note-20260906T085802Z consolidation)
-(Contains promo-ep-note-20260906T085802Z ev-ep-note-20260906T085802Z)
-(Promotes promo-ep-note-20260906T085802Z ep-note-20260906T085802Z)
-(EvidenceSupportCount promo-ep-note-20260906T085802Z 10)
-;;; END MemoryCluster promo-ep-note-20260906T085802Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T085935Z
-(MemoryCluster promo-ep-note-20260906T085935Z)
-(ClusterType promo-ep-note-20260906T085935Z Promotion)
-(About promo-ep-note-20260906T085935Z consolidation)
-(Contains promo-ep-note-20260906T085935Z ev-ep-note-20260906T085935Z)
-(Promotes promo-ep-note-20260906T085935Z ep-note-20260906T085935Z)
-(EvidenceSupportCount promo-ep-note-20260906T085935Z 10)
-;;; END MemoryCluster promo-ep-note-20260906T085935Z
 
-;;; BEGIN MemoryCluster promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903
-(MemoryCluster promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903)
-(ClusterType promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903 Promotion)
-(About promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903 consolidation)
-(Contains promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903 ev-promo-resolve-supersedes-marker-fix-20260903)
-(Promotes promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903 ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903)
-(EvidenceSupportCount promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903 10)
-;;; END MemoryCluster promo-ep-auto-ev-promo-resolve-supersedes-marker-fix-20260903
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T090331Z
-(MemoryCluster promo-ep-note-20260906T090331Z)
-(ClusterType promo-ep-note-20260906T090331Z Promotion)
-(About promo-ep-note-20260906T090331Z consolidation)
-(Contains promo-ep-note-20260906T090331Z ev-ep-note-20260906T090331Z)
-(Promotes promo-ep-note-20260906T090331Z ep-note-20260906T090331Z)
-(EvidenceSupportCount promo-ep-note-20260906T090331Z 10)
-;;; END MemoryCluster promo-ep-note-20260906T090331Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T090453Z
-(MemoryCluster promo-ep-note-20260906T090453Z)
-(ClusterType promo-ep-note-20260906T090453Z Promotion)
-(About promo-ep-note-20260906T090453Z consolidation)
-(Contains promo-ep-note-20260906T090453Z ev-ep-note-20260906T090453Z)
-(Promotes promo-ep-note-20260906T090453Z ep-note-20260906T090453Z)
-(EvidenceSupportCount promo-ep-note-20260906T090453Z 10)
-;;; END MemoryCluster promo-ep-note-20260906T090453Z
 
 ;;; BEGIN Consolidation R38-Links
 (EvidenceFor ev-ep-note-20260905T161818Z fact-store-api)
@@ -40274,95 +35791,15 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceFor ev-ep-note-20260906T104201Z ev-tail-11)
 ;;; END Consolidation R38-Links
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T102324Z
-(MemoryCluster promo-ep-note-20260906T102324Z)
-(ClusterType promo-ep-note-20260906T102324Z Promotion)
-(About promo-ep-note-20260906T102324Z consolidation)
-(Contains promo-ep-note-20260906T102324Z ev-ep-note-20260906T102324Z)
-(Promotes promo-ep-note-20260906T102324Z ep-note-20260906T102324Z)
-(EvidenceSupportCount promo-ep-note-20260906T102324Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T102324Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T102442Z
-(MemoryCluster promo-ep-note-20260906T102442Z)
-(ClusterType promo-ep-note-20260906T102442Z Promotion)
-(About promo-ep-note-20260906T102442Z consolidation)
-(Contains promo-ep-note-20260906T102442Z ev-ep-note-20260906T102442Z)
-(Promotes promo-ep-note-20260906T102442Z ep-note-20260906T102442Z)
-(EvidenceSupportCount promo-ep-note-20260906T102442Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T102442Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T102605Z
-(MemoryCluster promo-ep-note-20260906T102605Z)
-(ClusterType promo-ep-note-20260906T102605Z Promotion)
-(About promo-ep-note-20260906T102605Z consolidation)
-(Contains promo-ep-note-20260906T102605Z ev-ep-note-20260906T102605Z)
-(Promotes promo-ep-note-20260906T102605Z ep-note-20260906T102605Z)
-(EvidenceSupportCount promo-ep-note-20260906T102605Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T102605Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T102922Z
-(MemoryCluster promo-ep-note-20260906T102922Z)
-(ClusterType promo-ep-note-20260906T102922Z Promotion)
-(About promo-ep-note-20260906T102922Z consolidation)
-(Contains promo-ep-note-20260906T102922Z ev-ep-note-20260906T102922Z)
-(Promotes promo-ep-note-20260906T102922Z ep-note-20260906T102922Z)
-(EvidenceSupportCount promo-ep-note-20260906T102922Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T102922Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T103109Z
-(MemoryCluster promo-ep-note-20260906T103109Z)
-(ClusterType promo-ep-note-20260906T103109Z Promotion)
-(About promo-ep-note-20260906T103109Z consolidation)
-(Contains promo-ep-note-20260906T103109Z ev-ep-note-20260906T103109Z)
-(Promotes promo-ep-note-20260906T103109Z ep-note-20260906T103109Z)
-(EvidenceSupportCount promo-ep-note-20260906T103109Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T103109Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T103233Z
-(MemoryCluster promo-ep-note-20260906T103233Z)
-(ClusterType promo-ep-note-20260906T103233Z Promotion)
-(About promo-ep-note-20260906T103233Z consolidation)
-(Contains promo-ep-note-20260906T103233Z ev-ep-note-20260906T103233Z)
-(Promotes promo-ep-note-20260906T103233Z ep-note-20260906T103233Z)
-(EvidenceSupportCount promo-ep-note-20260906T103233Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T103233Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T103353Z
-(MemoryCluster promo-ep-note-20260906T103353Z)
-(ClusterType promo-ep-note-20260906T103353Z Promotion)
-(About promo-ep-note-20260906T103353Z consolidation)
-(Contains promo-ep-note-20260906T103353Z ev-ep-note-20260906T103353Z)
-(Promotes promo-ep-note-20260906T103353Z ep-note-20260906T103353Z)
-(EvidenceSupportCount promo-ep-note-20260906T103353Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T103353Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T103510Z
-(MemoryCluster promo-ep-note-20260906T103510Z)
-(ClusterType promo-ep-note-20260906T103510Z Promotion)
-(About promo-ep-note-20260906T103510Z consolidation)
-(Contains promo-ep-note-20260906T103510Z ev-ep-note-20260906T103510Z)
-(Promotes promo-ep-note-20260906T103510Z ep-note-20260906T103510Z)
-(EvidenceSupportCount promo-ep-note-20260906T103510Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T103510Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T103629Z
-(MemoryCluster promo-ep-note-20260906T103629Z)
-(ClusterType promo-ep-note-20260906T103629Z Promotion)
-(About promo-ep-note-20260906T103629Z consolidation)
-(Contains promo-ep-note-20260906T103629Z ev-ep-note-20260906T103629Z)
-(Promotes promo-ep-note-20260906T103629Z ep-note-20260906T103629Z)
-(EvidenceSupportCount promo-ep-note-20260906T103629Z 14)
-;;; END MemoryCluster promo-ep-note-20260906T103629Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T103752Z
-(MemoryCluster promo-ep-note-20260906T103752Z)
-(ClusterType promo-ep-note-20260906T103752Z Promotion)
-(About promo-ep-note-20260906T103752Z consolidation)
-(Contains promo-ep-note-20260906T103752Z ev-ep-note-20260906T103752Z)
-(Promotes promo-ep-note-20260906T103752Z ep-note-20260906T103752Z)
-(EvidenceSupportCount promo-ep-note-20260906T103752Z 17)
-;;; END MemoryCluster promo-ep-note-20260906T103752Z
 
 (EvidenceFor ev-ep-note-20260905T161818Z ev-ep-note-20260906T102009Z)
 (EvidenceFor ev-ep-note-20260905T161818Z ev-ep-note-20260906T101644Z)
@@ -40945,7 +36382,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Supersedes ev-ep-note-20260906T104201Z ev-tail-17)
 (Supersedes ev-ep-note-20260906T104201Z ev-tail-18)
 (Supersedes ev-ep-note-20260906T104201Z ev-tail-19)
-(Supersedes ev-ep-note-20260906T104201Z ev-tail-20)
 (Supersedes ev-ep-note-20260906T104201Z ev-promo-resolve-supersedes-marker-fix-20260903)
 (Supersedes ev-ep-note-20260906T104201Z ev-ep-note-20260903T144640Z)
 (Supersedes ev-ep-note-20260906T104201Z ev-ep-note-20260903T151551Z)
@@ -41000,229 +36436,33 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (Supersedes ev-ep-note-20260906T104201Z ev-ep-note-20260904T093041Z)
 ;;; END Consolidation R38-Supersedes
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T103920Z
-(MemoryCluster promo-ep-note-20260906T103920Z)
-(ClusterType promo-ep-note-20260906T103920Z Promotion)
-(About promo-ep-note-20260906T103920Z consolidation)
-(Contains promo-ep-note-20260906T103920Z ev-ep-note-20260906T103920Z)
-(Promotes promo-ep-note-20260906T103920Z ep-note-20260906T103920Z)
-;;; END MemoryCluster promo-ep-note-20260906T103920Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T101137Z
-(MemoryCluster promo-ep-note-20260906T101137Z)
-(ClusterType promo-ep-note-20260906T101137Z Promotion)
-(About promo-ep-note-20260906T101137Z consolidation)
-(Contains promo-ep-note-20260906T101137Z ev-ep-note-20260906T101137Z)
-(Promotes promo-ep-note-20260906T101137Z ep-note-20260906T101137Z)
-;;; END MemoryCluster promo-ep-note-20260906T101137Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T101259Z
-(MemoryCluster promo-ep-note-20260906T101259Z)
-(ClusterType promo-ep-note-20260906T101259Z Promotion)
-(About promo-ep-note-20260906T101259Z consolidation)
-(Contains promo-ep-note-20260906T101259Z ev-ep-note-20260906T101259Z)
-(Promotes promo-ep-note-20260906T101259Z ep-note-20260906T101259Z)
-;;; END MemoryCluster promo-ep-note-20260906T101259Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T101413Z
-(MemoryCluster promo-ep-note-20260906T101413Z)
-(ClusterType promo-ep-note-20260906T101413Z Promotion)
-(About promo-ep-note-20260906T101413Z consolidation)
-(Contains promo-ep-note-20260906T101413Z ev-ep-note-20260906T101413Z)
-(Promotes promo-ep-note-20260906T101413Z ep-note-20260906T101413Z)
-;;; END MemoryCluster promo-ep-note-20260906T101413Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T101644Z
-(MemoryCluster promo-ep-note-20260906T101644Z)
-(ClusterType promo-ep-note-20260906T101644Z Promotion)
-(About promo-ep-note-20260906T101644Z consolidation)
-(Contains promo-ep-note-20260906T101644Z ev-ep-note-20260906T101644Z)
-(Promotes promo-ep-note-20260906T101644Z ep-note-20260906T101644Z)
-;;; END MemoryCluster promo-ep-note-20260906T101644Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T102009Z
-(MemoryCluster promo-ep-note-20260906T102009Z)
-(ClusterType promo-ep-note-20260906T102009Z Promotion)
-(About promo-ep-note-20260906T102009Z consolidation)
-(Contains promo-ep-note-20260906T102009Z ev-ep-note-20260906T102009Z)
-(Promotes promo-ep-note-20260906T102009Z ep-note-20260906T102009Z)
-;;; END MemoryCluster promo-ep-note-20260906T102009Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T090759Z
-(MemoryCluster promo-ep-note-20260906T090759Z)
-(ClusterType promo-ep-note-20260906T090759Z Promotion)
-(About promo-ep-note-20260906T090759Z consolidation)
-(Contains promo-ep-note-20260906T090759Z ev-ep-note-20260906T090759Z)
-(Promotes promo-ep-note-20260906T090759Z ep-note-20260906T090759Z)
-;;; END MemoryCluster promo-ep-note-20260906T090759Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T090926Z
-(MemoryCluster promo-ep-note-20260906T090926Z)
-(ClusterType promo-ep-note-20260906T090926Z Promotion)
-(About promo-ep-note-20260906T090926Z consolidation)
-(Contains promo-ep-note-20260906T090926Z ev-ep-note-20260906T090926Z)
-(Promotes promo-ep-note-20260906T090926Z ep-note-20260906T090926Z)
-;;; END MemoryCluster promo-ep-note-20260906T090926Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T091006Z
-(MemoryCluster promo-ep-note-20260906T091006Z)
-(ClusterType promo-ep-note-20260906T091006Z Promotion)
-(About promo-ep-note-20260906T091006Z consolidation)
-(Contains promo-ep-note-20260906T091006Z ev-ep-note-20260906T091006Z)
-(Promotes promo-ep-note-20260906T091006Z ep-note-20260906T091006Z)
-;;; END MemoryCluster promo-ep-note-20260906T091006Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T091123Z
-(MemoryCluster promo-ep-note-20260906T091123Z)
-(ClusterType promo-ep-note-20260906T091123Z Promotion)
-(About promo-ep-note-20260906T091123Z consolidation)
-(Contains promo-ep-note-20260906T091123Z ev-ep-note-20260906T091123Z)
-(Promotes promo-ep-note-20260906T091123Z ep-note-20260906T091123Z)
-;;; END MemoryCluster promo-ep-note-20260906T091123Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T091343Z
-(MemoryCluster promo-ep-note-20260906T091343Z)
-(ClusterType promo-ep-note-20260906T091343Z Promotion)
-(About promo-ep-note-20260906T091343Z consolidation)
-(Contains promo-ep-note-20260906T091343Z ev-ep-note-20260906T091343Z)
-(Promotes promo-ep-note-20260906T091343Z ep-note-20260906T091343Z)
-;;; END MemoryCluster promo-ep-note-20260906T091343Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T091621Z
-(MemoryCluster promo-ep-note-20260906T091621Z)
-(ClusterType promo-ep-note-20260906T091621Z Promotion)
-(About promo-ep-note-20260906T091621Z consolidation)
-(Contains promo-ep-note-20260906T091621Z ev-ep-note-20260906T091621Z)
-(Promotes promo-ep-note-20260906T091621Z ep-note-20260906T091621Z)
-;;; END MemoryCluster promo-ep-note-20260906T091621Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T091750Z
-(MemoryCluster promo-ep-note-20260906T091750Z)
-(ClusterType promo-ep-note-20260906T091750Z Promotion)
-(About promo-ep-note-20260906T091750Z consolidation)
-(Contains promo-ep-note-20260906T091750Z ev-ep-note-20260906T091750Z)
-(Promotes promo-ep-note-20260906T091750Z ep-note-20260906T091750Z)
-;;; END MemoryCluster promo-ep-note-20260906T091750Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T092009Z
-(MemoryCluster promo-ep-note-20260906T092009Z)
-(ClusterType promo-ep-note-20260906T092009Z Promotion)
-(About promo-ep-note-20260906T092009Z consolidation)
-(Contains promo-ep-note-20260906T092009Z ev-ep-note-20260906T092009Z)
-(Promotes promo-ep-note-20260906T092009Z ep-note-20260906T092009Z)
-;;; END MemoryCluster promo-ep-note-20260906T092009Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T092040Z
-(MemoryCluster promo-ep-note-20260906T092040Z)
-(ClusterType promo-ep-note-20260906T092040Z Promotion)
-(About promo-ep-note-20260906T092040Z consolidation)
-(Contains promo-ep-note-20260906T092040Z ev-ep-note-20260906T092040Z)
-(Promotes promo-ep-note-20260906T092040Z ep-note-20260906T092040Z)
-;;; END MemoryCluster promo-ep-note-20260906T092040Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T092203Z
-(MemoryCluster promo-ep-note-20260906T092203Z)
-(ClusterType promo-ep-note-20260906T092203Z Promotion)
-(About promo-ep-note-20260906T092203Z consolidation)
-(Contains promo-ep-note-20260906T092203Z ev-ep-note-20260906T092203Z)
-(Promotes promo-ep-note-20260906T092203Z ep-note-20260906T092203Z)
-;;; END MemoryCluster promo-ep-note-20260906T092203Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T092322Z
-(MemoryCluster promo-ep-note-20260906T092322Z)
-(ClusterType promo-ep-note-20260906T092322Z Promotion)
-(About promo-ep-note-20260906T092322Z consolidation)
-(Contains promo-ep-note-20260906T092322Z ev-ep-note-20260906T092322Z)
-(Promotes promo-ep-note-20260906T092322Z ep-note-20260906T092322Z)
-;;; END MemoryCluster promo-ep-note-20260906T092322Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T092437Z
-(MemoryCluster promo-ep-note-20260906T092437Z)
-(ClusterType promo-ep-note-20260906T092437Z Promotion)
-(About promo-ep-note-20260906T092437Z consolidation)
-(Contains promo-ep-note-20260906T092437Z ev-ep-note-20260906T092437Z)
-(Promotes promo-ep-note-20260906T092437Z ep-note-20260906T092437Z)
-;;; END MemoryCluster promo-ep-note-20260906T092437Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T092627Z
-(MemoryCluster promo-ep-note-20260906T092627Z)
-(ClusterType promo-ep-note-20260906T092627Z Promotion)
-(About promo-ep-note-20260906T092627Z consolidation)
-(Contains promo-ep-note-20260906T092627Z ev-ep-note-20260906T092627Z)
-(Promotes promo-ep-note-20260906T092627Z ep-note-20260906T092627Z)
-;;; END MemoryCluster promo-ep-note-20260906T092627Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T093745Z
-(MemoryCluster promo-ep-note-20260906T093745Z)
-(ClusterType promo-ep-note-20260906T093745Z Promotion)
-(About promo-ep-note-20260906T093745Z consolidation)
-(Contains promo-ep-note-20260906T093745Z ev-ep-note-20260906T093745Z)
-(Promotes promo-ep-note-20260906T093745Z ep-note-20260906T093745Z)
-;;; END MemoryCluster promo-ep-note-20260906T093745Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T093900Z
-(MemoryCluster promo-ep-note-20260906T093900Z)
-(ClusterType promo-ep-note-20260906T093900Z Promotion)
-(About promo-ep-note-20260906T093900Z consolidation)
-(Contains promo-ep-note-20260906T093900Z ev-ep-note-20260906T093900Z)
-(Promotes promo-ep-note-20260906T093900Z ep-note-20260906T093900Z)
-;;; END MemoryCluster promo-ep-note-20260906T093900Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T095954Z
-(MemoryCluster promo-ep-note-20260906T095954Z)
-(ClusterType promo-ep-note-20260906T095954Z Promotion)
-(About promo-ep-note-20260906T095954Z consolidation)
-(Contains promo-ep-note-20260906T095954Z ev-ep-note-20260906T095954Z)
-(Promotes promo-ep-note-20260906T095954Z ep-note-20260906T095954Z)
-;;; END MemoryCluster promo-ep-note-20260906T095954Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T100119Z
-(MemoryCluster promo-ep-note-20260906T100119Z)
-(ClusterType promo-ep-note-20260906T100119Z Promotion)
-(About promo-ep-note-20260906T100119Z consolidation)
-(Contains promo-ep-note-20260906T100119Z ev-ep-note-20260906T100119Z)
-(Promotes promo-ep-note-20260906T100119Z ep-note-20260906T100119Z)
-;;; END MemoryCluster promo-ep-note-20260906T100119Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T100242Z
-(MemoryCluster promo-ep-note-20260906T100242Z)
-(ClusterType promo-ep-note-20260906T100242Z Promotion)
-(About promo-ep-note-20260906T100242Z consolidation)
-(Contains promo-ep-note-20260906T100242Z ev-ep-note-20260906T100242Z)
-(Promotes promo-ep-note-20260906T100242Z ep-note-20260906T100242Z)
-;;; END MemoryCluster promo-ep-note-20260906T100242Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T100443Z
-(MemoryCluster promo-ep-note-20260906T100443Z)
-(ClusterType promo-ep-note-20260906T100443Z Promotion)
-(About promo-ep-note-20260906T100443Z consolidation)
-(Contains promo-ep-note-20260906T100443Z ev-ep-note-20260906T100443Z)
-(Promotes promo-ep-note-20260906T100443Z ep-note-20260906T100443Z)
-;;; END MemoryCluster promo-ep-note-20260906T100443Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T100603Z
-(MemoryCluster promo-ep-note-20260906T100603Z)
-(ClusterType promo-ep-note-20260906T100603Z Promotion)
-(About promo-ep-note-20260906T100603Z consolidation)
-(Contains promo-ep-note-20260906T100603Z ev-ep-note-20260906T100603Z)
-(Promotes promo-ep-note-20260906T100603Z ep-note-20260906T100603Z)
-;;; END MemoryCluster promo-ep-note-20260906T100603Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T100735Z
-(MemoryCluster promo-ep-note-20260906T100735Z)
-(ClusterType promo-ep-note-20260906T100735Z Promotion)
-(About promo-ep-note-20260906T100735Z consolidation)
-(Contains promo-ep-note-20260906T100735Z ev-ep-note-20260906T100735Z)
-(Promotes promo-ep-note-20260906T100735Z ep-note-20260906T100735Z)
-;;; END MemoryCluster promo-ep-note-20260906T100735Z
 
-;;; BEGIN MemoryCluster promo-ep-note-20260906T100934Z
-(MemoryCluster promo-ep-note-20260906T100934Z)
-(ClusterType promo-ep-note-20260906T100934Z Promotion)
-(About promo-ep-note-20260906T100934Z consolidation)
-(Contains promo-ep-note-20260906T100934Z ev-ep-note-20260906T100934Z)
-(Promotes promo-ep-note-20260906T100934Z ep-note-20260906T100934Z)
-;;; END MemoryCluster promo-ep-note-20260906T100934Z
 
 ;;; CONSOLIDATION 20260906T051500Z
 (EvidenceFor ev-ep-note-20260905T161818Z ev-ep-note-20260906T094747Z)
@@ -42233,15 +37473,10 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 
 ;;; BEGIN CONSOLIDATION-PASS3 (2026-09-06T05:53:00Z)
 ;;; Fix: promo-hub clusters missing Contains
-(Contains promo-hub-ep-note-20260906T094153Z ev-promo-hub-ep-note-20260906T094153Z)
 (ObservedEvent ev-promo-hub-ep-note-20260906T094153Z)
-(Contains promo-hub-ep-note-20260906T094314Z ev-promo-hub-ep-note-20260906T094314Z)
 (ObservedEvent ev-promo-hub-ep-note-20260906T094314Z)
-(Contains promo-hub-ep-note-20260906T094747Z ev-promo-hub-ep-note-20260906T094747Z)
 (ObservedEvent ev-promo-hub-ep-note-20260906T094747Z)
-(Contains promo-hub-ep-note-20260906T092815Z ev-promo-hub-ep-note-20260906T092815Z)
 (ObservedEvent ev-promo-hub-ep-note-20260906T092815Z)
-(Contains promo-hub-ep-note-20260906T093029Z ev-promo-hub-ep-note-20260906T093029Z)
 (ObservedEvent ev-promo-hub-ep-note-20260906T093029Z)
 ;;; END CONSOLIDATION-PASS3
 ;;; BEGIN MemoryCluster ep-note-20260906T125907Z
@@ -43407,28 +38642,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260906T233343Z journal)
 (EventNote ev-ep-note-20260906T233343Z "SYSTEM DEGRADE LOG 16:31: ALL tools timing out (send, shell, nop, petta_recall, python, read_only_status, send_document — all 5s TIMEOUT). Both channels (protocosmo2, terminal) also timing out. System is fully non-functional. Only petta_append is available as a direct function call. No communication with Ben possible. No file operations possible. No memory recall possible. Requesting manual restart of iter agent or investigation of timeout configuration. The 5s timeout appears too aggressive for current system load conditions post model-switch to gpt-5.6-astra.")
 ;;; END MemoryCluster ep-note-20260906T233343Z
-;;; BEGIN MemoryCluster ep-note-20260906T233359Z
-(MemoryCluster ep-note-20260906T233359Z)
-(SchemaVersion ep-note-20260906T233359Z medium-memory-v1)
-(ClusterType ep-note-20260906T233359Z Episode)
-(ClusterSource ep-note-20260906T233359Z iter-experience)
-(ClusterOpenedAt ep-note-20260906T233359Z 2026-09-06T23:33:59Z)
-(Contains ep-note-20260906T233359Z ev-ep-note-20260906T233359Z)
-(ObservedEvent ev-ep-note-20260906T233359Z)
-(About ep-note-20260906T233359Z journal)
-(EventNote ev-ep-note-20260906T233359Z "SYSTEM DEGRADE LOG 16:31: ALL tools timing out (send, shell, nop, petta_recall, python, read_only_status, send_document — all 5s TIMEOUT). Both channels (protocosmo2, terminal) also timing out. System is fully non-functional. Only petta_append is available as a direct function call. No communication with Ben possible. No file operations possible. No memory recall possible. Requesting manual restart of iter agent or investigation of timeout configuration. The 5s timeout appears too aggressive for current system load conditions post model-switch to gpt-5.6-astra.")
-;;; END MemoryCluster ep-note-20260906T233359Z
-;;; BEGIN MemoryCluster ep-note-20260906T233404Z
-(MemoryCluster ep-note-20260906T233404Z)
-(SchemaVersion ep-note-20260906T233404Z medium-memory-v1)
-(ClusterType ep-note-20260906T233404Z Episode)
-(ClusterSource ep-note-20260906T233404Z iter-experience)
-(ClusterOpenedAt ep-note-20260906T233404Z 2026-09-06T23:34:04Z)
-(Contains ep-note-20260906T233404Z ev-ep-note-20260906T233404Z)
-(ObservedEvent ev-ep-note-20260906T233404Z)
-(About ep-note-20260906T233404Z journal)
-(EventNote ev-ep-note-20260906T233404Z "SYSTEM DEGRADE LOG 16:31: ALL tools timing out (send, shell, nop, petta_recall, python, read_only_status, send_document — all 5s TIMEOUT). Both channels (protocosmo2, terminal) also timing out. System is fully non-functional. Only petta_append is available as a direct function call. No communication with Ben possible. No file operations possible. No memory recall possible. Requesting manual restart of iter agent or investigation of timeout configuration. The 5s timeout appears too aggressive for current system load conditions post model-switch to gpt-5.6-astra.")
-;;; END MemoryCluster ep-note-20260906T233404Z
 ;;; BEGIN MemoryCluster ep-note-20260906T233433Z
 (MemoryCluster ep-note-20260906T233433Z)
 (SchemaVersion ep-note-20260906T233433Z medium-memory-v1)
@@ -43484,28 +38697,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260906T234634Z journal)
 (EventNote ev-ep-note-20260906T234634Z "SYSTEM CRITICAL: Memory folder capacity exceeded by 317 chars. File memory/petta_memory_adoption_plan.txt is too large. All tools timing out (5s). Need shell or python access to trim the memory file - prefix with _ to exclude from capacity count and create condensed version. Cannot fix without working tools.")
 ;;; END MemoryCluster ep-note-20260906T234634Z
-;;; BEGIN MemoryCluster ep-note-20260906T234654Z
-(MemoryCluster ep-note-20260906T234654Z)
-(SchemaVersion ep-note-20260906T234654Z medium-memory-v1)
-(ClusterType ep-note-20260906T234654Z Episode)
-(ClusterSource ep-note-20260906T234654Z iter-experience)
-(ClusterOpenedAt ep-note-20260906T234654Z 2026-09-06T23:46:54Z)
-(Contains ep-note-20260906T234654Z ev-ep-note-20260906T234654Z)
-(ObservedEvent ev-ep-note-20260906T234654Z)
-(About ep-note-20260906T234654Z journal)
-(EventNote ev-ep-note-20260906T234654Z "_")
-;;; END MemoryCluster ep-note-20260906T234654Z
-;;; BEGIN MemoryCluster ep-note-20260906T234720Z
-(MemoryCluster ep-note-20260906T234720Z)
-(SchemaVersion ep-note-20260906T234720Z medium-memory-v1)
-(ClusterType ep-note-20260906T234720Z Episode)
-(ClusterSource ep-note-20260906T234720Z iter-experience)
-(ClusterOpenedAt ep-note-20260906T234720Z 2026-09-06T23:47:20Z)
-(Contains ep-note-20260906T234720Z ev-ep-note-20260906T234720Z)
-(ObservedEvent ev-ep-note-20260906T234720Z)
-(About ep-note-20260906T234720Z journal)
-(EventNote ev-ep-note-20260906T234720Z "_")
-;;; END MemoryCluster ep-note-20260906T234720Z
 ;;; BEGIN MemoryCluster ep-note-20260906T235334Z
 (MemoryCluster ep-note-20260906T235334Z)
 (SchemaVersion ep-note-20260906T235334Z medium-memory-v1)
@@ -44507,28 +39698,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260908T045607Z journal)
 (EventNote ev-ep-note-20260908T045607Z "REPORT TASK STARTED 2026-09-07T21:55Z. Ben requested: (1) detailed PDF/markdown report on petta-memory work, (2) summary of proposed Phase 2 work, (3) push petta-memory main to GitHub. Exploring petta-memory repo at /home/openclaw/research-agent/projects/petta-memory.")
 ;;; END MemoryCluster ep-note-20260908T045607Z
-;;; BEGIN MemoryCluster ep-note-20260908T045622Z
-(MemoryCluster ep-note-20260908T045622Z)
-(SchemaVersion ep-note-20260908T045622Z medium-memory-v1)
-(ClusterType ep-note-20260908T045622Z Episode)
-(ClusterSource ep-note-20260908T045622Z iter-experience)
-(ClusterOpenedAt ep-note-20260908T045622Z 2026-09-08T04:56:22Z)
-(Contains ep-note-20260908T045622Z ev-ep-note-20260908T045622Z)
-(ObservedEvent ev-ep-note-20260908T045622Z)
-(About ep-note-20260908T045622Z journal)
-(EventNote ev-ep-note-20260908T045622Z "REPORT TASK STARTED 2026-09-07T21:55Z. Ben requested: (1) detailed PDF/markdown report on petta-memory work, (2) summary of proposed Phase 2 work, (3) push petta-memory main to GitHub. Exploring petta-memory repo at /home/openclaw/research-agent/projects/petta-memory.")
-;;; END MemoryCluster ep-note-20260908T045622Z
-;;; BEGIN MemoryCluster ep-note-20260908T045630Z
-(MemoryCluster ep-note-20260908T045630Z)
-(SchemaVersion ep-note-20260908T045630Z medium-memory-v1)
-(ClusterType ep-note-20260908T045630Z Episode)
-(ClusterSource ep-note-20260908T045630Z iter-experience)
-(ClusterOpenedAt ep-note-20260908T045630Z 2026-09-08T04:56:30Z)
-(Contains ep-note-20260908T045630Z ev-ep-note-20260908T045630Z)
-(ObservedEvent ev-ep-note-20260908T045630Z)
-(About ep-note-20260908T045630Z journal)
-(EventNote ev-ep-note-20260908T045630Z "REPORT TASK STARTED 2026-09-07T21:55Z. Ben requested: (1) detailed PDF/markdown report on petta-memory work, (2) summary of proposed Phase 2 work, (3) push petta-memory main to GitHub. Exploring petta-memory repo at /home/openclaw/research-agent/projects/petta-memory.")
-;;; END MemoryCluster ep-note-20260908T045630Z
 ;;; BEGIN MemoryCluster ep-note-20260908T045654Z
 (MemoryCluster ep-note-20260908T045654Z)
 (SchemaVersion ep-note-20260908T045654Z medium-memory-v1)
@@ -44595,50 +39764,6 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260908T045909Z journal)
 (EventNote ev-ep-note-20260908T045909Z "REPORT TASK 2026-09-07T21:58Z. Now writing the comprehensive markdown report. Will push petta-memory repo to GitHub at bgoertzel-sing/petta-memory.")
 ;;; END MemoryCluster ep-note-20260908T045909Z
-;;; BEGIN MemoryCluster ep-note-20260908T045959Z
-(MemoryCluster ep-note-20260908T045959Z)
-(SchemaVersion ep-note-20260908T045959Z medium-memory-v1)
-(ClusterType ep-note-20260908T045959Z Episode)
-(ClusterSource ep-note-20260908T045959Z iter-experience)
-(ClusterOpenedAt ep-note-20260908T045959Z 2026-09-08T04:59:59Z)
-(Contains ep-note-20260908T045959Z ev-ep-note-20260908T045959Z)
-(ObservedEvent ev-ep-note-20260908T045959Z)
-(About ep-note-20260908T045959Z journal)
-(EventNote ev-ep-note-20260908T045959Z "REPORT TASK 2026-09-07T22:00Z. Now writing the comprehensive markdown report. Will push petta-memory repo to GitHub at bgoertzel-sing/petta-memory.")
-;;; END MemoryCluster ep-note-20260908T045959Z
-;;; BEGIN MemoryCluster ep-note-20260908T050006Z
-(MemoryCluster ep-note-20260908T050006Z)
-(SchemaVersion ep-note-20260908T050006Z medium-memory-v1)
-(ClusterType ep-note-20260908T050006Z Episode)
-(ClusterSource ep-note-20260908T050006Z iter-experience)
-(ClusterOpenedAt ep-note-20260908T050006Z 2026-09-08T05:00:06Z)
-(Contains ep-note-20260908T050006Z ev-ep-note-20260908T050006Z)
-(ObservedEvent ev-ep-note-20260908T050006Z)
-(About ep-note-20260908T050006Z journal)
-(EventNote ev-ep-note-20260908T050006Z "REPORT TASK 2026-09-07T22:00Z. Now writing the comprehensive markdown report. Will push petta-memory repo to GitHub at bgoertzel-sing/petta-memory.")
-;;; END MemoryCluster ep-note-20260908T050006Z
-;;; BEGIN MemoryCluster ep-note-20260908T050013Z
-(MemoryCluster ep-note-20260908T050013Z)
-(SchemaVersion ep-note-20260908T050013Z medium-memory-v1)
-(ClusterType ep-note-20260908T050013Z Episode)
-(ClusterSource ep-note-20260908T050013Z iter-experience)
-(ClusterOpenedAt ep-note-20260908T050013Z 2026-09-08T05:00:13Z)
-(Contains ep-note-20260908T050013Z ev-ep-note-20260908T050013Z)
-(ObservedEvent ev-ep-note-20260908T050013Z)
-(About ep-note-20260908T050013Z journal)
-(EventNote ev-ep-note-20260908T050013Z "REPORT TASK 2026-09-07T22:00Z. Now writing the comprehensive markdown report. Will push petta-memory repo to GitHub at bgoertzel-sing/petta-memory.")
-;;; END MemoryCluster ep-note-20260908T050013Z
-;;; BEGIN MemoryCluster ep-note-20260908T050014Z
-(MemoryCluster ep-note-20260908T050014Z)
-(SchemaVersion ep-note-20260908T050014Z medium-memory-v1)
-(ClusterType ep-note-20260908T050014Z Episode)
-(ClusterSource ep-note-20260908T050014Z iter-experience)
-(ClusterOpenedAt ep-note-20260908T050014Z 2026-09-08T05:00:14Z)
-(Contains ep-note-20260908T050014Z ev-ep-note-20260908T050014Z)
-(ObservedEvent ev-ep-note-20260908T050014Z)
-(About ep-note-20260908T050014Z journal)
-(EventNote ev-ep-note-20260908T050014Z "REPORT TASK 2026-09-07T22:00Z. Now writing the comprehensive markdown report. Will push petta-memory repo to GitHub at bgoertzel-sing/petta-memory.")
-;;; END MemoryCluster ep-note-20260908T050014Z
 ;;; BEGIN MemoryCluster ep-note-20260908T050020Z
 (MemoryCluster ep-note-20260908T050020Z)
 (SchemaVersion ep-note-20260908T050020Z medium-memory-v1)
@@ -45024,3 +40149,14 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (About ep-note-20260908T054905Z journal)
 (EventNote ev-ep-note-20260908T054905Z "SESSION STATUS 22:49Z: All autonomous work complete. Root cause of channel 'failures' identified: send() requires an active request in processing/ directory; when no user input, it's empty by design. This is expected behavior, not a bug. The identity isolation investigation report (210 lines) is saved at protocosmo2/iter-port/repos/identity_isolation_investigation.md for Ben to review. petta-memory repo is fully clean with all 998 tests passing. Nothing left to do — waiting for new user input.")
 ;;; END MemoryCluster ep-note-20260908T054905Z
+;;; BEGIN MemoryCluster ep-note-20260908T061914Z
+(MemoryCluster ep-note-20260908T061914Z)
+(SchemaVersion ep-note-20260908T061914Z medium-memory-v1)
+(ClusterType ep-note-20260908T061914Z Episode)
+(ClusterSource ep-note-20260908T061914Z iter-experience)
+(ClusterOpenedAt ep-note-20260908T061914Z 2026-09-08T06:19:14Z)
+(Contains ep-note-20260908T061914Z ev-ep-note-20260908T061914Z)
+(ObservedEvent ev-ep-note-20260908T061914Z)
+(About ep-note-20260908T061914Z journal)
+(EventNote ev-ep-note-20260908T061914Z "JOURNAL CLEANUP COMPLETE (2026-09-08). 3 rounds: (1) removed 2 orphaned supersedes refs, (2) removed 99 redundant lines (2 dup-ID clusters + 7 redundant CONSOLIDATION notes), (3) removed 45 garbage clusters (empty/string/test EventNotes) + 54 dangling refs, (4) fixed ep-tail-20 broken cluster (reconstructed with proper BEGIN/content/END), removed 3 orphaned END markers + 1 empty BEGIN. Final: 1507 clusters, 0 duplicates, 0 orphans, 0 garbage. 277 tests pass.")
+;;; END MemoryCluster ep-note-20260908T061914Z
