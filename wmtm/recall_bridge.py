@@ -25,6 +25,7 @@ _RE_SUPERSEDES = re.compile(r"\(Supersedes (\S+) (\S+)\)")
 
 @dataclass
 class LTMCluster:
+    """Parsed representation of a single LTM journal cluster for WMTM admission."""
     id: str
     cluster_type: str = "Unknown"
     about_tags: list[str] = field(default_factory=list)
@@ -128,6 +129,7 @@ def parse_journal(lines: list[str]) -> list[LTMCluster]:
 
 @dataclass
 class RecallCandidate:
+    """A cluster candidate for admission into WMTM, with computed priority score."""
     cluster_id: str
     content: str
     score: float
