@@ -13243,10 +13243,17 @@ PENDING: Ben's explicit go to begin Phase A implementation.")
 (EvidenceSupportCount ep-note-20260906T023814Z 10)
 ;;; END MemoryCluster ep-note-20260906T023814Z
 
+;;; BEGIN MemoryCluster ep-tail-20
+(MemoryCluster ep-tail-20)
+(SchemaVersion ep-tail-20 medium-memory-v1)
+(ClusterType ep-tail-20 Episode)
+(ClusterSource ep-tail-20 iter-experience)
+(ClusterOpenedAt ep-tail-20 2026-09-03T07:24:00Z)
+(Contains ep-tail-20 ev-tail-20)
+(ObservedEvent ev-tail-20)
+(About ep-tail-20 journal)
+(EventNote ev-tail-20 "Tail note 20: Consolidation of early session loose notes into structured episode clusters. 20 loose tail notes converted to ep-tail-01..20 (verbatim, 0 loss). Journal now 0 loose lines.")
 ;;; END MemoryCluster ep-tail-20
-;;; END MemoryCluster ep-note-20260904T052215Z
-;;; END MemoryCluster ep-note-20260904T181510Z
-;;; END MemoryCluster ep-note-20260905T095406Z
 (MemoryCluster ep-note-20260905T163529Z)
 (SchemaVersion ep-note-20260905T163529Z medium-memory-v1)
 (ClusterType ep-note-20260905T163529Z Episode)
