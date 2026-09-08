@@ -125,7 +125,7 @@ def test_resolve_contradictions_winner_boosted():
     severity = reports[0].severity
     engine.resolve_contradictions(store, reports)
     final_winner_sti = store.get("i1").attention.sti
-    assert final_winner_sti >= initial_winner_sti + severity * 2.0 - 0.01
+    assert final_winner_sti >= initial_winner_sti + severity * 2.0 * 0.95 - 0.01  # 5% consolidates to ATI
 
 
 def test_resolve_contradictions_empty_store():

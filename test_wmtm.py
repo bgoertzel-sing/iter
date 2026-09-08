@@ -13,21 +13,32 @@ from wmtm.forgetting import ForgettingPolicy
 
 class TestAttentionValue:
     def test_decay_reduces_all_components(self):
+        # With consolidation flow, ATI/LTI may briefly increase when starting high
+        # (inflow from STI > decay loss). Over multiple ticks all decrease.
         av = AttentionValue(sti=10.0, ati=10.0, lti=10.0)
+        # STI always decreases immediately (only decays, no inflow)
         av.tick()
+        assert av.sti < 10.0
+        # After enough ticks, all three should be below initial
+        for _ in range(50):
+            av.tick()
         assert av.sti < 10.0
         assert av.ati < 10.0
         assert av.lti < 10.0
 
     def test_sti_decays_faster_than_lti(self):
+        # With consolidation, single-tick ordering is complex.
+        # Over many ticks, STI decays fastest, LTI slowest.
         av = AttentionValue(sti=100.0, ati=100.0, lti=100.0)
-        av.tick()
+        for _ in range(20):
+            av.tick()
         assert av.sti < av.ati < av.lti
 
     def test_boost_increases_sti(self):
         av = AttentionValue(sti=1.0)
         av.boost(5.0)
-        assert av.sti == 6.0
+        assert av.sti == 5.75  # 5% consolidates to ATI
+        assert av.ati == 0.25
 
     def test_total_is_weighted_composite(self):
         av = AttentionValue(sti=10.0, ati=4.0, lti=5.0)

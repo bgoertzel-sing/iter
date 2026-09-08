@@ -44,7 +44,7 @@ class TestWMTMStoreAdmit:
         item = s.admit("i1", "hello", initial_sti=3.0)
         # Should boost, not replace
         assert len(s) == 1
-        assert item.attention.sti == pytest.approx(5.0)  # 2.0 + 3.0
+        assert item.attention.sti == pytest.approx(4.85)  # 2.0 + 3.0 - 5% consolidation
 
     def test_admit_with_source_type(self):
         s = WMTMStore(capacity=10)
@@ -143,7 +143,7 @@ class TestWMTMStoreTouch:
         s.touch("i1")
         item = s.get("i1")
         assert item.utility == pytest.approx(1.0)
-        assert item.attention.sti == pytest.approx(1.5)  # 1.0 initial + 0.5 boost
+        assert item.attention.sti == pytest.approx(1.475)  # 1.0 + 0.5 - 5% consolidation
 
     def test_touch_nonexistent_silent(self):
         s = WMTMStore(capacity=10)

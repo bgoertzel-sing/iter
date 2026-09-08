@@ -68,14 +68,14 @@ class TestWMTMItemTouch:
         item = WMTMItem(id="i1", content="test")
         assert item.attention.sti == 0.0
         item.touch(tick=1)
-        assert item.attention.sti == pytest.approx(0.5)
+        assert item.attention.sti == pytest.approx(0.475)  # 5% consolidates to ATI
 
     def test_touch_multiple_times(self):
         item = WMTMItem(id="i1", content="test")
         for t in range(5):
             item.touch(tick=t)
         assert item.utility == pytest.approx(5.0)
-        assert item.attention.sti == pytest.approx(2.5)
+        assert item.attention.sti == pytest.approx(2.375)  # 5 boosts with 5% consolidation
         assert item.last_used == 4
 
 

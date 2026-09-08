@@ -50,6 +50,7 @@ class TestAttentionValueTick:
     def test_all_three_decay_independently(self):
         av = AttentionValue(sti=10.0, ati=8.0, lti=6.0)
         av.tick()
+        # tick only decays (consolidation is in boost)
         assert av.sti == pytest.approx(9.0)
         assert av.ati == pytest.approx(7.76)
         assert av.lti == pytest.approx(5.97)
@@ -59,7 +60,9 @@ class TestAttentionValueBoost:
     def test_boost_adds_to_sti(self):
         av = AttentionValue(sti=5.0)
         av.boost(3.0)
-        assert av.sti == pytest.approx(8.0)
+        # 5% of 3.0 = 0.15 consolidates to ATI
+        assert av.sti == pytest.approx(7.85)
+        assert av.ati == pytest.approx(0.15)
 
     def test_boost_zero(self):
         av = AttentionValue(sti=5.0)
@@ -121,8 +124,10 @@ class TestAttentionValueDecayRates:
         assert av.sti == pytest.approx(50.0)
 
     def test_decay_rate_one_means_no_decay(self):
+        # With decay=1.0, no decay loss, but consolidation still transfers
         av = AttentionValue(sti=10.0, sti_decay=1.0, ati_decay=1.0, lti_decay=1.0)
         av.tick()
+        # With decay=1.0, no loss at all
         assert av.sti == 10.0
         assert av.ati == 0.0
         assert av.lti == 0.0
