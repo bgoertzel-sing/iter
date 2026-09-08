@@ -2,11 +2,9 @@
 import pytest
 from wmtm.recall_bridge import (
     LTMCluster,
-    RecallCandidate,
     RecallBridge,
     parse_journal,
     _collect_superseded,
-    _populate_cluster_fields,
 )
 from wmtm.store import WMTMStore
 # ---- LTMCluster ----

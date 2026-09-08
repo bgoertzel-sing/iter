@@ -1,8 +1,8 @@
 """Simulation tests: long-run stability and stress scenarios for WMTM."""
 import random
 from wmtm import (
-    WMTMStore, WMTMOrchestrator, WMTMInferenceEngine,
-    UtilityTracker, ForgettingLog, ForgettingPolicy,
+    WMTMStore, WMTMOrchestrator,
+    UtilityTracker,
     WritebackManager, CycleResult,
 )
 def test_100_cycle_stability():

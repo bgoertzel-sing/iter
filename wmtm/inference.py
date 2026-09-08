@@ -302,6 +302,18 @@ class WMTMInferenceEngine:
                     ))
         return candidates
 
+    @staticmethod
+    def _build_triple_map(
+        items: list[WMTMItem],
+    ) -> dict[tuple[str, str], list[tuple[str, WMTMItem]]]:
+        """Build a map from (subject, relation) to list of (object, item) pairs."""
+        triple_map: dict[tuple[str, str], list[tuple[str, WMTMItem]]] = {}
+        for item in items:
+            for t in extract_triples(item.content):
+                key = (t.subject, t.relation)
+                triple_map.setdefault(key, []).append((t.object, item))
+        return triple_map
+
     def _evidence_aggregation(self, active_set: list[WMTMItem]) -> list[InferenceCandidate]:
         """Evidence aggregation: multiple items support same conclusion.
 
@@ -309,37 +321,43 @@ class WMTMInferenceEngine:
         pair with the same object, combine their strengths using noisy-OR:
         combined = 1 - product(1 - s_i)
         """
+        evidence_map = self._build_triple_map(active_set)
         candidates = []
-        evidence_map: dict[tuple[str, str], list[tuple[str, WMTMItem]]] = {}
-        for item in active_set:
-            for t in extract_triples(item.content):
-                key = (t.subject, t.relation)
-                evidence_map.setdefault(key, []).append((t.object, item))
-
         for (subj, rel), entries in evidence_map.items():
-            if len(entries) < 2:
-                continue
-            objects = {obj for obj, _ in entries}
-            if len(objects) > 1:
-                continue  # disagreement handled by contradiction detection
-            obj = list(objects)[0]
-            n = len(entries)
-            base_strength = 0.7
-            combined = 1.0 - (1.0 - base_strength) ** n
-            combined = min(combined, 0.95)
-            item_ids = [item.id for _, item in entries]
-            parent_sti = sum(item.attention.sti for _, item in entries) / n
-            initial_sti = parent_sti * combined * 0.5
-            triple = BeliefTriple(subject=subj, relation=rel, object=obj)
-            candidates.append(InferenceCandidate(
-                content=f"{triple.to_text()} (aggregated from {n} sources)",
-                confidence=combined,
-                derived_from=item_ids,
-                inference_type='evidence_aggregation',
-                triple=triple,
-                initial_sti=initial_sti,
-            ))
+            candidate = self._build_evidence_candidate(subj, rel, entries)
+            if candidate is not None:
+                candidates.append(candidate)
         return candidates
+
+    @staticmethod
+    def _build_evidence_candidate(
+        subj: str,
+        rel: str,
+        entries: list[tuple[str, WMTMItem]],
+    ) -> Optional[InferenceCandidate]:
+        """Build a single evidence-aggregation candidate from entries, or None."""
+        if len(entries) < 2:
+            return None
+        objects = {obj for obj, _ in entries}
+        if len(objects) > 1:
+            return None  # disagreement handled by contradiction detection
+        obj = list(objects)[0]
+        n = len(entries)
+        base_strength = 0.7
+        combined = 1.0 - (1.0 - base_strength) ** n
+        combined = min(combined, 0.95)
+        item_ids = [item.id for _, item in entries]
+        parent_sti = sum(item.attention.sti for _, item in entries) / n
+        initial_sti = parent_sti * combined * 0.5
+        triple = BeliefTriple(subject=subj, relation=rel, object=obj)
+        return InferenceCandidate(
+            content=f"{triple.to_text()} (aggregated from {n} sources)",
+            confidence=combined,
+            derived_from=item_ids,
+            inference_type='evidence_aggregation',
+            triple=triple,
+            initial_sti=initial_sti,
+        )
 
     def detect_contradictions(self, store: WMTMStore) -> list[ContradictionReport]:
         """Detect contradictions between items in the store.
@@ -348,27 +366,34 @@ class WMTMInferenceEngine:
         but have different objects. Returns ContradictionReport for each
         conflicting pair.
         """
-        reports = []
         items = store.get_active_set()
-        triple_map: dict[tuple[str, str], list[tuple[str, WMTMItem]]] = {}
-        for item in items:
-            for t in extract_triples(item.content):
-                key = (t.subject, t.relation)
-                triple_map.setdefault(key, []).append((t.object, item))
-
+        triple_map = self._build_triple_map(items)
+        reports = []
         for (s, r), entries in triple_map.items():
-            objects = {obj for obj, _ in entries}
-            if len(objects) > 1:
-                items_involved = [item for _, item in entries]
-                severity = len(objects) * 0.3
-                reports.append(ContradictionReport(
-                    subject=s,
-                    relation=r,
-                    conflicting_objects=sorted(objects),
-                    item_ids=[it.id for it in items_involved],
-                    severity=severity,
-                ))
+            report = self._build_contradiction_report(s, r, entries)
+            if report is not None:
+                reports.append(report)
         return reports
+
+    @staticmethod
+    def _build_contradiction_report(
+        s: str,
+        r: str,
+        entries: list[tuple[str, WMTMItem]],
+    ) -> Optional[ContradictionReport]:
+        """Build a contradiction report from entries with differing objects, or None."""
+        objects = {obj for obj, _ in entries}
+        if len(objects) <= 1:
+            return None
+        items_involved = [item for _, item in entries]
+        severity = len(objects) * 0.3
+        return ContradictionReport(
+            subject=s,
+            relation=r,
+            conflicting_objects=sorted(objects),
+            item_ids=[it.id for it in items_involved],
+            severity=severity,
+        )
 
     def resolve_contradictions(
         self,
