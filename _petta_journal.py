@@ -15,16 +15,19 @@ _LOCK = threading.Lock()
 _RE_SUPERSEDES = re.compile(r"\(Supersedes\s+(\S+)\s+(\S+)\)")
 _RE_MEMORY_CLUSTER = re.compile(r"\(MemoryCluster\s+([^\s)]+)")
 
-def _journal_dir():
+def _journal_dir() -> Path:
+    """Return the journal directory (from JOURNAL_DIR env var or default location)."""
     env = os.environ.get("JOURNAL_DIR")
     base = Path(env) if env else Path(__file__).resolve().parent / "memory" / "_journal"
     base.mkdir(parents=True, exist_ok=True)
     return base
 
-def _journal_path():
+def _journal_path() -> Path:
+    """Return the full path to the journal metta file."""
     return _journal_dir() / "journal.metta"
 
-def _read_lines():
+def _read_lines() -> list[str]:
+    """Read all journal lines from disk, returning an empty list on any error."""
     try:
         p = _journal_path()
         if not p.exists():
@@ -33,7 +36,7 @@ def _read_lines():
     except Exception:
         return []
 
-def _collect_superseded_ids(lines):
+def _collect_superseded_ids(lines: list[str]) -> set[str]:
     """Scan all lines for (Supersedes new-id old-id) pairs and return the set of superseded old-ids."""
     superseded = set()
     for line in lines:
@@ -45,7 +48,7 @@ def _collect_superseded_ids(lines):
                 superseded.add(old_id)
     return superseded
 
-def _filter_superseded(lines, superseded):
+def _filter_superseded(lines: list[str], superseded: set[str]) -> list[str]:
     """Walk lines, dropping clusters whose BEGIN id is in the superseded set."""
     out = []
     dropping = False
@@ -63,7 +66,7 @@ def _filter_superseded(lines, superseded):
             out.append(line)
     return out
 
-def resolve_supersedes(lines):
+def resolve_supersedes(lines: list[str]) -> list[str]:
     """Given journal lines, return lines with superseded clusters removed."""
     try:
         superseded = _collect_superseded_ids(lines)
@@ -71,13 +74,13 @@ def resolve_supersedes(lines):
     except Exception:
         return lines
 
-def recall(limit=20):
+def recall(limit: int = 20) -> dict:
     """Return the supersession-resolved journal view (read-only)."""
     lines = _read_lines()
     resolved = resolve_supersedes(lines)
     return {"ok": True, "count": len(resolved), "view": resolved[-limit:] if limit else resolved}
 
-def append_note(note):
+def append_note(note: str) -> dict:
     """Append a note as a structured Episode cluster (append-only write).
 
     Structured (not loose) so MediumMemoryStore.append_cluster keeps working
@@ -110,7 +113,7 @@ def append_note(note):
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
-def current_beliefs():
+def current_beliefs() -> dict:
     """Return resolved view containing only current (non-superseded) lines."""
     lines = _read_lines()
     resolved = resolve_supersedes(lines)
