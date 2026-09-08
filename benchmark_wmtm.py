@@ -6,17 +6,17 @@ from wmtm import WMTMStore, WMTMOrchestrator, ForgettingPolicy, UtilityTracker, 
 SUBJ=['alpha','beta','gamma','delta','epsilon','zeta','eta','theta','iota','kappa']
 REL=['implies','is-a','has','causes','prevents','precedes','enables']
 OBJ=['thing','concept','result','state','property','event','entity','process']
-def mk(n,c):
+def mk(n: int, c: int) -> tuple[str, str, float]:
     """Generate a recall event tuple (id, content, sti) for benchmark seed *n* and count *k*."""
     return [(f"r{c}_{i}",f"{random.choice(SUBJ)} {random.choice(REL)} {random.choice(OBJ)}",random.uniform(30,100)) for i in range(n)]
-def bench_throughput():
+def bench_throughput() -> float:
     """Benchmark B1: throughput in cycles per second over 1000 cycles."""
     s=WMTMStore(capacity=200);o=WMTMOrchestrator(s)
     t0=time.time()
     for c in range(50):o.cycle(recall_fn=lambda r=mk(10,c):r)
     el=time.time()-t0
     print(f"B1 Throughput: 50c in {el:.2f}s ({50/el:.0f} cyc/s) store={len(s)} forgotten={len(o.forget_log)}")
-def bench_occupancy():
+def bench_occupancy() -> bool:
     """Benchmark B2: occupancy tracking — verify active set stays within capacity."""
     random.seed(42)
     s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
@@ -27,7 +27,7 @@ def bench_occupancy():
         occ.append(len(s));inf.append(r.admitted_derived);ev.append(r.evicted)
     ao=sum(occ)/len(occ)
     print(f"B2 Occupancy: avg={ao:.1f}/50 max={max(occ)} stable={max(occ)<=50} derived={sum(inf)} evicted={sum(ev)}")
-def bench_stability():
+def bench_stability() -> int:
     """Benchmark B3: stability — run 200 stress cycles and check for capacity violations."""
     random.seed(123)
     s=WMTMStore(capacity=50);o=WMTMOrchestrator(s)
@@ -36,7 +36,7 @@ def bench_stability():
         o.cycle(recall_fn=lambda r=mk(random.randint(0,15),c):r)
         if len(s)>50:v+=1
     print(f"B3 Stability: 200 stress cycles cap=50 violations={v}")
-def _run_inference_test(name, recall_items, check_filter, contradictions=False):
+def _run_inference_test(name: str, recall_items, check_filter, contradictions: bool = False) -> tuple[bool, object]:
     """Run a single inference-pattern test and return (passed, result_obj)."""
     s = WMTMStore(capacity=50)
     o = WMTMOrchestrator(s)
@@ -53,7 +53,7 @@ def _run_inference_test(name, recall_items, check_filter, contradictions=False):
     print(f"  {name:<15}{'PASS' if passed else 'FAIL':>5} derived={r.admitted_derived}")
     return passed, r
 
-def bench_inference():
+def bench_inference() -> dict[str, bool]:
     """Benchmark B4: inference — run all 6 inference pattern tests (deduction, induction, abduction, analogy, evidence, contradiction)."""
     results = {}
     # deduction
@@ -88,7 +88,7 @@ def bench_inference():
     results['contradiction'] = passed
     total = sum(1 for v in results.values() if v)
     print(f"  TOTAL: {total}/{len(results)} patterns passing")
-def bench_writeback():
+def bench_writeback() -> bool:
     """Benchmark B5: writeback — verify periodic journal persistence works correctly."""
     s=WMTMStore(capacity=50)
     ut=UtilityTracker()
@@ -101,13 +101,13 @@ def bench_writeback():
         else:o.cycle(append_fn=lambda x:wb_log.append(x))
         for item in s.get_active_set()[:3]:s.touch(item.id);ut.record_use(item.id,c)
     print(f"B6 Writeback: {len(wb_log)} items written back over 5 cycles")
-def bench_forgetting():
+def bench_forgetting() -> int:
     """Benchmark B6: forgetting — verify ECAN decay and eviction under load."""
     s=WMTMStore(capacity=10);o=WMTMOrchestrator(s)
     rec=[(f'r{i}',f'item_{i} implies val_{i}',50.0) for i in range(15)]
     r=o.cycle(recall_fn=lambda r=rec:r)
     print(f"B7 Forgetting: store={len(s)} evicted={r.evicted} forget_log={len(o.forget_log)}")
-def _run_config(label, sd, st, dma):
+def _run_config(label: str, sd: float, st: float, dma: int) -> tuple[str, float, float, int]:
     """Run one ECAN config over 200 cycles and return (label, score, avg_occ, total_derived)."""
     random.seed(42)
     s = WMTMStore(capacity=50)
@@ -122,7 +122,7 @@ def _run_config(label, sd, st, dma):
     print(f'{label:<16}{ao:>7.1f}{st_str:>5}{sum(inf):>6}{sum(ev):>6}{sc:>6.3f}')
     return (label, sc, ao, sum(inf))
 
-def _apply_decay_patch(store, sd_val):
+def _apply_decay_patch(store, sd_val: float) -> None:
     """Patch store.admit to set sti_decay on admitted items."""
     oa = store.admit
     def inner(*a, **kw):
@@ -132,7 +132,7 @@ def _apply_decay_patch(store, sd_val):
         return item
     store.admit = inner
 
-def _run_sweep_cycles(orch, store, n=200):
+def _run_sweep_cycles(orch, store, n: int = 200) -> tuple[list, list, list]:
     """Run n cycles and collect occupancy/derived/evicted metrics."""
     occ, inf, ev = [], [], []
     for c in range(n):
@@ -143,7 +143,7 @@ def _run_sweep_cycles(orch, store, n=200):
         occ.append(len(store)); inf.append(r.admitted_derived); ev.append(r.evicted)
     return occ, inf, ev
 
-def _compute_score(stab, ao, total_derived, total_evicted):
+def _compute_score(stab: bool, ao: float, total_derived: int, total_evicted: int) -> float:
     """Compute the ECAN stability/occupancy/derived/eviction score."""
     if not stab:
         return 0.0
@@ -151,7 +151,7 @@ def _compute_score(stab, ao, total_derived, total_evicted):
             + min(total_derived / 25, 1) * 0.3
             + max(0, 1 - abs(total_evicted / 200 - 0.4)) * 0.3)
 
-def param_sweep():
+def param_sweep() -> None:
     """Benchmark B8: ECAN parameter sweep — test 10 configurations over 200 cycles each."""
     configs = [
         ('baseline', 0.90, 0.05, 20), ('fast_decay', 0.80, 0.05, 20),
