@@ -1,121 +1,82 @@
 # WMTM — Working Medium-Term Memory
 
-A bounded-capacity mutable memory layer sitting between short-term context (STM)
-and the append-only PeTTa long-term journal (LTM).  WMTM implements ECAN-style
-attention allocation, PLN-based inference, utility tracking, forgetting, and
-periodic writeback to LTM.
+A bounded-capacity mutable memory layer for cognitive agents, sitting between short-term memory (STM) and long-term memory (LTM). Implements ECAN-style attention allocation, PLN-based inference, utility tracking, forgetting, and writeback to LTM.
 
 ## Architecture
 
 ```
-  ┌─────────┐    recall    ┌──────┐   infer    ┌───────────┐
-  │ LTM     │ ───────────→ │ WMTM │ ─────────→ │ Derived   │
-  │ Journal │ ←─────────── │ Store│            │ Candidates│
-  └─────────┘   writeback  └──────┘            └───────────┘
-                    ↑  forget ↓                    ↓ admit
-                 ┌─────────┐                 ┌──────────┐
-                 │Utility  │                 │Forgetting│
-                 │Tracker  │                 │Log       │
-                 └─────────┘                 └──────────┘
+LTM Journal ──► RecallBridge ──► WMTMStore (bounded) ──► WritebackManager ──► LTM Journal
+                     │                  │                     │
+                     ▼                  ▼                     ▼
+                LTMCluster      InferenceEngine        WritebackCandidate
+                                 │
+                                 ▼
+                          ContradictionReport
 ```
 
-### Modules
+### Core Modules
 
-| Module            | Responsibility                                          |
-|-------------------|---------------------------------------------------------|
-| `item.py`         | `WMTMItem` dataclass (id, content, source, attention)  |
-| `attention.py`    | `AttentionValue` (STI/LTI) with exponential decay        |
-| `store.py`        | `WMTMStore` bounded-capacity store with capacity FIFO    |
-| `forgetting.py`   | `ForgettingPolicy` — eviction based on attention+utility|
-| `inference.py`    | `WMTMInferenceEngine` — deduction, induction, abduction,|
-|                   | analogy, evidence aggregation, contradiction detection  |
-| `utility.py`      | `UtilityTracker` — tracks use/miss/inferred-from counts  |
-| `forgetting_log.py`| `ForgettingLog` — prevents re-derivation of forgotten   |
-| `writeback.py`    | `WritebackManager` — promotes high-utility items to LTM  |
-| `orchestrator.py` | `WMTMOrchestrator` — ties all phases into one cycle      |
-| `recall_bridge.py`| `RecallBridge` — LTM journal → WMTM keyword matching     |
+| Module | Purpose |
+|---|---|
+| `wmtm/item.py` | `WMTMItem` dataclass — items in the store |
+| `wmtm/attention.py` | `AttentionValue` — STI/LTI with decay |
+| `wmtm/store.py` | `WMTMStore` — bounded-capacity mutable store |
+| `wmtm/forgetting.py` | `ForgettingPolicy` — eviction decisions |
+| `wmtm/inference.py` | `WMTMInferenceEngine` — PLN deduction/induction/abduction/analogy |
+| `wmtm/utility.py` | `UtilityTracker` — use/miss tracking |
+| `wmtm/forgetting_log.py` | `ForgettingLog` — prevents re-derivation of forgotten items |
+| `wmtm/writeback.py` | `WritebackManager` — promotes high-value items to LTM |
+| `wmtm/orchestrator.py` | `WMTMOrchestrator` — ties all components into a single cycle |
+| `wmtm/recall_bridge.py` | `RecallBridge` — bridges LTM journal clusters to WMTM |
 
-### Orchestration Cycle
+### Supporting Files
 
-1. **Recall** — pull relevant items from LTM journal into WMTM
-2. **Infer** — run inference engine over active set (deduction, induction, …)
-3. **Admit** — admit novel, non-forgotten derived candidates
-4. **Tick** — decay attention, age items
-5. **Utility** — record use/miss for each item
-6. **Forget** — evict low-attention/low-utility items (logged to prevent re-derivation)
-7. **Writeback** — persist high-utility items back to LTM journal
+| File | Purpose |
+|---|---|
+| `_petta_journal.py` | PeTTa journal parser/writer for LTM persistence |
+| `benchmark_wmtm.py` | Performance benchmarks and parameter sweeps |
+| `test_wmtm_*.py` | 285 unit tests (100% public function coverage) |
 
 ## Quick Start
 
 ```python
 from wmtm import WMTMStore, WMTMOrchestrator
 
-store = WMTMStore(capacity=50)
-orch = WMTMOrchestrator(store)
+store = WMTMStore(capacity=100)
+orch = WMTMOrchestrator(store=store)
 
-# Recall some items into the store
-def recall_fn():
-    return [("r1", "fire implies smoke", 80.0),
-            ("r2", "smoke implies danger", 70.0)]
+# Admit an item
+item = store.admit("i1", "fire implies smoke", initial_sti=5.0)
 
-result = orch.cycle(recall_fn=recall_fn)
-print(f"Admitted: {result.admitted_derived}, Active: {result.active_count}")
+# Run a cognitive cycle
+result = orch.cycle()
+print(f"Candidates: {len(result.candidates)}, Evicted: {len(result.evicted)}")
 ```
 
-## Benchmark
+## Benchmark Results
+
+- **Throughput:** ~107 cycles/sec
+- **Stability:** 0 violations over 200 stress cycles
+- **Inference:** 6/6 PASS (deduction, induction, abduction, analogy, evidence, contradiction)
+- **Tests:** 285/285 pass
+
+## Design Principles
+
+1. **Bounded capacity** — the store has a hard limit; old/low-attention items are evicted
+2. **Attention-based** — ECAN-style STI/LTI values drive activation and forgetting
+3. **Utility-aware** — items that are frequently used get higher utility scores
+4. **Forgetting-aware** — a forgetting log prevents re-derivation of deliberately forgotten items
+5. **Inference-driven** — PLN inference generates new candidates each cycle
+6. **Writeback** — high-value derived items are promoted to LTM for persistence
+
+## Running Tests
+
+```bash
+python3 -m pytest -q
+```
+
+## Running Benchmarks
 
 ```bash
 python3 benchmark_wmtm.py
-```
-
-| Benchmark | Metric                          | Result             |
-|-----------|---------------------------------|--------------------|
-| B1        | Throughput                      | ~107 cycles/s      |
-| B2        | Occupancy                       | Stable ≤ capacity  |
-| B3        | Stability (200 stress cycles)   | 0 violations       |
-| B4        | Inference (6 patterns)          | 6/6 PASS           |
-| B5        | Writeback                       | PASS               |
-
-## Testing
-
-```bash
-python3 -m pytest -q              # 285 tests, ~3.5s
-python3 -m pytest -q --tb=short   # with tracebacks
-python3 -m pytest -k inference    # specific module
-```
-
-## Code Quality
-
-- **Docstring coverage**: 100% across all public functions
-- **Return type annotations**: 100% across all public functions
-- **Cyclomatic complexity**: All public functions ≤ 6 (remaining ≥7 are inherent algorithm logic)
-- **0 TODO/FIXME/HACK** in live code
-- **0 unused imports**
-
-## Project Structure
-
-```
-.
-├── iter.py                  # Iter agent runtime
-├── _petta_journal.py        # PeTTa journal plumbing (append-only, supersession-resolved reads)
-├── benchmark_wmtm.py        # Performance benchmarks & ECAN parameter sweep
-├── wmtm/
-│   ├── __init__.py          # Public API exports
-│   ├── item.py              # WMTMItem
-│   ├── attention.py         # AttentionValue (ECAN)
-│   ├── store.py             # WMTMStore
-│   ├── forgetting.py        # ForgettingPolicy
-│   ├── forgetting_log.py    # ForgettingLog
-│   ├── inference.py         # WMTMInferenceEngine (PLN)
-│   ├── utility.py           # UtilityTracker
-│   ├── writeback.py         # WritebackManager
-│   ├── orchestrator.py      # WMTMOrchestrator
-│   └── recall_bridge.py     # RecallBridge (LTM → WMTM)
-├── test_*.py                # 19 test files, 285 tests
-├── tools/                   # Iter agent tool plugins
-├── channels/                # Iter agent communication channels
-├── transformations/         # Iter agent belief transformations
-└── memory/
-    ├── _journal/            # PeTTa long-term journal
-    └── *.txt                # Agent memory files
 ```
