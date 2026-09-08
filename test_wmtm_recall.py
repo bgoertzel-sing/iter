@@ -6,7 +6,7 @@ PROJECT_ROOT = Path(__file__).parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from wmtm.store import WMTMStore
-from wmtm.recall_bridge import RecallBridge, parse_journal, LTMCluster, RecallCandidate
+from wmtm.recall_bridge import RecallBridge, parse_journal, LTMCluster
 
 
 class TestParseJournal:

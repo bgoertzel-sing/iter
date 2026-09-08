@@ -1,11 +1,6 @@
 """Tests for WMTM Orchestrator."""
-import pytest
 from wmtm.orchestrator import WMTMOrchestrator, CycleResult
 from wmtm.store import WMTMStore
-from wmtm.inference import WMTMInferenceEngine
-from wmtm.utility import UtilityTracker
-from wmtm.forgetting_log import ForgettingLog
-from wmtm.forgetting import ForgettingPolicy
 from wmtm.writeback import WritebackManager
 
 

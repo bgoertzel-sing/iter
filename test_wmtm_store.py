@@ -1,7 +1,6 @@
 """Unit tests for WMTMStore: bounded-capacity mutable active-set."""
 import pytest
 from wmtm.store import WMTMStore
-from wmtm.item import WMTMItem
 
 
 class TestWMTMStoreInit:

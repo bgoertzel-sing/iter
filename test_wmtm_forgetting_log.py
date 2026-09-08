@@ -1,9 +1,6 @@
 """Tests for WMTM ForgettingLog."""
-import pytest
-from wmtm.forgetting_log import ForgettingLog, ForgetRecord, content_hash
+from wmtm.forgetting_log import ForgettingLog, content_hash
 from wmtm.store import WMTMStore
-from wmtm.item import WMTMItem
-from wmtm.attention import AttentionValue
 
 
 def test_content_hash_consistent():

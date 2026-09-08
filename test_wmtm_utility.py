@@ -1,6 +1,5 @@
 """Tests for WMTM UtilityTracker."""
-import pytest
-from wmtm.utility import UtilityTracker, UtilityRecord
+from wmtm.utility import UtilityTracker
 from wmtm.store import WMTMStore
 
 

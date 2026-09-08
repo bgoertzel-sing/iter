@@ -1,6 +1,5 @@
 """Tests for WMTM WritebackManager."""
-import pytest
-from wmtm.writeback import WritebackManager, WritebackCandidate, format_derived_metta, format_enrichment_metta
+from wmtm.writeback import WritebackManager, format_derived_metta, format_enrichment_metta
 from wmtm.store import WMTMStore
 from wmtm.item import WMTMItem
 from wmtm.attention import AttentionValue

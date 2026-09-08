@@ -1,6 +1,5 @@
 """Unit tests for iter.py utility functions."""
 import ast
-import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent

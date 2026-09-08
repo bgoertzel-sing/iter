@@ -3,7 +3,6 @@
 Regression test for bug where abduction/evidence candidates were filtered
 out because their content contained parent item content as explanation.
 """
-import pytest
 from wmtm import WMTMStore, WMTMOrchestrator, WMTMInferenceEngine, InferenceCandidate
 
 

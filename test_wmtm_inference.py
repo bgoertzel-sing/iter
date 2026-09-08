@@ -1,5 +1,4 @@
 """Tests for WMTM Inference Engine."""
-import pytest
 from wmtm.inference import (
     WMTMInferenceEngine,
     InferenceCandidate,
@@ -7,8 +6,6 @@ from wmtm.inference import (
     extract_triples,
 )
 from wmtm.store import WMTMStore
-from wmtm.item import WMTMItem
-from wmtm.attention import AttentionValue
 
 
 # --- extract_triples tests ---

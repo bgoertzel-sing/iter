@@ -1,15 +1,11 @@
 """Tests for contradiction resolution (Phase 5)."""
-import pytest
 from wmtm.inference import (
     WMTMInferenceEngine,
     ContradictionReport,
     ContradictionResolution,
 )
 from wmtm.store import WMTMStore
-from wmtm.item import WMTMItem
-from wmtm.attention import AttentionValue
 from wmtm.orchestrator import WMTMOrchestrator, CycleResult
-from wmtm.utility import UtilityTracker
 
 
 # --- resolve_contradictions unit tests ---

@@ -37,7 +37,6 @@ def test_invoke_dynamic_accepts_path_kwarg():
         # just the function by exec-ing the relevant portion.
 
         # Instead, let's test the function signature directly:
-        import inspect
 
         # Read iter.py and find the invoke_dynamic definition
         iter_src = Path("iter.py").read_text()

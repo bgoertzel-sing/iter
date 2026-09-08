@@ -1,8 +1,6 @@
 """Unit tests for tool modules: nop, shell, send, petta_journal round-trip."""
-import os
 import sys
 import tempfile
-import subprocess
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent
