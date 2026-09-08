@@ -77,6 +77,7 @@ class WritebackManager:
         derived_min_utility: float = 1.5,
         derived_min_age: int = 15,
     ) -> None:
+        """Initialize the writeback manager with a store and journal path."""
         self.min_age = min_age
         self.min_utility = min_utility
         self.derived_min_utility = derived_min_utility

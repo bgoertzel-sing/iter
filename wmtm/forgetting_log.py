@@ -38,6 +38,7 @@ class ForgettingLog:
     """
 
     def __init__(self) -> None:
+        """Initialize the forgetting log."""
         self._records: list[ForgetRecord] = []
         self._hashes: set[str] = set()
         self._ids: set[str] = set()
@@ -94,4 +95,5 @@ class ForgettingLog:
         self._ids.clear()
 
     def __len__(self) -> int:
+        """Return the number of logged eviction events."""
         return len(self._records)

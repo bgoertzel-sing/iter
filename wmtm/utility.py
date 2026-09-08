@@ -50,6 +50,7 @@ class UtilityTracker:
     """
 
     def __init__(self) -> None:
+        """Initialize the utility function evaluator."""
         self._records: dict[str, UtilityRecord] = {}
 
     def ensure(self, item_id: str) -> UtilityRecord:

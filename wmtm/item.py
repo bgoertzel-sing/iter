@@ -35,6 +35,7 @@ class WMTMItem:
         self.attention.boost(0.5)
 
     def __repr__(self) -> str:
+        """Return a concise string representation of the WMTM item."""
         return (
             f"WMTMItem(id={self.id!r}, type={self.source_type}, "
             f"sti={self.attention.sti:.2f}, age={self.age})"

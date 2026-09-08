@@ -139,6 +139,7 @@ class RecallBridge:
     """Bridges LTM archive -> WMTM via keyword match + spreading activation."""
 
     def __init__(self, ltm_clusters: list[LTMCluster]) -> None:
+        """Initialize the recall bridge with store, forgetting policy, and inference engine."""
         self._clusters: list[LTMCluster] = ltm_clusters
         self._by_id: dict[str, LTMCluster] = {c.id: c for c in ltm_clusters}
         self._evidence_for_targets: dict[str, list[str]] = {}
@@ -267,6 +268,7 @@ class RecallBridge:
         active_ids: set[str],
         store: WMTMStore,
     ) -> float:
+        """Compute spreading activation for a single token across the active set."""
         boost: float = 0.0
         for target in cluster.evidence_for:
             if target in active_ids:
@@ -283,6 +285,7 @@ class RecallBridge:
 
     @staticmethod
     def _tokenize(text: str) -> set[str]:
+        """Tokenize a text string into normalized lowercase tokens."""
         tokens: set[str] = set()
         for word in text.lower().split():
             word = word.strip(".,;:!?()[]{}\"'")

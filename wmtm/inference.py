@@ -21,6 +21,7 @@ class BeliefTriple:
     object: str
 
     def __repr__(self) -> str:
+        """Return a concise string representation of the inference engine state."""
         return f"({self.subject} -> {self.relation} -> {self.object})"
 
     def to_text(self) -> str:
@@ -126,6 +127,7 @@ class WMTMInferenceEngine:
         sti_focus_ratio: float = 0.5,
         budget_confidence_threshold: float = 0.3,
     ) -> None:
+        """Initialize the inference engine with a reference to the WMTM store."""
         self.novelty_bonus = novelty_bonus
         self.min_confidence = min_confidence
         self.inference_budget = inference_budget

@@ -53,6 +53,7 @@ class WMTMOrchestrator:
         forgetting_log: Optional[ForgettingLog] = None,
         writeback_manager: Optional[WritebackManager] = None,
     ) -> None:
+        """Initialize the WMTM orchestrator with a store and default forgetting policy."""
         self.store = store
         self.engine = inference_engine or WMTMInferenceEngine()
         self.utility = utility_tracker or UtilityTracker()

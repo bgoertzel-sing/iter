@@ -15,6 +15,7 @@ class WMTMStore:
     """
 
     def __init__(self, capacity: int = 200, tick: int = 0) -> None:
+        """Initialize the WMTM store with a given capacity."""
         if capacity <= 0:
             raise ValueError("capacity must be positive")
         self.capacity = capacity
@@ -116,7 +117,9 @@ class WMTMStore:
     # -- dunder helpers -------------------------------------------------
 
     def __len__(self) -> int:
+        """Return the number of items currently in the active set."""
         return len(self._items)
 
     def __contains__(self, item_id: str) -> bool:
+        """Check whether an item with the given id exists in the store."""
         return item_id in self._items
