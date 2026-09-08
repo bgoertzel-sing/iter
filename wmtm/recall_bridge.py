@@ -39,24 +39,24 @@ class LTMCluster:
         return " ".join(self.about_tags) + " " + self.event_note
 
 
-def parse_journal(lines):
+def parse_journal(lines: list[str]) -> list[LTMCluster]:
     """Parse journal lines into LTMCluster objects, skipping superseded."""
-    superseded = set()
+    superseded: set[str] = set()
     for line in lines:
         for m in _RE_SUPERSEDES.finditer(line):
-            old_id = m.group(2)
+            old_id: str = m.group(2)
             if old_id != "old-id":
                 superseded.add(old_id)
 
-    clusters = []
-    current = None
-    current_lines = []
+    clusters: list[LTMCluster] = []
+    current: Optional[LTMCluster] = None
+    current_lines: list[str] = []
 
     for line in lines:
         stripped = line.strip()
         begin_m = _RE_CLUSTER_BEGIN.match(stripped)
         if begin_m:
-            cid = begin_m.group(1)
+            cid: str = begin_m.group(1)
             current = LTMCluster(id=cid, raw_lines=[])
             current_lines = [line]
             continue
@@ -104,30 +104,35 @@ class RecallCandidate:
 class RecallBridge:
     """Bridges LTM archive -> WMTM via keyword match + spreading activation."""
 
-    def __init__(self, ltm_clusters):
-        self._clusters = ltm_clusters
-        self._by_id = {c.id: c for c in ltm_clusters}
-        self._evidence_for_targets = {}
+    def __init__(self, ltm_clusters: list[LTMCluster]) -> None:
+        self._clusters: list[LTMCluster] = ltm_clusters
+        self._by_id: dict[str, LTMCluster] = {c.id: c for c in ltm_clusters}
+        self._evidence_for_targets: dict[str, list[str]] = {}
         for c in ltm_clusters:
             for target in c.evidence_for:
                 self._evidence_for_targets.setdefault(target, []).append(c.id)
 
-    def recall(self, query_context, store, top_k=20):
+    def recall(
+        self,
+        query_context: str,
+        store: WMTMStore,
+        top_k: int = 20,
+    ) -> list[RecallCandidate]:
         """Recall items from LTM matching query_context."""
-        query_terms = self._tokenize(query_context)
-        active_ids = {item.id for item in store.get_active_set()}
-        candidates = []
+        query_terms: set[str] = self._tokenize(query_context)
+        active_ids: set[str] = {item.id for item in store.get_active_set()}
+        candidates: list[RecallCandidate] = []
 
         for cluster in self._clusters:
             if cluster.id in active_ids:
                 continue
 
-            score = 0.0
-            cluster_text = self._tokenize(cluster.text)
-            matching_terms = query_terms & cluster_text
+            score: float = 0.0
+            cluster_text: set[str] = self._tokenize(cluster.text)
+            matching_terms: set[str] = query_terms & cluster_text
             score += len(matching_terms) * 1.0
 
-            cluster_text_raw = cluster.text.lower()
+            cluster_text_raw: str = cluster.text.lower()
             for term in query_terms:
                 if term in cluster_text_raw:
                     score += 0.5
@@ -136,7 +141,7 @@ class RecallBridge:
                 continue
 
             score += min(cluster.evidence_support_count * 0.01, 2.0)
-            spread_score = self._spreading_activation_for(cluster, active_ids, store)
+            spread_score: float = self._spreading_activation_for(cluster, active_ids, store)
             score += spread_score
 
             candidates.append(RecallCandidate(
@@ -150,20 +155,27 @@ class RecallBridge:
         candidates.sort(key=lambda c: c.score, reverse=True)
         return candidates[:top_k]
 
-    def spreading_activation(self, seed_ids, depth=2, decay=0.5):
+    def spreading_activation(
+        self,
+        seed_ids: list[str],
+        depth: int = 2,
+        decay: float = 0.5,
+    ) -> dict[str, float]:
         """Follow EvidenceFor/PromotesFrom edges from seed items."""
-        visited = set()
-        scores = {}
-        frontier = [(sid, 1.0) for sid in seed_ids if sid in self._by_id]
+        visited: set[str] = set()
+        scores: dict[str, float] = {}
+        frontier: list[tuple[str, float]] = [
+            (sid, 1.0) for sid in seed_ids if sid in self._by_id
+        ]
 
-        for hop in range(depth + 1):
-            next_frontier = []
+        for _hop in range(depth + 1):
+            next_frontier: list[tuple[str, float]] = []
             for cid, activation in frontier:
                 if cid in visited:
                     continue
                 visited.add(cid)
                 scores[cid] = scores.get(cid, 0.0) + activation
-                cluster = self._by_id.get(cid)
+                cluster: Optional[LTMCluster] = self._by_id.get(cid)
                 if not cluster:
                     continue
                 for target in cluster.evidence_for:
@@ -176,22 +188,29 @@ class RecallBridge:
 
         return scores
 
-    def _spreading_activation_for(self, cluster, active_ids, store):
-        boost = 0.0
+    def _spreading_activation_for(
+        self,
+        cluster: LTMCluster,
+        active_ids: set[str],
+        store: WMTMStore,
+    ) -> float:
+        boost: float = 0.0
         for target in cluster.evidence_for:
             if target in active_ids:
                 boost += 0.5
         for source_id in self._evidence_for_targets.get(cluster.id, []):
             if source_id in active_ids:
                 boost += 0.5
-        spread = self.spreading_activation(list(active_ids), depth=2, decay=0.3)
+        spread: dict[str, float] = self.spreading_activation(
+            list(active_ids), depth=2, decay=0.3
+        )
         if cluster.id in spread:
             boost += spread[cluster.id] * 0.2
         return boost
 
     @staticmethod
-    def _tokenize(text):
-        tokens = set()
+    def _tokenize(text: str) -> set[str]:
+        tokens: set[str] = set()
         for word in text.lower().split():
             word = word.strip(".,;:!?()[]{}\"'")
             if len(word) >= 2:
