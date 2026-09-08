@@ -128,3 +128,24 @@ def test_promote_to_ltm_candidates():
     tracker.tick(store, current_tick=35)
     candidates = tracker.promote_to_ltm_candidates(store, min_age=30, min_utility=2.0)
     assert any(c.id == "i1" for c in candidates)
+
+
+# --- get_utility ---
+
+
+def test_get_utility_untracked():
+    """get_utility returns 0.0 for untracked items."""
+    tracker = UtilityTracker()
+    assert tracker.get_utility("nonexistent") == 0.0
+
+
+def test_get_utility_tracked():
+    """get_utility returns the utility score for tracked items."""
+    tracker = UtilityTracker()
+    tracker.record_use("i1", tick=1)
+    tracker.record_use("i1", tick=2)
+    tracker.record_miss("i1", tick=3)
+    # utility_score = use_count - miss_count (simplified)
+    util = tracker.get_utility("i1")
+    assert isinstance(util, float)
+    assert util > 0.0  # 2 uses - 1 miss = positive

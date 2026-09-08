@@ -373,3 +373,50 @@ def test_focus_set_small_set_returns_all():
     engine = WMTMInferenceEngine()
     focus = engine._focus_set(store.get_active_set())
     assert len(focus) == 2
+
+
+# --- generate_candidates (alias for infer) ---
+
+
+def test_generate_candidates_alias():
+    """generate_candidates should produce same results as infer."""
+    store = WMTMStore()
+    store.admit("i1", "fire implies smoke", initial_sti=5.0)
+    store.admit("i2", "smoke implies danger", initial_sti=5.0)
+    engine = WMTMInferenceEngine()
+    active = store.get_active_set()
+    via_infer = engine.infer(active)
+    via_alias = engine.generate_candidates(active)
+    assert len(via_alias) == len(via_infer)
+    # Same content, just different candidate IDs
+    infer_contents = {c.content for c in via_infer}
+    alias_contents = {c.content for c in via_alias}
+    assert infer_contents == alias_contents
+
+
+def test_generate_candidates_empty():
+    """generate_candidates on empty active set returns []."""
+    engine = WMTMInferenceEngine()
+    result = engine.generate_candidates([])
+    assert result == []
+
+
+# --- BeliefTriple.to_text ---
+
+
+def test_belief_triple_to_text():
+    """to_text should return 'subject relation object' format."""
+    t = BeliefTriple(subject="fire", relation="implies", object="smoke")
+    assert t.to_text() == "fire implies smoke"
+
+
+def test_belief_triple_to_text_isa():
+    """to_text with is-a relation."""
+    t = BeliefTriple(subject="socrates", relation="is-a", object="man")
+    assert t.to_text() == "socrates is-a man"
+
+
+def test_belief_triple_to_text_has():
+    """to_text with has relation."""
+    t = BeliefTriple(subject="car", relation="has", object="wheels")
+    assert t.to_text() == "car has wheels"

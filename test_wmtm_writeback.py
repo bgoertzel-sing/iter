@@ -127,3 +127,26 @@ def test_has_been_written():
     candidates = wb.select_candidates(store)
     wb.writeback(candidates, lambda c: None)
     assert wb.has_been_written("d1") is True
+
+
+# --- WritebackManager.reset ---
+
+
+def test_writeback_reset():
+    """reset() should clear all tracking state."""
+    wb = WritebackManager(derived_min_age=5, derived_min_utility=0.5)
+    store = WMTMStore()
+    item = store.admit("wb-reset-test", "test content", source_type="derived",
+                       derived_from=["src1"], initial_sti=5.0)
+    item.utility = 5.0
+    # Advance tick so the item is old enough for writeback selection
+    for _ in range(10):
+        store.tick()
+    candidates = wb.select_candidates(store)
+    assert len(candidates) >= 1
+    wb.writeback(candidates, lambda c: None)
+    # Verify it was tracked as written back
+    assert wb.has_been_written(item.id)
+    # Reset clears tracking
+    wb.reset()
+    assert not wb.has_been_written(item.id)
