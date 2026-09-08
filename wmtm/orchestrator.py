@@ -62,6 +62,97 @@ class WMTMOrchestrator:
         self.writeback = writeback_manager or WritebackManager()
         self._cycle = 0
 
+    # ── Phase helpers ──────────────────────────────────────────────
+
+    def _recall_from_ltm(
+        self,
+        recall_fn: Optional[Callable[[], list[tuple[str, str, float]]]],
+    ) -> None:
+        """Pull items from LTM into the store via recall_fn."""
+        if recall_fn is None:
+            return
+        for item_id, content, sti in recall_fn():
+            self.store.admit(
+                item_id=item_id,
+                content=content,
+                source_type='recalled',
+                initial_sti=sti,
+            )
+        self._log_capacity_evictions()
+
+    def _log_capacity_evictions(self) -> None:
+        """Record any items evicted by capacity pressure since last drain."""
+        for ev in self.store.drain_pending_evicted():
+            self.forget_log.record(ev, self._cycle)
+
+    def _admit_derived(self, candidates: list) -> list:
+        """Admit novel, non-forgotten derived candidates; return admitted items."""
+        admitted = []
+        for i, cand in enumerate(candidates):
+            if self._is_skipworthy(cand):
+                continue
+            item = self._admit_candidate(cand, i)
+            if item is not None:
+                admitted.append(item)
+                for pid in cand.derived_from:
+                    self.utility.record_inferred_from(pid)
+        self._log_capacity_evictions()
+        return admitted
+
+    def _is_skipworthy(self, cand) -> bool:
+        """Check if a candidate should be skipped (forgotten or duplicate)."""
+        if self.forget_log.is_forgotten(cand.content):
+            if cand.initial_sti < self.forget_log_override_threshold:
+                return True
+        if not self.engine.is_novel(cand, self.store):
+            return True
+        return False
+
+    def _admit_candidate(self, cand, index: int):
+        """Admit a single derived candidate into the store."""
+        item_id = f"derived-{cand.inference_type}-{self._cycle}-{index}"
+        return self.store.admit(
+            item_id=item_id,
+            content=cand.content,
+            source_type='derived',
+            derived_from=cand.derived_from,
+            initial_sti=cand.initial_sti,
+        )
+
+    def _resolve_contradictions_phase(self, result: CycleResult) -> None:
+        """Detect and resolve contradictions in the active set."""
+        contradictions = self.engine.detect_contradictions(self.store)
+        result.contradictions = contradictions
+        if not contradictions:
+            return
+        resolutions = self.engine.resolve_contradictions(self.store, contradictions)
+        result.resolutions = resolutions
+        for res in resolutions:
+            for ev_item in res.evicted_items:
+                self.forget_log.record(ev_item, self._cycle)
+                self.utility.remove(ev_item.id)
+
+    def _reinforce(self) -> None:
+        """Boost STI for items that were actually used this cycle."""
+        for item in self.store.get_active_set():
+            rec = self.utility.get_record(item.id)
+            if rec is not None and rec.use_count > 0 and rec.last_use_tick == self._cycle:
+                item.attention.boost(2.0)
+
+    def _do_writeback(
+        self,
+        append_fn: Optional[Callable[[str], None]],
+        result: CycleResult,
+    ) -> None:
+        """Write high-utility items back to LTM via append_fn."""
+        if append_fn is None:
+            return
+        wb_candidates = self.writeback.select_candidates(self.store)
+        written = self.writeback.writeback(wb_candidates, append_fn)
+        result.written_back = len(written)
+
+    # ── Main cycle ─────────────────────────────────────────────────
+
     def cycle(
         self,
         recall_fn: Optional[Callable[[], list[tuple[str, str, float]]]] = None,
@@ -77,68 +168,19 @@ class WMTMOrchestrator:
         """
         result = CycleResult(cycle=self._cycle)
 
-        # 1. Recall from LTM (if provided)
-        if recall_fn is not None:
-            recalled = recall_fn()
-            for item_id, content, sti in recalled:
-                self.store.admit(
-                    item_id=item_id,
-                    content=content,
-                    source_type='recalled',
-                    initial_sti=sti,
-                )
-
-        # 1b. Log any items evicted by capacity during recall
-        for ev in self.store.drain_pending_evicted():
-            self.forget_log.record(ev, self._cycle)
+        # 1. Recall from LTM
+        self._recall_from_ltm(recall_fn)
 
         # 2. Run inference
         active = self.store.get_active_set()
         candidates = self.engine.infer(active)
 
         # 3. Admit novel derived candidates
-        admitted = []
-        for i, cand in enumerate(candidates):
-            # Skip if previously forgotten (unless high attention)
-            if self.forget_log.is_forgotten(cand.content):
-                if cand.initial_sti < self.forget_log_override_threshold:
-                    continue
-            # Skip if content duplicates existing
-            if not self.engine.is_novel(cand, self.store):
-                continue
-            item_id = f"derived-{cand.inference_type}-{self._cycle}-{i}"
-            item = self.store.admit(
-                item_id=item_id,
-                content=cand.content,
-                source_type='derived',
-                derived_from=cand.derived_from,
-                initial_sti=cand.initial_sti,
-            )
-            if item is not None:
-                admitted.append(item)
-                # Record that parents contributed to a derivation
-                for pid in cand.derived_from:
-                    self.utility.record_inferred_from(pid)
-
+        admitted = self._admit_derived(candidates)
         result.admitted_derived = len(admitted)
 
-        # 3b. Log any items evicted by capacity during derived admission
-        for ev in self.store.drain_pending_evicted():
-            self.forget_log.record(ev, self._cycle)
-
-        # 3c. Detect and resolve contradictions in the active set
-        contradictions = self.engine.detect_contradictions(self.store)
-        result.contradictions = contradictions
-
-        # 3d. Resolve contradictions (Phase 5: attention+utility-weighted resolution)
-        if contradictions:
-            resolutions = self.engine.resolve_contradictions(self.store, contradictions)
-            result.resolutions = resolutions
-            # Log items evicted by contradiction resolution
-            for res in resolutions:
-                for ev_item in res.evicted_items:
-                    self.forget_log.record(ev_item, self._cycle)
-                    self.utility.remove(ev_item.id)
+        # 3c/3d. Detect and resolve contradictions
+        self._resolve_contradictions_phase(result)
 
         # 4. Tick: decay + age
         evicted_by_tick = self.store.tick()
@@ -148,11 +190,8 @@ class WMTMOrchestrator:
         # 5. Utility tracking
         self.utility.tick(self.store, self._cycle)
 
-        # 5b. Reinforce: boost STI for items actually used this cycle
-        for item in self.store.get_active_set():
-            rec = self.utility.get_record(item.id)
-            if rec is not None and rec.use_count > 0 and rec.last_use_tick == self._cycle:
-                item.attention.boost(2.0)  # small STI boost for being useful
+        # 5b. Reinforce used items
+        self._reinforce()
 
         # 6. Forgetting policy
         evicted_by_policy = self.forgetting.evaluate(self.store)
@@ -163,10 +202,7 @@ class WMTMOrchestrator:
         result.evicted = len(evicted_by_tick) + len(evicted_by_policy)
 
         # 7. Writeback
-        if append_fn is not None:
-            wb_candidates = self.writeback.select_candidates(self.store)
-            written = self.writeback.writeback(wb_candidates, append_fn)
-            result.written_back = len(written)
+        self._do_writeback(append_fn, result)
 
         result.active_count = len(self.store)
         self._cycle += 1
