@@ -9,12 +9,11 @@ For recalled items, this allows enrichment (e.g., adding new evidence).
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import Optional, Callable
+from dataclasses import dataclass
+from typing import Callable
 
 from .item import WMTMItem
 from .store import WMTMStore
-from .utility import UtilityTracker
 
 
 @dataclass

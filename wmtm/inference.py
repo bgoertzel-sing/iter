@@ -11,7 +11,6 @@ from typing import Optional
 
 from .store import WMTMStore
 from .item import WMTMItem
-from .attention import AttentionValue
 
 
 @dataclass

@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Callable, Optional
 
 from .store import WMTMStore
-from .inference import WMTMInferenceEngine, InferenceCandidate, ContradictionReport, ContradictionResolution
+from .inference import WMTMInferenceEngine
 from .utility import UtilityTracker
 from .forgetting_log import ForgettingLog
 from .forgetting import ForgettingPolicy

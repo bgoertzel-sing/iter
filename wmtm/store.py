@@ -14,7 +14,7 @@ class WMTMStore:
     and REMOVED. When at capacity, lowest-STI items are evicted first.
     """
 
-    def __init__(self, capacity: int = 200, tick: int = 0):
+    def __init__(self, capacity: int = 200, tick: int = 0) -> None:
         if capacity <= 0:
             raise ValueError("capacity must be positive")
         self.capacity = capacity

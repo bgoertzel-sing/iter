@@ -6,7 +6,7 @@ This feeds into the ForgettingPolicy for age-based eviction decisions.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Optional
 
 from .item import WMTMItem
@@ -49,7 +49,7 @@ class UtilityTracker:
     Call record_inferred_from() when an item contributes to a derivation.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._records: dict[str, UtilityRecord] = {}
 
     def ensure(self, item_id: str) -> UtilityRecord:

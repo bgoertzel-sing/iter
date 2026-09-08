@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass, field
-from typing import Optional
 
 from .item import WMTMItem
 
@@ -38,7 +37,7 @@ class ForgettingLog:
     track what has been forgotten for debugging/analysis.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._records: list[ForgetRecord] = []
         self._hashes: set[str] = set()
         self._ids: set[str] = set()
