@@ -3,9 +3,9 @@ Tests the full cycle: recall -> infer -> use -> decay -> forget -> writeback.
 Also tests multi-cycle behavior, promotion, and forgetting log persistence.
 """
 from wmtm import (
-    WMTMStore, WMTMOrchestrator, WMTMInferenceEngine,
-    UtilityTracker, ForgettingLog, ForgettingPolicy,
-    WritebackManager, ForgettingPolicy, CycleResult,
+    WMTMStore, WMTMOrchestrator,
+    UtilityTracker, ForgettingPolicy,
+    WritebackManager, CycleResult,
 )
 def test_full_cycle_recall_infer_forget():
     """Full cycle: recall items, run inference, decay, forget."""
