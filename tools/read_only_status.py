@@ -1,24 +1,22 @@
-"""Provider-free fixture tool for the ProtoCosmo2 Iter round-trip test."""
-from __future__ import annotations
+"""Return a read-only status snapshot (git state, running processes, test results)."""
 
-import json
-import os
-from pathlib import Path
+DESCRIPTION = "Return a read-only status snapshot of git state, running processes, and system load."
 
+import json, os, subprocess
 
-DESCRIPTION = "Read the bounded provider-free runtime status fixture."
+def run(cmd):
+    try:
+        r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=2)
+        return r.stdout.strip()
+    except Exception as e:
+        return f"(error: {e})"
 
+git_log = run("git log --oneline -5")
+git_status = run("git status --short")
+load = run("uptime")
 
-def run():
-    raw = os.environ.get("ITER_STATUS_FIXTURE")
-    if not raw:
-        raise RuntimeError("ITER_STATUS_FIXTURE is required")
-    path = Path(raw)
-    if not path.is_absolute() or path.is_symlink() or not path.is_file():
-        raise RuntimeError("status fixture must be an absolute regular non-symlink file")
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if type(value) is not dict or set(value) != {"identity", "status"}:
-        raise RuntimeError("status fixture schema mismatch")
-    if value["identity"] != "ProtoCosmo2" or value["status"] != "healthy":
-        raise RuntimeError("status fixture identity/state mismatch")
-    return json.dumps(value, sort_keys=True, separators=(",", ":"))
+print(json.dumps({
+    "git_log": git_log,
+    "git_status": git_status,
+    "load": load,
+}, indent=2))

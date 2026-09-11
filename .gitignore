@@ -11,3 +11,5 @@ memory/
 .env
 .DS_Store
 checkpoints/
+tmp*.py
+*.deb
