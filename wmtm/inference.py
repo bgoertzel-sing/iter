@@ -226,7 +226,7 @@ class WMTMInferenceEngine:
                 confidence = count / (count + 1)
                 triple = BeliefTriple(subject=subj, relation=rel, object=obj)
                 candidates.append(InferenceCandidate(
-                    content=f"{triple.to_text()} (induced from {count} instances)",
+                    content=f"{triple.to_text()} (induced)",
                     confidence=confidence,
                     derived_from=item_ids,
                     inference_type='induction',
@@ -351,7 +351,7 @@ class WMTMInferenceEngine:
         initial_sti = parent_sti * combined * 0.5
         triple = BeliefTriple(subject=subj, relation=rel, object=obj)
         return InferenceCandidate(
-            content=f"{triple.to_text()} (aggregated from {n} sources)",
+            content=f"{triple.to_text()} (aggregated)",
             confidence=combined,
             derived_from=item_ids,
             inference_type='evidence_aggregation',

@@ -3,6 +3,7 @@
 One orchestration cycle:
 1. Recall from LTM (via recall_bridge) into WMTM
 2. Run inference engine over active set
+2b. Run PLN inference over active set (optional, default on)
 3. Admit derived candidates (if novel)
 4. Tick: decay attention, age items
 5. Track utility (use/miss)
@@ -29,6 +30,8 @@ class CycleResult:
     """Summary of a single orchestration cycle."""
     cycle: int
     admitted_derived: int = 0
+    pln_admitted: int = 0
+    gc_admitted: int = 0
     evicted: int = 0
     written_back: int = 0
     active_count: int = 0
@@ -52,8 +55,15 @@ class WMTMOrchestrator:
         forgetting_policy: Optional[ForgettingPolicy] = None,
         forgetting_log: Optional[ForgettingLog] = None,
         writeback_manager: Optional[WritebackManager] = None,
+        use_pln: bool = True,
+        use_goalchainer: bool = False,
+        goalchainer_request: str = '',
     ) -> None:
-        """Initialize the WMTM orchestrator with a store and default forgetting policy."""
+        """Initialize the WMTM orchestrator with a store and default forgetting policy.
+
+        Args:
+            use_pln: if True, run PLN inference (via pln_bridge) in each cycle.
+        """
         self.store = store
         self.engine = inference_engine or WMTMInferenceEngine()
         self.utility = utility_tracker or UtilityTracker()
@@ -61,6 +71,9 @@ class WMTMOrchestrator:
         self.forget_log = forgetting_log or ForgettingLog()
         self.forget_log_override_threshold = 500.0  # only re-derive forgotten content if exceptionally high attention
         self.writeback = writeback_manager or WritebackManager()
+        self.use_pln = use_pln
+        self.use_goalchainer = use_goalchainer
+        self.goalchainer_request = goalchainer_request
         self._cycle = 0
 
     # ── Phase helpers ──────────────────────────────────────────────
@@ -120,6 +133,44 @@ class WMTMOrchestrator:
             initial_sti=cand.initial_sti,
         )
 
+    def _run_pln_phase(self) -> list:
+        """Run PLN inference over the WMTM active set and admit candidates.
+
+        Returns the list of admitted PLN-derived items.
+        """
+        if not self.use_pln:
+            return []
+        try:
+            from .pln_bridge import run_pln_inference_over_wmtm
+            pln_candidates = run_pln_inference_over_wmtm(self.store)
+            if not pln_candidates:
+                return []
+            return self._admit_derived(pln_candidates)
+        except Exception:
+            return []
+
+    def _run_goalchainer_phase(self) -> list:
+        """Run GoalChainer over the WMTM active set and admit decisions.
+
+        This is the feedback loop: GoalChainer reads WMTM evidence,
+        makes a decision, and the results are admitted back into WMTM.
+
+        Returns the list of admitted GoalChainer-derived items.
+        """
+        if not self.use_goalchainer or not self.goalchainer_request:
+            return []
+        try:
+            from .goalchainer_bridge import run_goalchainer_over_wmtm
+            gc_candidates = run_goalchainer_over_wmtm(
+                self.store,
+                self.goalchainer_request,
+            )
+            if not gc_candidates:
+                return []
+            return self._admit_derived(gc_candidates)
+        except Exception:
+            return []
+
     def _resolve_contradictions_phase(self, result: CycleResult) -> None:
         """Detect and resolve contradictions in the active set."""
         contradictions = self.engine.detect_contradictions(self.store)
@@ -172,13 +223,21 @@ class WMTMOrchestrator:
         # 1. Recall from LTM
         self._recall_from_ltm(recall_fn)
 
-        # 2. Run inference
+        # 2. Run basic inference
         active = self.store.get_active_set()
         candidates = self.engine.infer(active)
 
         # 3. Admit novel derived candidates
         admitted = self._admit_derived(candidates)
         result.admitted_derived = len(admitted)
+
+        # 2b. Run PLN inference and admit its candidates
+        pln_admitted = self._run_pln_phase()
+        result.pln_admitted = len(pln_admitted)
+
+        # 2c. Run GoalChainer feedback loop and admit its decisions
+        gc_admitted = self._run_goalchainer_phase()
+        result.gc_admitted = len(gc_admitted)
 
         # 3c/3d. Detect and resolve contradictions
         self._resolve_contradictions_phase(result)
