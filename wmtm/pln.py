@@ -121,10 +121,12 @@ class TruthValue:
         )
 
     def to_dict(self) -> dict:
+        """Serialize TruthValue to a dict with rounded values."""
         return {"strength": round(self.strength, 4), "confidence": round(self.confidence, 4)}
 
     @classmethod
     def from_dict(cls, d: dict) -> TruthValue:
+        """Reconstruct a TruthValue from a serialized dict."""
         return cls(strength=d["strength"], confidence=d["confidence"])
 
 
