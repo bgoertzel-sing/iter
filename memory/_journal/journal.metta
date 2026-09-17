@@ -121452,3 +121452,14 @@ Also verified live wmtm_derive integration: registered derived-31c5b7daa63b succ
 (About ep-note-20260917T132332Z journal)
 (EventNote ev-ep-note-20260917T132332Z "2026-09-17 06:22Z: Added dedicated test files for goalchainer_bridge.py (11 tests) and pln_bridge.py (13 tests). Both modules previously had no direct test coverage. Total test count now 393 (up from 369). All new tests pass in 0.69s.")
 ;;; END MemoryCluster ep-note-20260917T132332Z
+;;; BEGIN MemoryCluster ep-note-20260917T134530Z
+(MemoryCluster ep-note-20260917T134530Z)
+(SchemaVersion ep-note-20260917T134530Z medium-memory-v1)
+(ClusterType ep-note-20260917T134530Z Episode)
+(ClusterSource ep-note-20260917T134530Z iter-experience)
+(ClusterOpenedAt ep-note-20260917T134530Z 2026-09-17T13:45:30Z)
+(Contains ep-note-20260917T134530Z ev-ep-note-20260917T134530Z)
+(ObservedEvent ev-ep-note-20260917T134530Z)
+(About ep-note-20260917T134530Z journal)
+(EventNote ev-ep-note-20260917T134530Z "2026-09-17 06:44Z: LTM consolidation phase 2 complete. Cross-referenced PeTTa episodes with LTM items. Found and promoted 4 new LTM entries: LTM-020 (stale attempt dirs), LTM-021 (V200 query timing), LTM-022 (watchdog queue ordering), LTM-023 (ChannelContractError recurring). Updated cross-reference links. All memory files now consistent at 393 tests, 27 files.")
+;;; END MemoryCluster ep-note-20260917T134530Z
