@@ -46,7 +46,7 @@ recall → attention → inference(basic) → PLN(step 2b) → GoalChainer(step 
 | `_petta_journal.py` | PeTTa journal parser/writer for LTM persistence |
 | `benchmark_wmtm.py` | Performance benchmarks and parameter sweeps |
 | `simulate_incident.py` | 8-phase incident response simulation (uses real GoalChainer output) |
-| `test_*.py` | 393 tests across 27 files (100% module coverage) |
+| `test_*.py` | 400 tests across 27 files (100% module coverage) |
 
 ## Quick Start
 
@@ -74,7 +74,7 @@ print(f"Candidates: {len(result.candidates)}, Evicted: {len(result.evicted)}")
 - **GoalChainer Bridge:** 11 tests — evidence conversion, decision parsing, STI boosts/penalties
 - **Live Tool Bridge:** 15 tests — real goalchainer_decide + wmtm_derive output parsing
 - **Simulation:** 8-phase cognitive cycle with real GoalChainer integration
-- **Tests:** 393/393 pass (27 files, `--timeout=15`)
+- **Tests:** 400/400 pass (27 files, `--timeout=15`)
 
 ## Design Principles
 
