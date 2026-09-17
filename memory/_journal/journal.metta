@@ -121406,3 +121406,16 @@ Simulation result: 8 facts → 3 GoalChainer decisions → 3 admitted to WMTM �
 
 Final: 352 tests pass (3 simulation + 15 live + 10 e2e + 19 gc + 305 core). 3 pre-existing timeouts.")
 ;;; END MemoryCluster ep-note-20260917T102846Z
+;;; BEGIN MemoryCluster ep-note-20260917T111310Z
+(MemoryCluster ep-note-20260917T111310Z)
+(SchemaVersion ep-note-20260917T111310Z medium-memory-v1)
+(ClusterType ep-note-20260917T111310Z Episode)
+(ClusterSource ep-note-20260917T111310Z iter-experience)
+(ClusterOpenedAt ep-note-20260917T111310Z 2026-09-17T11:13:10Z)
+(Contains ep-note-20260917T111310Z ev-ep-note-20260917T111310Z)
+(ObservedEvent ev-ep-note-20260917T111310Z)
+(About ep-note-20260917T111310Z journal)
+(EventNote ev-ep-note-20260917T111310Z "Timeout tests CORRECTION 2026-09-17: The 3 \"pre-existing timeouts\" (test_wmtm_recall.py, test_invoke_dynamic_path_collision.py) actually PASS with 10s timeout. They take 5.5s and 13.3s respectively. Not broken — just slow due to real PeTTa journal parsing. Only fail with default 3s timeout.
+
+Also verified live wmtm_derive integration: registered derived-31c5b7daa63b successfully. Both live tool bridge integration points (goalchainer_decide + wmtm_derive) now confirmed working end-to-end.")
+;;; END MemoryCluster ep-note-20260917T111310Z
