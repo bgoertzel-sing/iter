@@ -209,3 +209,81 @@ class TestPLNBridge:
         candidates = run_pln_inference_over_wmtm(store)
         for c in candidates:
             assert len(c.derived_from) >= 2
+
+    # ─── Previously untested methods ──────────────────────────
+
+    def test_weighted_avg(self):
+        tv1 = TruthValue(0.8, 0.6)
+        tv2 = TruthValue(0.4, 0.2)
+        result = tv1.weighted_avg(tv2, 0.75)
+        assert abs(result.strength - 0.7) < 1e-6   # 0.75*0.8 + 0.25*0.4
+        assert abs(result.confidence - 0.5) < 1e-6  # 0.75*0.6 + 0.25*0.2
+
+    def test_weighted_avg_clamps_weight(self):
+        tv1 = TruthValue(0.8, 0.6)
+        tv2 = TruthValue(0.4, 0.2)
+        result_high = tv1.weighted_avg(tv2, 2.0)  # clamps to 1.0
+        assert abs(result_high.strength - 0.8) < 1e-6
+        result_low = tv1.weighted_avg(tv2, -1.0)  # clamps to 0.0
+        assert abs(result_low.strength - 0.4) < 1e-6
+
+    def test_weighted_avg_half(self):
+        tv1 = TruthValue(1.0, 1.0)
+        tv2 = TruthValue(0.0, 0.0)
+        result = tv1.weighted_avg(tv2, 0.5)
+        assert abs(result.strength - 0.5) < 1e-6
+        assert abs(result.confidence - 0.5) < 1e-6
+
+    def test_implicates(self):
+        a = TruthValue(0.8, 0.9)
+        b = TruthValue(0.6, 0.7)
+        result = a.implicates(b)
+        # s = min(1, 0.6 / max(0.8, eps)) = min(1, 0.75) = 0.75
+        assert abs(result.strength - 0.75) < 1e-6
+        # c = 0.9 * 0.7 = 0.63
+        assert abs(result.confidence - 0.63) < 1e-6
+
+    def test_implicates_caps_at_one(self):
+        a = TruthValue(0.3, 0.9)
+        b = TruthValue(0.9, 0.8)
+        result = a.implicates(b)
+        # s = min(1, 0.9 / 0.3) = min(1, 3.0) = 1.0
+        assert result.strength == 1.0
+        assert abs(result.confidence - 0.72) < 1e-6
+
+    def test_implicates_near_zero_strength(self):
+        a = TruthValue(1e-10, 0.5)
+        b = TruthValue(0.5, 0.5)
+        result = a.implicates(b)
+        # s = min(1, 0.5 / max(1e-10, eps)) = min(1, very_large) = 1.0
+        assert result.strength == 1.0
+
+
+class TestAnalogyTransfer:
+    def setup_method(self):
+        self.engine = PLNInferenceEngine()
+
+    def test_analogy_transfer_basic(self):
+        ab = TruthValue(0.9, 0.8)
+        cd = TruthValue(0.85, 0.75)
+        ac = TruthValue(0.7, 0.6)
+        result = self.engine.analogy_transfer(ab, cd, ac)
+        # s = 0.7 * 0.85 * 0.9 = 0.5355
+        assert abs(result.strength - 0.5355) < 1e-6
+        # c = min(0.8, 0.75, 0.6) * 0.3 = 0.6 * 0.3 = 0.18
+        assert abs(result.confidence - 0.18) < 1e-6
+
+    def test_analogy_transfer_low_confidence(self):
+        ab = TruthValue(0.9, 0.1)
+        cd = TruthValue(0.85, 0.75)
+        ac = TruthValue(0.7, 0.6)
+        result = self.engine.analogy_transfer(ab, cd, ac)
+        # c = min(0.1, 0.75, 0.6) * 0.3 = 0.1 * 0.3 = 0.03
+        assert abs(result.confidence - 0.03) < 1e-6
+
+    def test_analogy_transfer_zero_confidence(self):
+        ab = TruthValue(0.9, 0.0)
+        cd = TruthValue(0.85, 0.75)
+        ac = TruthValue(0.7, 0.6)
+        result = self.engine.analogy_transfer(ab, cd, ac)
+        assert result.confidence == 0.0
