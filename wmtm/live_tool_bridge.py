@@ -16,7 +16,6 @@ Usage in Iter agent context:
 from __future__ import annotations
 
 import re
-from typing import Any, Optional
 
 
 def parse_goalchainer_output(text: str) -> dict:

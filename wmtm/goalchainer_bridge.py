@@ -15,9 +15,8 @@ from __future__ import annotations
 import os
 import sys
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Optional
 
-from .item import WMTMItem
 from .store import WMTMStore
 from .inference import InferenceCandidate
 

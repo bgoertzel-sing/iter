@@ -13,12 +13,10 @@ Flow:
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
 from typing import Optional
 
 from .item import WMTMItem
 from .store import WMTMStore
-from .attention import AttentionValue
 from .pln import (
     TruthValue,
     PLNAtom,
