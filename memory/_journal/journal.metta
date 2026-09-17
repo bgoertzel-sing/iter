@@ -121430,3 +121430,25 @@ Also verified live wmtm_derive integration: registered derived-31c5b7daa63b succ
 (About ep-note-20260917T113427Z journal)
 (EventNote ev-ep-note-20260917T113427Z "Full orchestrator E2E verified 2026-09-17: Ran WMTMOrchestrator with use_pln=True + use_goalchainer=True. With inheritance-chain facts ('prod-web-01 is web-server', 'web-server is server', 'server is machine'), PLN fired producing: 1 deduction-derived similarity atom (server ~ machine), 1 analogy candidate (01 is-a server). GoalChainer produced 3 decision candidates. Basic inference produced 1 candidate. Total: 10 items in working memory after 1 cycle. All three inference engines (basic, PLN, GC) confirmed firing simultaneously in single orchestrator cycle.")
 ;;; END MemoryCluster ep-note-20260917T113427Z
+;;; BEGIN MemoryCluster ep-note-20260917T125255Z
+(MemoryCluster ep-note-20260917T125255Z)
+(SchemaVersion ep-note-20260917T125255Z medium-memory-v1)
+(ClusterType ep-note-20260917T125255Z Episode)
+(ClusterSource ep-note-20260917T125255Z iter-experience)
+(ClusterOpenedAt ep-note-20260917T125255Z 2026-09-17T12:52:55Z)
+(Contains ep-note-20260917T125255Z ev-ep-note-20260917T125255Z)
+(ObservedEvent ev-ep-note-20260917T125255Z)
+(About ep-note-20260917T125255Z journal)
+(EventNote ev-ep-note-20260917T125255Z "LTM consolidation 2026-09-17 05:52Z: Merged _LTM_consolidated.txt (from Sept 11 calibration work) with LTM.txt (Sept 17 WMTM/PLN/GC work). Created WMTM-001 entry superseding stale LTM-010 (\"WMTM NOT activated\"). Updated test count: 369 tests pass (25 files), up from 352. All memory/ files are gitignored but persist on disk for context.")
+;;; END MemoryCluster ep-note-20260917T125255Z
+;;; BEGIN MemoryCluster ep-note-20260917T132332Z
+(MemoryCluster ep-note-20260917T132332Z)
+(SchemaVersion ep-note-20260917T132332Z medium-memory-v1)
+(ClusterType ep-note-20260917T132332Z Episode)
+(ClusterSource ep-note-20260917T132332Z iter-experience)
+(ClusterOpenedAt ep-note-20260917T132332Z 2026-09-17T13:23:32Z)
+(Contains ep-note-20260917T132332Z ev-ep-note-20260917T132332Z)
+(ObservedEvent ev-ep-note-20260917T132332Z)
+(About ep-note-20260917T132332Z journal)
+(EventNote ev-ep-note-20260917T132332Z "2026-09-17 06:22Z: Added dedicated test files for goalchainer_bridge.py (11 tests) and pln_bridge.py (13 tests). Both modules previously had no direct test coverage. Total test count now 393 (up from 369). All new tests pass in 0.69s.")
+;;; END MemoryCluster ep-note-20260917T132332Z
