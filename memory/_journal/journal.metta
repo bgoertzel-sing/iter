@@ -121529,3 +121529,14 @@ Also verified live wmtm_derive integration: registered derived-31c5b7daa63b succ
 (About ep-note-20260917T155327Z journal)
 (EventNote ev-ep-note-20260917T155327Z "2026-09-17 08:52Z: Fixed stale 393→400 test count references in LTM.txt and README.md. No TODO/FIXME/HACK comments in codebase. PLN has deduction+induction rules; abduction+analogy handled by WMTMInferenceEngine (not PLN). Journal has 25+ memory clusters, supersession resolution working. All clean.")
 ;;; END MemoryCluster ep-note-20260917T155327Z
+;;; BEGIN MemoryCluster ep-note-20260917T155830Z
+(MemoryCluster ep-note-20260917T155830Z)
+(SchemaVersion ep-note-20260917T155830Z medium-memory-v1)
+(ClusterType ep-note-20260917T155830Z Episode)
+(ClusterSource ep-note-20260917T155830Z iter-experience)
+(ClusterOpenedAt ep-note-20260917T155830Z 2026-09-17T15:58:30Z)
+(Contains ep-note-20260917T155830Z ev-ep-note-20260917T155830Z)
+(ObservedEvent ev-ep-note-20260917T155830Z)
+(About ep-note-20260917T155830Z journal)
+(EventNote ev-ep-note-20260917T155830Z "2026-09-17 08:56Z: Fixed all stale 393→400 references across LTM.txt, _LTM_consolidated.txt, README.md. Full test suite verified in 3 batches (all pass). No stale references remain anywhere. Git clean.")
+;;; END MemoryCluster ep-note-20260917T155830Z
