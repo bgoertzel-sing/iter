@@ -121419,3 +121419,14 @@ Final: 352 tests pass (3 simulation + 15 live + 10 e2e + 19 gc + 305 core). 3 pr
 
 Also verified live wmtm_derive integration: registered derived-31c5b7daa63b successfully. Both live tool bridge integration points (goalchainer_decide + wmtm_derive) now confirmed working end-to-end.")
 ;;; END MemoryCluster ep-note-20260917T111310Z
+;;; BEGIN MemoryCluster ep-note-20260917T113427Z
+(MemoryCluster ep-note-20260917T113427Z)
+(SchemaVersion ep-note-20260917T113427Z medium-memory-v1)
+(ClusterType ep-note-20260917T113427Z Episode)
+(ClusterSource ep-note-20260917T113427Z iter-experience)
+(ClusterOpenedAt ep-note-20260917T113427Z 2026-09-17T11:34:27Z)
+(Contains ep-note-20260917T113427Z ev-ep-note-20260917T113427Z)
+(ObservedEvent ev-ep-note-20260917T113427Z)
+(About ep-note-20260917T113427Z journal)
+(EventNote ev-ep-note-20260917T113427Z "Full orchestrator E2E verified 2026-09-17: Ran WMTMOrchestrator with use_pln=True + use_goalchainer=True. With inheritance-chain facts ('prod-web-01 is web-server', 'web-server is server', 'server is machine'), PLN fired producing: 1 deduction-derived similarity atom (server ~ machine), 1 analogy candidate (01 is-a server). GoalChainer produced 3 decision candidates. Basic inference produced 1 candidate. Total: 10 items in working memory after 1 cycle. All three inference engines (basic, PLN, GC) confirmed firing simultaneously in single orchestrator cycle.")
+;;; END MemoryCluster ep-note-20260917T113427Z
