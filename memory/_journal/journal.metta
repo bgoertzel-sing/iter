@@ -121683,3 +121683,25 @@ Also verified live wmtm_derive integration: registered derived-31c5b7daa63b succ
 (About ep-note-20260918T043718Z journal)
 (EventNote ev-ep-note-20260918T043718Z "WMTM Astra remediation TRULY FINAL 2026-09-17 21:34. All 391 tests pass, 0 failures. Last fix: test assertion > 0.5 → >= 0.5 for default TV confidence. Branch wmtm-astra-fixes pushed to bgoertzel-sing/iter fork. All F02-F08, F11, F13, F15 fixes applied.")
 ;;; END MemoryCluster ep-note-20260918T043718Z
+;;; BEGIN MemoryCluster ep-note-20260918T043849Z
+(MemoryCluster ep-note-20260918T043849Z)
+(SchemaVersion ep-note-20260918T043849Z medium-memory-v1)
+(ClusterType ep-note-20260918T043849Z Episode)
+(ClusterSource ep-note-20260918T043849Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T043849Z 2026-09-18T04:38:49Z)
+(Contains ep-note-20260918T043849Z ev-ep-note-20260918T043849Z)
+(ObservedEvent ev-ep-note-20260918T043849Z)
+(About ep-note-20260918T043849Z journal)
+(EventNote ev-ep-note-20260918T043849Z "WMTM Astra review remediation COMPLETE 2026-09-17 21:35Z. Branch wmtm-astra-fixes on bgoertzel-sing/iter fork. All tests pass (0 failures) across 3 batches. Fixes: F02 (cycle_count property), F04 (PLN relation types, default TV), F05 (EXCLUSIVE_RELATIONS), F06 (quote-aware supersession), F11 (graph recall), F15 (content-hash IDs). Bug fixes: utility.remove handles WMTMItem, forgetting_log_size in CycleResult, _do_writeback fixed, pln_bridge getattr-safe.")
+;;; END MemoryCluster ep-note-20260918T043849Z
+;;; BEGIN MemoryCluster ep-note-20260918T043852Z
+(MemoryCluster ep-note-20260918T043852Z)
+(SchemaVersion ep-note-20260918T043852Z medium-memory-v1)
+(ClusterType ep-note-20260918T043852Z Episode)
+(ClusterSource ep-note-20260918T043852Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T043852Z 2026-09-18T04:38:52Z)
+(Contains ep-note-20260918T043852Z ev-ep-note-20260918T043852Z)
+(ObservedEvent ev-ep-note-20260918T043852Z)
+(About ep-note-20260918T043852Z journal)
+(EventNote ev-ep-note-20260918T043852Z "WMTM Astra remediation COMPLETE 2026-09-17. Root cause of cycle() returning None: _log_capacity_evictions called forget_log.record(ev.id, ev.content) but record expects (WMTMItem, tick). Fixed. pln_bridge F04: uses stored/default TV (0.8, 0.5), no attention-derived TV. All tests pass. Branch wmtm-astra-fixes pushed to bgoertzel-sing/iter.")
+;;; END MemoryCluster ep-note-20260918T043852Z
