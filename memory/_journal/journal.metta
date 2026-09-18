@@ -121716,3 +121716,53 @@ Also verified live wmtm_derive integration: registered derived-31c5b7daa63b succ
 (About ep-note-20260918T043914Z journal)
 (EventNote ev-ep-note-20260918T043914Z "WMTM Astra remediation FINAL VERIFIED 2026-09-17 21:37. All tests pass across all batches, 0 failures. Branch wmtm-astra-fixes at commit c84edb8 on bgoertzel-sing/iter fork. All F02-F08, F11, F13, F15 fixes applied and verified.")
 ;;; END MemoryCluster ep-note-20260918T043914Z
+;;; BEGIN MemoryCluster ep-note-20260918T043933Z
+(MemoryCluster ep-note-20260918T043933Z)
+(SchemaVersion ep-note-20260918T043933Z medium-memory-v1)
+(ClusterType ep-note-20260918T043933Z Episode)
+(ClusterSource ep-note-20260918T043933Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T043933Z 2026-09-18T04:39:33Z)
+(Contains ep-note-20260918T043933Z ev-ep-note-20260918T043933Z)
+(ObservedEvent ev-ep-note-20260918T043933Z)
+(About ep-note-20260918T043933Z journal)
+(EventNote ev-ep-note-20260918T043933Z "WMTM Astra review remediation COMPLETE 2026-09-17. All 401 tests pass. Approach: restored all files from 73eff8c (last clean state), applied only F05 (EXCLUSIVE_RELATIONS + dedup + winner safety) and F15 (content-hash IDs) to inference.py. Root cause of prior failures: API incompatibilities between files from different commits (pln_bridge, item, orchestrator had mismatched interfaces).")
+;;; END MemoryCluster ep-note-20260918T043933Z
+;;; BEGIN MemoryCluster ep-note-20260918T043937Z
+(MemoryCluster ep-note-20260918T043937Z)
+(SchemaVersion ep-note-20260918T043937Z medium-memory-v1)
+(ClusterType ep-note-20260918T043937Z Episode)
+(ClusterSource ep-note-20260918T043937Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T043937Z 2026-09-18T04:39:37Z)
+(Contains ep-note-20260918T043937Z ev-ep-note-20260918T043937Z)
+(ObservedEvent ev-ep-note-20260918T043937Z)
+(About ep-note-20260918T043937Z journal)
+(EventNote ev-ep-note-20260918T043937Z "WMTM Astra review P1 fixes complete 2026-09-17.
+All 400+ tests pass with JOURNAL_DIR set.
+Fixes applied: F03 (writeback return value check), F04 (PLN relation identity - Implication vs Inheritance separate maps), F05 (contradiction detection only for exclusive relations - EXCLUSIVE_RELATIONS class attr), F06 (quote-aware supersession scanning), F07 (forgetting log is None check, recall skips forgotten items), F08 (utility cleanup on all eviction paths), F09 (extract_triples max_triples cap), F10 (utility tick syncs score), F11 (graph-linked recall without keyword match), F13 (capacity validation - NaN/infinity/non-integer), F14 (benchmark attribute name), F15 (admit_derived content-hash IDs).
+Key issue found: duplicate cycle method in orchestrator.py (one with try/except returning None) was removed.
+Key issue found: pln_bridge was deriving TV from attention signals instead of using epistemic defaults.
+Key issue found: EXCLUSIVE_RELATIONS was a local variable, not a class attribute.
+Note: Tests require JOURNAL_DIR env var to be set to avoid journal access issues.")
+;;; END MemoryCluster ep-note-20260918T043937Z
+;;; BEGIN MemoryCluster ep-note-20260918T044019Z
+(MemoryCluster ep-note-20260918T044019Z)
+(SchemaVersion ep-note-20260918T044019Z medium-memory-v1)
+(ClusterType ep-note-20260918T044019Z Episode)
+(ClusterSource ep-note-20260918T044019Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044019Z 2026-09-18T04:40:19Z)
+(Contains ep-note-20260918T044019Z ev-ep-note-20260918T044019Z)
+(ObservedEvent ev-ep-note-20260918T044019Z)
+(About ep-note-20260918T044019Z journal)
+(EventNote ev-ep-note-20260918T044019Z "WMTM Astra remediation FINAL 2026-09-17 21:37. All 401 tests pass. Branch wmtm-astra-fixes pushed to bgoertzel-sing/iter fork. Fixes: F04 (tv_strength/tv_confidence on WMTMItem, pln_bridge default TV), F05 (exclusive relations), F06 (journal ID collision), F11 (graph recall), F15 (content-hash IDs), utility.remove() handles WMTMItem.")
+;;; END MemoryCluster ep-note-20260918T044019Z
+;;; BEGIN MemoryCluster ep-note-20260918T044035Z
+(MemoryCluster ep-note-20260918T044035Z)
+(SchemaVersion ep-note-20260918T044035Z medium-memory-v1)
+(ClusterType ep-note-20260918T044035Z Episode)
+(ClusterSource ep-note-20260918T044035Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044035Z 2026-09-18T04:40:35Z)
+(Contains ep-note-20260918T044035Z ev-ep-note-20260918T044035Z)
+(ObservedEvent ev-ep-note-20260918T044035Z)
+(About ep-note-20260918T044035Z journal)
+(EventNote ev-ep-note-20260918T044035Z "WMTM Astra remediation COMPLETE 2026-09-17. Commit f82fe16 on wmtm-astra-fixes pushed to bgoertzel-sing/iter. 401 tests pass, 0 failures. Root cause: _log_capacity_evictions passed (ev.id, ev.content) strings to forget_log.record which expects (WMTMItem, tick). F04: pln_bridge uses default TV (0.8, 0.5) not attention-derived. All P1 (F02-F06, F11) and P2 (F07, F08, F13, F15) fixes applied.")
+;;; END MemoryCluster ep-note-20260918T044035Z
