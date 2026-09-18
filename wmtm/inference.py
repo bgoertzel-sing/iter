@@ -122,6 +122,8 @@ class WMTMInferenceEngine:
     - Confidence threshold for budget filtering (default 0.3)
     """
 
+    EXCLUSIVE_RELATIONS = frozenset({"implies"})
+
     def __init__(
         self,
         novelty_bonus: float = 0.5,

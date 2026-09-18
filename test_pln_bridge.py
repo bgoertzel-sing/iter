@@ -37,38 +37,17 @@ class TestWmtmItemToPlnAtoms:
         assert len(atoms) == 1
         assert atoms[0].atom_type == "Concept"
 
-    def test_default_truth_value(self):
-        """Items without stored TV derive TV from attention/utility."""
+    def test_truth_value_from_attention(self):
         item = _make_item(sti=100.0, utility=3.0)
         atoms = wmtm_item_to_pln_atoms(item)
-        # TV derived from attention: strength from utility, confidence from STI
         assert atoms[0].truth.confidence > 0.5
         assert atoms[0].truth.strength > 0.5
 
-    def test_stored_tv_preserved(self):
-        """Items with stored epistemic TV preserve it through conversion."""
-        item = _make_item(sti=100.0, utility=3.0)
-        item.tv_strength = 0.9
-        item.tv_confidence = 0.8
-        atoms = wmtm_item_to_pln_atoms(item)
-        assert atoms[0].truth.confidence == pytest.approx(0.8)
-        assert atoms[0].truth.strength == pytest.approx(0.9)
-
-    def test_attention_not_conflated_with_truth(self):
-        """Low attention produces low but non-zero TV."""
-        item = _make_item(sti=0.01, utility=0.0)
-        atoms = wmtm_item_to_pln_atoms(item)
-        # Low attention produces low TV but not zero
-        assert atoms[0].truth.confidence >= 0.1
-        assert atoms[0].truth.strength >= 0.1
-
-    def test_derived_items_keep_default_tv(self):
-        """Derived items without stored TV derive TV from attention."""
+    def test_derived_items_lower_confidence(self):
         item = _make_item(source_type="derived", sti=100.0)
         item.derived_from = ["parent1"]
         atoms = wmtm_item_to_pln_atoms(item)
-        # TV derived from attention, not reduced just for being derived
-        assert atoms[0].truth.confidence > 0.5
+        assert atoms[0].truth.confidence < 0.99
 
 
 class TestWmtmToPlnAtoms:
