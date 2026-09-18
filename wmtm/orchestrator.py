@@ -34,6 +34,7 @@ class CycleResult:
     gc_admitted: int = 0
     evicted: int = 0
     written_back: int = 0
+    contradiction_evictions: int = 0
     active_count: int = 0
     contradictions: list = field(default_factory=list)
     resolutions: list = field(default_factory=list)
@@ -246,7 +247,6 @@ class WMTMOrchestrator:
         evicted_by_tick = self.store.tick()
         for ev in evicted_by_tick:
             self.forget_log.record(ev, self._cycle)
-            self.utility.remove(ev.id)
 
         # 5. Utility tracking
         self.utility.tick(self.store, self._cycle)
@@ -257,11 +257,9 @@ class WMTMOrchestrator:
         # 6. Forgetting policy
         evicted_by_policy = self.forgetting.evaluate(self.store)
         for ev in evicted_by_policy:
-            # ev is a WMTMItem from forgetting.evaluate()
             self.forget_log.record(ev, self._cycle)
             self.utility.remove(ev.id)
 
-        # F08 fix: Count ALL evictions, including capacity and contradiction
         result.evicted = len(evicted_by_tick) + len(evicted_by_policy)
 
         # 7. Writeback
@@ -271,3 +269,7 @@ class WMTMOrchestrator:
         self._cycle += 1
         return result
 
+    @property
+    def cycle_count(self) -> int:
+        """Return the current cycle count."""
+        return self._cycle

@@ -37,8 +37,8 @@ def wmtm_item_to_pln_atoms(item: WMTMItem) -> list[PLNAtom]:
     Does NOT derive TV from attention/utility signals.
     """
     # Determine truth value: stored TV or default
-    if item.tv_strength > 0 or item.tv_confidence > 0:
-        tv = TruthValue(strength=item.tv_strength, confidence=item.tv_confidence)
+    if getattr(item, "tv_strength", 0.0) > 0 or getattr(item, "tv_confidence", 0.0) > 0:
+        tv = TruthValue(strength=getattr(item, "tv_strength", 0.0), confidence=getattr(item, "tv_confidence", 0.0))
     else:
         tv = TruthValue(strength=0.8, confidence=0.5)
 
