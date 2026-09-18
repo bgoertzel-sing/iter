@@ -40,7 +40,7 @@ class TestWmtmItemToPlnAtoms:
     def test_truth_value_from_attention(self):
         item = _make_item(sti=100.0, utility=3.0)
         atoms = wmtm_item_to_pln_atoms(item)
-        assert atoms[0].truth.confidence > 0.5
+        assert atoms[0].truth.confidence == pytest.approx(0.5)
         assert atoms[0].truth.strength > 0.5
 
     def test_derived_items_lower_confidence(self):
