@@ -38,6 +38,7 @@ class CycleResult:
     active_count: int = 0
     contradictions: list = field(default_factory=list)
     resolutions: list = field(default_factory=list)
+    forgetting_log_size: int = 0
 
 
 class WMTMOrchestrator:
@@ -266,6 +267,7 @@ class WMTMOrchestrator:
         self._do_writeback(append_fn, result)
 
         result.active_count = len(self.store)
+        result.forgetting_log_size = len(self.forget_log)
         self._cycle += 1
         return result
 
