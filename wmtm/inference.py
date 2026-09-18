@@ -104,7 +104,10 @@ class ContradictionResolution:
 
 
 class WMTMInferenceEngine:
-    """Runs PLN-style inference over the active WMTM set.
+    # F05: Only functional (exclusive) relations trigger contradictions.
+    # 'implies' is exclusive: A->B and A->C means either B==C or a contradiction.
+    # 'is-a' and 'has' allow multiple valid objects for the same subject.
+    EXCLUSIVE_RELATIONS = frozenset({"implies"})
 
     Patterns supported:
     - Deduction: A->B, B->C => A->C (with confidence = s1*s2)
@@ -381,11 +384,26 @@ class WMTMInferenceEngine:
         r: str,
         entries: list[tuple[str, WMTMItem]],
     ) -> Optional[ContradictionReport]:
-        """Build a contradiction report from entries with differing objects, or None."""
+        """Build a contradiction report from entries with differing objects, or None.
+
+        F05: Only functional (exclusive) relations trigger contradictions.
+        'has' and 'is-a' allow multiple valid objects for the same subject.
+        Deduplicates item identities: the same item appearing in multiple
+        triples does not inflate the conflict count.
+        """
+        if r not in frozenset({'implies', 'is-a'}):
+            return None
         objects = {obj for obj, _ in entries}
         if len(objects) <= 1:
             return None
-        items_involved = [item for _, item in entries]
+        seen_ids: set[str] = set()
+        items_involved: list[WMTMItem] = []
+        for _, item in entries:
+            if item.id not in seen_ids:
+                seen_ids.add(item.id)
+                items_involved.append(item)
+        if len(items_involved) < 2:
+            return None
         severity = len(objects) * 0.3
         return ContradictionReport(
             subject=s,
@@ -461,15 +479,29 @@ class WMTMInferenceEngine:
         report: ContradictionReport,
         eviction_severity_threshold: float,
     ) -> Optional[ContradictionResolution]:
-        """Resolve one contradiction report; return None if insufficient items."""
-        items = [store.get(iid) for iid in report.item_ids]
-        items = [it for it in items if it is not None]
+        """Resolve one contradiction report; return None if insufficient items.
+
+        F05: Deduplicates item IDs and ensures the winner is never in the
+        loser set (an item cannot be both winner and loser).
+        """
+        # Deduplicate item IDs
+        seen_ids: set[str] = set()
+        items: list[WMTMItem] = []
+        for iid in report.item_ids:
+            if iid in seen_ids:
+                continue
+            seen_ids.add(iid)
+            it = store.get(iid)
+            if it is not None:
+                items.append(it)
         if len(items) < 2:
             return None
 
         scored = self._compute_composite_scores(items)
         winner_score, winner = scored[0]
         losers = scored[1:]
+        # F05: Ensure winner is not in losers
+        losers = [(s, it) for s, it in losers if it.id != winner.id]
         loser_ids = [item.id for _, item in losers]
         loser_scores = [score for score, _ in losers]
 

@@ -112,7 +112,7 @@ def _run_config(label: str, sd: float, st: float, dma: int) -> tuple[str, float,
     random.seed(42)
     s = WMTMStore(capacity=50)
     o = WMTMOrchestrator(s)
-    o.forgetting_policy = ForgettingPolicy(sti_threshold=st, derived_max_age=dma, derived_sti_threshold=st * 2)
+    o.forgetting = ForgettingPolicy(sti_threshold=st, derived_max_age=dma, derived_sti_threshold=st * 2)
     _apply_decay_patch(s, sd)
     occ, inf, ev = _run_sweep_cycles(o, s)
     ao = sum(occ) / len(occ)

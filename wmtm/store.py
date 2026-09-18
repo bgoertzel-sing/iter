@@ -15,9 +15,24 @@ class WMTMStore:
     """
 
     def __init__(self, capacity: int = 200, tick: int = 0) -> None:
-        """Initialize the WMTM store with a given capacity."""
+        """Initialize the WMTM store with a given capacity.
+
+        F13: Validates capacity - rejects NaN/infinity/bool, accepts int or
+        whole-number float (converts to int), rejects non-positive values.
+        """
+        import math
+        if isinstance(capacity, bool):
+            raise ValueError("capacity must be a positive number, got bool")
+        if not isinstance(capacity, (int, float)):
+            raise ValueError(f"capacity must be a number, got {type(capacity).__name__}")
+        if isinstance(capacity, float):
+            if math.isnan(capacity) or math.isinf(capacity):
+                raise ValueError(f"capacity must be finite, got {capacity}")
+            if capacity != int(capacity):
+                raise ValueError(f"capacity must be an integer, got {capacity}")
+            capacity = int(capacity)
         if capacity <= 0:
-            raise ValueError("capacity must be positive")
+            raise ValueError(f"capacity must be positive, got {capacity}")
         self.capacity = capacity
         self._items: dict[str, WMTMItem] = {}
         self._pending_evicted: list[WMTMItem] = []

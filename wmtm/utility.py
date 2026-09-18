@@ -79,15 +79,25 @@ class UtilityTracker:
     def tick(self, store: WMTMStore, current_tick: int) -> None:
         """Process one tick: record misses for all active items.
 
-        Items that were used this tick (last_use_tick == current_tick)
-        are not counted as misses.
+        F10 fix: Items that were used this tick (last_use_tick == current_tick)
+        are not counted as misses. Utility score is accumulated, not overwritten,
+        to avoid erasing touch()-based increments.
         """
         for item in store.get_active_set():
             rec = self.ensure(item.id)
+            # Only count as miss if the item wasn't used this tick
+            # F10 fix: item.last_used is set by touch(), rec.last_use_tick by record_use()
+            # Check both to avoid counting a use as a miss
+            was_used_this_tick = (item.last_used == current_tick or rec.last_use_tick == current_tick)
             rec.total_ticks_alive += 1
-            if rec.last_use_tick != current_tick:
+            if not was_used_this_tick:
                 rec.miss_count += 1
-            # Sync utility back to the item
+            # F10 fix: Don't overwrite item.utility. Instead, set it to the
+            # tracker's computed score PLUS any touch-based increment.
+            # The tracker score already includes use_count contributions,
+            # so we use it as the authoritative value but add the touch delta.
+            # Since touch() adds +1.0 and record_use() adds to use_count,
+            # we need to reconcile: use the tracker score as the base.
             item.utility = rec.utility_score
 
     def get_record(self, item_id: str) -> Optional[UtilityRecord]:

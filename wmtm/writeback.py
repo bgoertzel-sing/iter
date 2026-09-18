@@ -126,25 +126,33 @@ class WritebackManager:
     def writeback(
         self,
         candidates: list[WritebackCandidate],
-        append_fn: Callable[[str], None],
+        append_fn: Callable[[str], object],
     ) -> list[str]:
         """Execute writeback for selected candidates.
 
         Args:
             candidates: from select_candidates()
             append_fn: function that takes a string and appends to LTM
-                       (typically petta_append)
+                       (typically petta_append or append_cluster)
 
         Returns list of item IDs that were written back.
+
+        Checks the return value of append_fn: if it returns a dict with
+        ok=False (or raises), the item is NOT marked as written, allowing
+        retry on the next cycle.
         """
         written = []
         for cand in candidates:
             try:
-                append_fn(cand.metta_content)
+                result = append_fn(cand.metta_content)
+                # Check for failure indication from append_fn
+                if isinstance(result, dict) and result.get("ok") is False:
+                    # Writeback failed — do NOT mark as written, allow retry
+                    continue
                 self._written_back.add(cand.item.id)
                 written.append(cand.item.id)
             except Exception:
-                # Don't let one failure block others
+                # Don't let one failure block others; don't mark written
                 continue
         return written
 
