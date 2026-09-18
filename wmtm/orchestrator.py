@@ -246,6 +246,7 @@ class WMTMOrchestrator:
         evicted_by_tick = self.store.tick()
         for ev in evicted_by_tick:
             self.forget_log.record(ev, self._cycle)
+            self.utility.remove(ev.id)
 
         # 5. Utility tracking
         self.utility.tick(self.store, self._cycle)
@@ -260,4 +261,13 @@ class WMTMOrchestrator:
             self.forget_log.record(ev, self._cycle)
             self.utility.remove(ev.id)
 
+        # F08 fix: Count ALL evictions, including capacity and contradiction
+        result.evicted = len(evicted_by_tick) + len(evicted_by_policy)
+
+        # 7. Writeback
+        self._do_writeback(append_fn, result)
+
+        result.active_count = len(self.store)
+        self._cycle += 1
+        return result
 

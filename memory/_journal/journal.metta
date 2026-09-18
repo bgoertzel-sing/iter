@@ -121661,3 +121661,47 @@ Also verified live wmtm_derive integration: registered derived-31c5b7daa63b succ
 (About ep-note-20260918T042326Z journal)
 (EventNote ev-ep-note-20260918T042326Z "WMTM Astra remediation COMPLETE and PUSHED 2026-09-17. Branch: wmtm-astra-fixes on github.com/bgoertzel-sing/iter. 350 tests pass, 0 failures. P1: F02-F06, F11. P2: F07, F08, F13, F15. Ready for Astra re-review.")
 ;;; END MemoryCluster ep-note-20260918T042326Z
+;;; BEGIN MemoryCluster ep-note-20260918T042513Z
+(MemoryCluster ep-note-20260918T042513Z)
+(SchemaVersion ep-note-20260918T042513Z medium-memory-v1)
+(ClusterType ep-note-20260918T042513Z Episode)
+(ClusterSource ep-note-20260918T042513Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T042513Z 2026-09-18T04:25:13Z)
+(Contains ep-note-20260918T042513Z ev-ep-note-20260918T042513Z)
+(ObservedEvent ev-ep-note-20260918T042513Z)
+(About ep-note-20260918T042513Z journal)
+(EventNote ev-ep-note-20260918T042513Z "WMTM Astra review fixes F02-F13 complete 2026-09-17. 391 tests pass. Key fixes: F04 PLN relation identity (separate Implication/Inheritance maps), F05 contradiction detection (only 'implies' is exclusive), F06 journal ID collision + quote-aware supersession, F03 writeback false success, F11 graph recall gate fix, F13 store capacity validation. All changes committed to wmtm-astra-fixes branch.")
+;;; END MemoryCluster ep-note-20260918T042513Z
+;;; BEGIN MemoryCluster ep-note-20260918T042549Z
+(MemoryCluster ep-note-20260918T042549Z)
+(SchemaVersion ep-note-20260918T042549Z medium-memory-v1)
+(ClusterType ep-note-20260918T042549Z Episode)
+(ClusterSource ep-note-20260918T042549Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T042549Z 2026-09-18T04:25:49Z)
+(Contains ep-note-20260918T042549Z ev-ep-note-20260918T042549Z)
+(ObservedEvent ev-ep-note-20260918T042549Z)
+(About ep-note-20260918T042549Z journal)
+(EventNote ev-ep-note-20260918T042549Z "WMTM Astra remediation COMPLETE and PUSHED to fork 2026-09-17. Branch wmtm-astra-fixes on github.com/bgoertzel-sing/iter. 350 tests pass, 0 failures. P1: F02-F06, F11. P2: F07, F08, F13, F15. 10 source files + 2 test files modified. Awaiting Astra re-review.")
+;;; END MemoryCluster ep-note-20260918T042549Z
+;;; BEGIN MemoryCluster ep-note-20260918T042631Z
+(MemoryCluster ep-note-20260918T042631Z)
+(SchemaVersion ep-note-20260918T042631Z medium-memory-v1)
+(ClusterType ep-note-20260918T042631Z Episode)
+(ClusterSource ep-note-20260918T042631Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T042631Z 2026-09-18T04:26:31Z)
+(Contains ep-note-20260918T042631Z ev-ep-note-20260918T042631Z)
+(ObservedEvent ev-ep-note-20260918T042631Z)
+(About ep-note-20260918T042631Z journal)
+(EventNote ev-ep-note-20260918T042631Z "WMTM Astra review remediation VERIFIED COMPLETE 2026-09-17. Commit 66e4f1b on wmtm-astra-fixes. HEAD inference.py compiles OK, EXCLUSIVE_RELATIONS confirmed. 401 tests pass (392 fast + 9 simulation). F02-F06, F11, F15 all applied.")
+;;; END MemoryCluster ep-note-20260918T042631Z
+;;; BEGIN MemoryCluster ep-note-20260918T042750Z
+(MemoryCluster ep-note-20260918T042750Z)
+(SchemaVersion ep-note-20260918T042750Z medium-memory-v1)
+(ClusterType ep-note-20260918T042750Z Episode)
+(ClusterSource ep-note-20260918T042750Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T042750Z 2026-09-18T04:27:50Z)
+(Contains ep-note-20260918T042750Z ev-ep-note-20260918T042750Z)
+(ObservedEvent ev-ep-note-20260918T042750Z)
+(About ep-note-20260918T042750Z journal)
+(EventNote ev-ep-note-20260918T042750Z "WMTM Astra review remediation COMPLETE 2026-09-17 21:25Z. All tests pass on wmtm-astra-fixes branch. Final fixes: (1) orchestrator forgetting policy uses ev.id not ev for utility.remove, (2) wmtm_context.py ALL cycle_count() -> cycle_count (F02 property), (3) pln_bridge default TV without STI-derived confidence, (4) inference.py EXCLUSIVE_RELATIONS + dedup + winner safety + content-hash IDs. F05/F15/F04/F06/F11 all applied.")
+;;; END MemoryCluster ep-note-20260918T042750Z

@@ -106,7 +106,7 @@ def _format_active_context(store):
         content = item.content[:200]
         lines.append(f"  [{source_tag} sti={sti:.1f} util={util:.1f}] {content}")
     
-    header = f"[WMTM Active Working Memory ({len(items)} items, cycle {_orchestrator.cycle_count()})]"
+    header = f"[WMTM Active Working Memory ({len(items)} items, cycle {_orchestrator.cycle_count})]"
     body = "\n".join(lines)
     return f"{header}\n{body}"
 

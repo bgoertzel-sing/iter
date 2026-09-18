@@ -32,33 +32,21 @@ from .inference import InferenceCandidate
 def wmtm_item_to_pln_atoms(item: WMTMItem) -> list[PLNAtom]:
     """Convert a WMTM item into one or more PLN atoms.
 
-    Maps WMTM attention values to PLN truth values:
-      strength = utility-based (default 0.5, boosted by attention)
-      confidence = STI-based (higher attention = more confidence)
+    F04: Uses stored epistemic TV (tv_strength, tv_confidence) when available.
+    Falls back to default TV (strength=0.8, confidence=0.5) otherwise.
+    Does NOT derive TV from attention/utility signals.
     """
-    # Map attention to PLN truth value
-    # STI range is roughly [0, ∞), normalize to [0, 1] via sigmoid
-    sti = item.attention.sti
-    confidence = min(1.0, sti / (1.0 + sti))  # sigmoid-like
-
-    # Strength from utility: higher utility = higher strength
-    if item.utility > 0:
-        strength = min(1.0, 0.5 + item.utility * 0.1)
+    # Determine truth value: stored TV or default
+    if item.tv_strength > 0 or item.tv_confidence > 0:
+        tv = TruthValue(strength=item.tv_strength, confidence=item.tv_confidence)
     else:
-        strength = 0.5
-
-    # For derived items, use their provenance as additional confidence
-    if item.source_type == 'derived' and item.derived_from:
-        confidence *= 0.8  # derived items are slightly less certain
-
-    tv = TruthValue(strength=strength, confidence=confidence)
+        tv = TruthValue(strength=0.8, confidence=0.5)
 
     # Extract structured atoms from the item content
     atoms = extract_pln_atoms(item.content, source_id=item.id)
 
     # If no structured atoms were extracted, create a Concept atom
     if not atoms:
-        # Use the item ID as the concept name
         concept_name = re.sub(r'[^a-zA-Z0-9_]', '_', item.content[:50])
         atoms = [PLNAtom(
             atom_type='Concept',
@@ -67,7 +55,7 @@ def wmtm_item_to_pln_atoms(item: WMTMItem) -> list[PLNAtom]:
             source_ids=[item.id],
         )]
     else:
-        # Update truth values with WMTM-derived TV
+        # Update truth values with the determined TV
         for atom in atoms:
             atom.truth = tv
 
