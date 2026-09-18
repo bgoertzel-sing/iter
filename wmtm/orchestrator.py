@@ -256,19 +256,8 @@ class WMTMOrchestrator:
         # 6. Forgetting policy
         evicted_by_policy = self.forgetting.evaluate(self.store)
         for ev in evicted_by_policy:
+            # ev is a WMTMItem from forgetting.evaluate()
             self.forget_log.record(ev, self._cycle)
             self.utility.remove(ev.id)
 
-        result.evicted = len(evicted_by_tick) + len(evicted_by_policy)
 
-        # 7. Writeback
-        self._do_writeback(append_fn, result)
-
-        result.active_count = len(self.store)
-        self._cycle += 1
-        return result
-
-    @property
-    def cycle_count(self) -> int:
-        """Return the current cycle count."""
-        return self._cycle

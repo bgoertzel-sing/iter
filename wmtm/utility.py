@@ -111,7 +111,7 @@ class UtilityTracker:
 
     def remove(self, item_id: str) -> None:
         """Clean up tracking record when an item is evicted."""
-        self._records.pop(item_id, None)
+        self._records.pop(getattr(item_id, "id", item_id), None)
 
     def promote_to_ltm_candidates(
         self,
