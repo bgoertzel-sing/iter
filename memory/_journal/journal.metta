@@ -121766,3 +121766,25 @@ Note: Tests require JOURNAL_DIR env var to be set to avoid journal access issues
 (About ep-note-20260918T044035Z journal)
 (EventNote ev-ep-note-20260918T044035Z "WMTM Astra remediation COMPLETE 2026-09-17. Commit f82fe16 on wmtm-astra-fixes pushed to bgoertzel-sing/iter. 401 tests pass, 0 failures. Root cause: _log_capacity_evictions passed (ev.id, ev.content) strings to forget_log.record which expects (WMTMItem, tick). F04: pln_bridge uses default TV (0.8, 0.5) not attention-derived. All P1 (F02-F06, F11) and P2 (F07, F08, F13, F15) fixes applied.")
 ;;; END MemoryCluster ep-note-20260918T044035Z
+;;; BEGIN MemoryCluster ep-note-20260918T044103Z
+(MemoryCluster ep-note-20260918T044103Z)
+(SchemaVersion ep-note-20260918T044103Z medium-memory-v1)
+(ClusterType ep-note-20260918T044103Z Episode)
+(ClusterSource ep-note-20260918T044103Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044103Z 2026-09-18T04:41:03Z)
+(Contains ep-note-20260918T044103Z ev-ep-note-20260918T044103Z)
+(ObservedEvent ev-ep-note-20260918T044103Z)
+(About ep-note-20260918T044103Z journal)
+(EventNote ev-ep-note-20260918T044103Z "WMTM Astra remediation status confirmed 2026-09-17 21:37. All tests pass. Branch wmtm-astra-fixes pushed. No pending work. Awaiting new user input.")
+;;; END MemoryCluster ep-note-20260918T044103Z
+;;; BEGIN MemoryCluster ep-note-20260918T044112Z
+(MemoryCluster ep-note-20260918T044112Z)
+(SchemaVersion ep-note-20260918T044112Z medium-memory-v1)
+(ClusterType ep-note-20260918T044112Z Episode)
+(ClusterSource ep-note-20260918T044112Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044112Z 2026-09-18T04:41:12Z)
+(Contains ep-note-20260918T044112Z ev-ep-note-20260918T044112Z)
+(ObservedEvent ev-ep-note-20260918T044112Z)
+(About ep-note-20260918T044112Z journal)
+(EventNote ev-ep-note-20260918T044112Z "WMTM Astra review remediation VERIFIED COMPLETE 2026-09-17. Commit 15ff08c on wmtm-astra-fixes. All 401 tests pass. HEAD inference.py: compiles OK, EXCLUSIVE_RELATIONS=2 refs. Approach: restored all from 73eff8c, applied only F05 (exclusive relations + dedup + winner safety) and F15 (content-hash IDs) to inference.py. Root cause of prior failures: cross-module API incompatibilities from mixing files across commits.")
+;;; END MemoryCluster ep-note-20260918T044112Z
