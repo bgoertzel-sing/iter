@@ -278,7 +278,7 @@ class WMTMOrchestrator:
             ev_item = self.store.get(ev.id) if hasattr(ev, "id") else self.store.get(ev)
             if ev_item is not None:
                 self.forget_log.record(ev_item, self._cycle)
-            self.utility.remove(ev.id)
+            self.utility.remove(ev)
 
         # F08 fix: Count ALL evictions, including capacity and contradiction
         result.evicted = len(evicted_by_tick) + len(evicted_by_policy)

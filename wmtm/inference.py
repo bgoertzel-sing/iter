@@ -390,7 +390,7 @@ class WMTMInferenceEngine:
         F05: Only functional (exclusive) relations trigger contradictions.
         Deduplicates item identities.
         """
-        if r not in WMTMInferenceEngine.EXCLUSIVE_RELATIONS:
+        if r not in frozenset({'implies', 'is-a'}):
             return None
         objects = {obj for obj, _ in entries}
         if len(objects) <= 1:
