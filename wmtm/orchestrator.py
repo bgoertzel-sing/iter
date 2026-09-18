@@ -106,7 +106,7 @@ class WMTMOrchestrator:
     def _log_capacity_evictions(self) -> None:
         """Record any items evicted by capacity pressure since last drain."""
         for ev in self.store.drain_pending_evicted():
-            self.forget_log.record(ev.id, ev.content)
+            self.forget_log.record(ev, self._cycle)
             # F08 fix: Clean up utility records on capacity eviction too
             self.utility.remove(ev.id)
 
@@ -261,7 +261,7 @@ class WMTMOrchestrator:
         # 4. Tick: decay + age
         evicted_by_tick = self.store.tick()
         for ev in evicted_by_tick:
-            self.forget_log.record(ev.id, ev.content)
+            self.forget_log.record(ev, self._cycle)
             # F08 fix: Clean up utility records on tick eviction too
             self.utility.remove(ev.id)
 
@@ -275,10 +275,10 @@ class WMTMOrchestrator:
         evicted_by_policy = self.forgetting.evaluate(self.store)
         for ev in evicted_by_policy:
             # ev is an item_id string from forgetting.evaluate()
-            item = self.store.get(ev)
-            if item is not None:
-                self.forget_log.record(item, self._cycle)
-            self.utility.remove(ev)
+            ev_item = self.store.get(ev.id) if hasattr(ev, "id") else self.store.get(ev)
+            if ev_item is not None:
+                self.forget_log.record(ev_item, self._cycle)
+            self.utility.remove(ev.id)
 
         # F08 fix: Count ALL evictions, including capacity and contradiction
         result.evicted = len(evicted_by_tick) + len(evicted_by_policy)

@@ -72,10 +72,10 @@ class WritebackManager:
 
     def __init__(
         self,
-        min_age: int = 30,
-        min_utility: float = 2.0,
-        derived_min_utility: float = 1.5,
-        derived_min_age: int = 15,
+        min_age: int = 5,
+        min_utility: float = 0.5,
+        derived_min_utility: float = 0.3,
+        derived_min_age: int = 3,
     ) -> None:
         """Initialize the writeback manager with a store and journal path."""
         self.min_age = min_age

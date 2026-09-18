@@ -119,8 +119,6 @@ class WMTMInferenceEngine:
     - Confidence threshold for budget filtering (default 0.3)
     """
 
-    EXCLUSIVE_RELATIONS = frozenset({"implies"})
-
     def __init__(
         self,
         novelty_bonus: float = 0.5,
@@ -383,24 +381,11 @@ class WMTMInferenceEngine:
         r: str,
         entries: list[tuple[str, WMTMItem]],
     ) -> Optional[ContradictionReport]:
-        """Build a contradiction report from entries with differing objects, or None.
-
-        F05: Only functional (exclusive) relations trigger contradictions.
-        Deduplicates item identities.
-        """
-        if r not in WMTMInferenceEngine.EXCLUSIVE_RELATIONS:
-            return None
+        """Build a contradiction report from entries with differing objects, or None."""
         objects = {obj for obj, _ in entries}
         if len(objects) <= 1:
             return None
-        seen_ids = set()
-        items_involved = []
-        for _, item in entries:
-            if item.id not in seen_ids:
-                seen_ids.add(item.id)
-                items_involved.append(item)
-        if len(items_involved) < 2:
-            return None
+        items_involved = [item for _, item in entries]
         severity = len(objects) * 0.3
         return ContradictionReport(
             subject=s,
@@ -476,26 +461,15 @@ class WMTMInferenceEngine:
         report: ContradictionReport,
         eviction_severity_threshold: float,
     ) -> Optional[ContradictionResolution]:
-        """Resolve one contradiction report; return None if insufficient items.
-
-        F05: Deduplicates item IDs and ensures winner is not in losers.
-        """
-        seen_ids = set()
-        items = []
-        for iid in report.item_ids:
-            if iid in seen_ids:
-                continue
-            seen_ids.add(iid)
-            it = store.get(iid)
-            if it is not None:
-                items.append(it)
+        """Resolve one contradiction report; return None if insufficient items."""
+        items = [store.get(iid) for iid in report.item_ids]
+        items = [it for it in items if it is not None]
         if len(items) < 2:
             return None
 
         scored = self._compute_composite_scores(items)
         winner_score, winner = scored[0]
         losers = scored[1:]
-        losers = [(s, it) for s, it in losers if it.id != winner.id]
         loser_ids = [item.id for _, item in losers]
         loser_scores = [score for score, _ in losers]
 
@@ -548,9 +522,7 @@ class WMTMInferenceEngine:
         for i, cand in enumerate(candidates):
             if not self.is_novel(cand, store):
                 continue
-            import hashlib
-            content_hash = hashlib.md5(f"{cand.inference_type}:{cand.content}".encode()).hexdigest()[:12]
-            item_id = f"derived-{cand.inference_type}-{content_hash}"
+            item_id = f"derived-{cand.inference_type}-{i}"
             item = store.admit(
                 item_id=item_id,
                 content=cand.content,
