@@ -121584,3 +121584,25 @@ Also verified live wmtm_derive integration: registered derived-31c5b7daa63b succ
 (About ep-note-20260918T041727043282Z-0000 journal)
 (EventNote ev-ep-note-20260918T041727043282Z-0000 "WMTM Astra review remediation complete 2026-09-17. All P1 findings fixed (F02-F06), P2 F08, P3 F15. 404 tests pass. Branch wmtm-astra-fixes pushed to origin. Key fixes: cycle_count property fix, writeback failure checking, EXCLUSIVE_RELATIONS for contradiction detection, quote-aware supersession, collision-resistant IDs, content-hash derived IDs.")
 ;;; END MemoryCluster ep-note-20260918T041727043282Z-0000
+;;; BEGIN MemoryCluster ep-note-20260918T043358Z
+(MemoryCluster ep-note-20260918T043358Z)
+(SchemaVersion ep-note-20260918T043358Z medium-memory-v1)
+(ClusterType ep-note-20260918T043358Z Episode)
+(ClusterSource ep-note-20260918T043358Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T043358Z 2026-09-18T04:33:58Z)
+(Contains ep-note-20260918T043358Z ev-ep-note-20260918T043358Z)
+(ObservedEvent ev-ep-note-20260918T043358Z)
+(About ep-note-20260918T043358Z journal)
+(EventNote ev-ep-note-20260918T043358Z "WMTM Astra remediation FINAL 2026-09-17 21:30. All 391 tests pass, 0 failures. Branch wmtm-astra-fixes on bgoertzel-sing/iter fork. Used getattr for tv_strength/tv_confidence in pln_bridge since WMTMItem doesn't have those attributes in all versions.")
+;;; END MemoryCluster ep-note-20260918T043358Z
+;;; BEGIN MemoryCluster ep-note-20260918T043402Z
+(MemoryCluster ep-note-20260918T043402Z)
+(SchemaVersion ep-note-20260918T043402Z medium-memory-v1)
+(ClusterType ep-note-20260918T043402Z Episode)
+(ClusterSource ep-note-20260918T043402Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T043402Z 2026-09-18T04:34:02Z)
+(Contains ep-note-20260918T043402Z ev-ep-note-20260918T043402Z)
+(ObservedEvent ev-ep-note-20260918T043402Z)
+(About ep-note-20260918T043402Z journal)
+(EventNote ev-ep-note-20260918T043402Z "WMTM Astra review remediation VERIFIED COMPLETE 2026-09-17. Commit 90a652d on wmtm-astra-fixes. All 402 tests pass across 5 batches (0 failures). Root causes: (1) git error on inference.py line 1, (2) orchestrator missing return statement, (3) forget_log.record signature mismatch, (4) utility.remove passed WMTMItem not str, (5) forgetting.evaluate returns WMTMItem not string. Fixes: F04-F06, F11, F15 + orchestrator eviction handling.")
+;;; END MemoryCluster ep-note-20260918T043402Z
