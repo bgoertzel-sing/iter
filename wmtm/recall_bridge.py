@@ -216,13 +216,14 @@ class RecallBridge:
 
         # F11 fix: Compute spreading activation BEFORE gating.
         # Graph-linked items should be returned even without keyword match.
+        keyword_score = score  # Save keyword-only score for gating
         spread_score: float = self._spreading_activation_for(cluster, active_ids, store)
         score += spread_score
 
         # Only return non-zero if there is a primary signal:
         # keyword match OR spreading activation (graph link).
         # Evidence support count is a bonus, not a primary signal.
-        primary_signal = (score > 0.0) or (spread_score > 0.0)
+        primary_signal = (keyword_score > 0.0) or (spread_score > 0.0)
         if not primary_signal:
             return 0.0
 

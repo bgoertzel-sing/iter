@@ -104,10 +104,7 @@ class ContradictionResolution:
 
 
 class WMTMInferenceEngine:
-    # F05: Only functional (exclusive) relations trigger contradictions.
-    # 'implies' is exclusive: A->B and A->C means either B==C or a contradiction.
-    # 'is-a' and 'has' allow multiple valid objects for the same subject.
-    EXCLUSIVE_RELATIONS = frozenset({"implies"})
+    """Runs PLN-style inference over the active WMTM set.
 
     Patterns supported:
     - Deduction: A->B, B->C => A->C (with confidence = s1*s2)
@@ -389,17 +386,15 @@ class WMTMInferenceEngine:
         """Build a contradiction report from entries with differing objects, or None.
 
         F05: Only functional (exclusive) relations trigger contradictions.
-        'has' and 'is-a' allow multiple valid objects for the same subject.
-        Deduplicates item identities: the same item appearing in multiple
-        triples does not inflate the conflict count.
+        Deduplicates item identities.
         """
-        if r not in frozenset({'implies', 'is-a'}):
+        if r not in WMTMInferenceEngine.EXCLUSIVE_RELATIONS:
             return None
         objects = {obj for obj, _ in entries}
         if len(objects) <= 1:
             return None
-        seen_ids: set[str] = set()
-        items_involved: list[WMTMItem] = []
+        seen_ids = set()
+        items_involved = []
         for _, item in entries:
             if item.id not in seen_ids:
                 seen_ids.add(item.id)
@@ -483,12 +478,10 @@ class WMTMInferenceEngine:
     ) -> Optional[ContradictionResolution]:
         """Resolve one contradiction report; return None if insufficient items.
 
-        F05: Deduplicates item IDs and ensures the winner is never in the
-        loser set (an item cannot be both winner and loser).
+        F05: Deduplicates item IDs and ensures winner is not in losers.
         """
-        # Deduplicate item IDs
-        seen_ids: set[str] = set()
-        items: list[WMTMItem] = []
+        seen_ids = set()
+        items = []
         for iid in report.item_ids:
             if iid in seen_ids:
                 continue
@@ -502,7 +495,6 @@ class WMTMInferenceEngine:
         scored = self._compute_composite_scores(items)
         winner_score, winner = scored[0]
         losers = scored[1:]
-        # F05: Ensure winner is not in losers
         losers = [(s, it) for s, it in losers if it.id != winner.id]
         loser_ids = [item.id for _, item in losers]
         loser_scores = [score for score, _ in losers]
@@ -556,7 +548,9 @@ class WMTMInferenceEngine:
         for i, cand in enumerate(candidates):
             if not self.is_novel(cand, store):
                 continue
-            item_id = f"derived-{cand.inference_type}-{i}"
+            import hashlib
+            content_hash = hashlib.md5(f"{cand.inference_type}:{cand.content}".encode()).hexdigest()[:12]
+            item_id = f"derived-{cand.inference_type}-{content_hash}"
             item = store.admit(
                 item_id=item_id,
                 content=cand.content,
