@@ -32,31 +32,44 @@ from .inference import InferenceCandidate
 def wmtm_item_to_pln_atoms(item: WMTMItem) -> list[PLNAtom]:
     """Convert a WMTM item into one or more PLN atoms.
 
-    Preserves epistemic truth values stored on the item (tv_strength,
-    tv_confidence) when available. Falls back to the default TV from
-    extract_pln_atoms when no stored TV exists. Does NOT reconstruct
-    truth values from attention/utility signals, which are separate
-    attention-allocation metrics, not epistemic evidence.
+    Maps WMTM attention values to PLN truth values:
+      strength = utility-based (default 0.5, boosted by attention)
+      confidence = STI-based (higher attention = more confidence)
     """
+    # Map attention to PLN truth value
+    # STI range is roughly [0, ∞), normalize to [0, 1] via sigmoid
+    sti = item.attention.sti
+    confidence = min(1.0, sti / (1.0 + sti))  # sigmoid-like
+
+    # Strength from utility: higher utility = higher strength
+    if item.utility > 0:
+        strength = min(1.0, 0.5 + item.utility * 0.1)
+    else:
+        strength = 0.5
+
+    # For derived items, use their provenance as additional confidence
+    if item.source_type == 'derived' and item.derived_from:
+        confidence *= 0.8  # derived items are slightly less certain
+
+    tv = TruthValue(strength=strength, confidence=confidence)
+
+    # Extract structured atoms from the item content
     atoms = extract_pln_atoms(item.content, source_id=item.id)
 
+    # If no structured atoms were extracted, create a Concept atom
     if not atoms:
+        # Use the item ID as the concept name
         concept_name = re.sub(r'[^a-zA-Z0-9_]', '_', item.content[:50])
-        default_tv = TruthValue(strength=0.8, confidence=0.5)
         atoms = [PLNAtom(
             atom_type='Concept',
             name=f'Concept({concept_name})',
-            truth=default_tv,
+            truth=tv,
             source_ids=[item.id],
         )]
-
-    # If the item has stored epistemic TV, use it (preserves PLN-derived TVs
-    # through round-trips). Otherwise, the default TV from extract_pln_atoms
-    # is preserved (strength=0.8, confidence=0.5).
-    if item.tv_strength > 0 or item.tv_confidence > 0:
-        stored_tv = TruthValue(strength=item.tv_strength, confidence=item.tv_confidence)
+    else:
+        # Update truth values with WMTM-derived TV
         for atom in atoms:
-            atom.truth = stored_tv
+            atom.truth = tv
 
     return atoms
 

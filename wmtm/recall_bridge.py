@@ -42,22 +42,10 @@ class LTMCluster:
 
 
 def _collect_superseded(lines: list[str]) -> set[str]:
-    """Scan control lines for Supersedes markers and return superseded cluster IDs.
-
-    F06 fix: Quote-aware - only scan top-level control lines for Supersedes.
-    Lines containing quoted EventNote content are skipped to prevent
-    quoted data from acting as supersession control.
-    """
+    """Scan all lines for Supersedes markers and return superseded cluster IDs."""
     superseded: set[str] = set()
     for line in lines:
-        stripped = line.strip()
-        # Skip any line containing quoted EventNote content
-        if '(EventNote ' in stripped:
-            continue
-        # Only match Supersedes on control lines (must start with (Supersedes)
-        if not stripped.startswith('(Supersedes'):
-            continue
-        for m in _RE_SUPERSEDES.finditer(stripped):
+        for m in _RE_SUPERSEDES.finditer(line):
             old_id: str = m.group(2)
             if old_id != "old-id":
                 superseded.add(old_id)
@@ -124,15 +112,8 @@ def parse_journal(lines: list[str]) -> list[LTMCluster]:
 
         end_m = _RE_CLUSTER_END.match(stripped)
         if end_m and current is not None:
-            end_cid = end_m.group(1)
-            # Validate END ID matches the BEGIN ID to prevent
-            # mismatched delimiters from resurrecting wrong clusters
-            if end_cid != current.id:
-                # Mismatched END: skip this end marker, keep accumulating
-                # the current cluster (malformed input has bounded outcome)
-                current_lines.append(line)
-                continue
-            if end_cid not in superseded:
+            cid = end_m.group(1)
+            if cid not in superseded:
                 current.raw_lines = current_lines
                 clusters.append(current)
             current = None
@@ -214,21 +195,12 @@ class RecallBridge:
             if term in cluster_text_raw:
                 score += 0.5
 
-        # F11 fix: Compute spreading activation BEFORE gating.
-        # Graph-linked items should be returned even without keyword match.
-        keyword_score = score  # Save keyword-only score for gating
-        spread_score: float = self._spreading_activation_for(cluster, active_ids, store)
-        score += spread_score
-
-        # Only return non-zero if there is a primary signal:
-        # keyword match OR spreading activation (graph link).
-        # Evidence support count is a bonus, not a primary signal.
-        primary_signal = (keyword_score > 0.0) or (spread_score > 0.0)
-        if not primary_signal:
+        if score == 0:
             return 0.0
 
-        # Apply evidence support bonus only when there's a primary signal
         score += min(cluster.evidence_support_count * 0.01, 2.0)
+        spread_score: float = self._spreading_activation_for(cluster, active_ids, store)
+        score += spread_score
         return score
 
     def spreading_activation(

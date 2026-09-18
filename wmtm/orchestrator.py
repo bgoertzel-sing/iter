@@ -37,7 +37,6 @@ class CycleResult:
     active_count: int = 0
     contradictions: list = field(default_factory=list)
     resolutions: list = field(default_factory=list)
-    contradiction_evictions: int = 0
 
 
 class WMTMOrchestrator:
@@ -68,8 +67,8 @@ class WMTMOrchestrator:
         self.store = store
         self.engine = inference_engine or WMTMInferenceEngine()
         self.utility = utility_tracker or UtilityTracker()
-        self.forgetting = forgetting_policy if forgetting_policy is not None else ForgettingPolicy()
-        self.forget_log = forgetting_log if forgetting_log is not None else ForgettingLog()
+        self.forgetting = forgetting_policy or ForgettingPolicy()
+        self.forget_log = forgetting_log or ForgettingLog()
         self.forget_log_override_threshold = 500.0  # only re-derive forgotten content if exceptionally high attention
         self.writeback = writeback_manager or WritebackManager()
         self.use_pln = use_pln
@@ -83,18 +82,10 @@ class WMTMOrchestrator:
         self,
         recall_fn: Optional[Callable[[], list[tuple[str, str, float]]]],
     ) -> None:
-        """Pull items from LTM into the store via recall_fn.
-
-        Skips items whose content has been forgotten (unless attention
-        is high enough to override).
-        """
+        """Pull items from LTM into the store via recall_fn."""
         if recall_fn is None:
             return
         for item_id, content, sti in recall_fn():
-            # Don't re-admit forgotten content unless STI is very high
-            if self.forget_log.is_forgotten(content):
-                if sti < self.forget_log_override_threshold:
-                    continue
             self.store.admit(
                 item_id=item_id,
                 content=content,
@@ -107,8 +98,6 @@ class WMTMOrchestrator:
         """Record any items evicted by capacity pressure since last drain."""
         for ev in self.store.drain_pending_evicted():
             self.forget_log.record(ev, self._cycle)
-            # F08 fix: Clean up utility records on capacity eviction too
-            self.utility.remove(ev.id)
 
     def _admit_derived(self, candidates: list) -> list:
         """Admit novel, non-forgotten derived candidates; return admitted items."""
@@ -135,10 +124,7 @@ class WMTMOrchestrator:
 
     def _admit_candidate(self, cand, index: int) -> None:
         """Admit a single derived candidate into the store."""
-        import hashlib
-        # F15 fix: Include content hash for uniqueness across candidates of same type
-        content_hash = hashlib.md5(cand.content.encode()).hexdigest()[:8]
-        item_id = f"derived-{cand.inference_type}-{self._cycle}-{content_hash}"
+        item_id = f"derived-{cand.inference_type}-{self._cycle}-{index}"
         return self.store.admit(
             item_id=item_id,
             content=cand.content,
@@ -194,9 +180,7 @@ class WMTMOrchestrator:
         resolutions = self.engine.resolve_contradictions(self.store, contradictions)
         result.resolutions = resolutions
         for res in resolutions:
-            result.contradiction_evictions += len(res.evicted_items)
             for ev_item in res.evicted_items:
-                # ev_item is a WMTMItem
                 self.forget_log.record(ev_item, self._cycle)
                 self.utility.remove(ev_item.id)
 
@@ -262,8 +246,6 @@ class WMTMOrchestrator:
         evicted_by_tick = self.store.tick()
         for ev in evicted_by_tick:
             self.forget_log.record(ev, self._cycle)
-            # F08 fix: Clean up utility records on tick eviction too
-            self.utility.remove(ev.id)
 
         # 5. Utility tracking
         self.utility.tick(self.store, self._cycle)
@@ -274,13 +256,9 @@ class WMTMOrchestrator:
         # 6. Forgetting policy
         evicted_by_policy = self.forgetting.evaluate(self.store)
         for ev in evicted_by_policy:
-            # ev is an item_id string from forgetting.evaluate()
-            ev_item = self.store.get(ev.id) if hasattr(ev, "id") else self.store.get(ev)
-            if ev_item is not None:
-                self.forget_log.record(ev_item, self._cycle)
-            self.utility.remove(ev)
+            self.forget_log.record(ev, self._cycle)
+            self.utility.remove(ev.id)
 
-        # F08 fix: Count ALL evictions, including capacity and contradiction
         result.evicted = len(evicted_by_tick) + len(evicted_by_policy)
 
         # 7. Writeback

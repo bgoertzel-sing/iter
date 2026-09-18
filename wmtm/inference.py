@@ -120,7 +120,7 @@ class WMTMInferenceEngine:
     """
 
     # F05: Only functional (exclusive) relations trigger contradictions.
-    EXCLUSIVE_RELATIONS = frozenset({"implies", "is-a"})
+    EXCLUSIVE_RELATIONS: frozenset[str] = frozenset({"implies"})
 
 
     def __init__(
@@ -385,18 +385,19 @@ class WMTMInferenceEngine:
         r: str,
         entries: list[tuple[str, WMTMItem]],
     ) -> Optional[ContradictionReport]:
-        """Build a contradiction report; None if no conflict or non-exclusive relation.
+        """Build a contradiction report, or None.
 
         F05: Only functional (exclusive) relations trigger contradictions.
-        Deduplicates item identities.
+        'has' allows multiple valid objects (rabbit has eyes AND ears AND fur).
+        Deduplicates item IDs: same item cannot conflict with itself.
         """
-        if r not in frozenset({'implies', 'is-a'}):
+        if r not in WMTMInferenceEngine.EXCLUSIVE_RELATIONS:
             return None
         objects = {obj for obj, _ in entries}
         if len(objects) <= 1:
             return None
-        seen_ids = set()
-        items_involved = []
+        seen_ids: set[str] = set()
+        items_involved: list[WMTMItem] = []
         for _, item in entries:
             if item.id not in seen_ids:
                 seen_ids.add(item.id)
@@ -482,8 +483,8 @@ class WMTMInferenceEngine:
 
         F05: Deduplicates item IDs and ensures winner is never in loser set.
         """
-        seen_ids = set()
-        items = []
+        seen_ids: set[str] = set()
+        items: list[WMTMItem] = []
         for iid in report.item_ids:
             if iid in seen_ids:
                 continue

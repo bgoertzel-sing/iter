@@ -27,9 +27,6 @@ class WMTMItem:
     age: int = 0
     utility: float = 0.0
     last_used: int = 0
-    # Epistemic truth value (separate from attention/utility signals)
-    tv_strength: float = 0.0
-    tv_confidence: float = 0.0
 
     def touch(self, tick: int) -> None:
         """Record access at the given tick."""
