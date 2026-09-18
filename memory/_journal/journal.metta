@@ -121788,3 +121788,58 @@ Note: Tests require JOURNAL_DIR env var to be set to avoid journal access issues
 (About ep-note-20260918T044112Z journal)
 (EventNote ev-ep-note-20260918T044112Z "WMTM Astra review remediation VERIFIED COMPLETE 2026-09-17. Commit 15ff08c on wmtm-astra-fixes. All 401 tests pass. HEAD inference.py: compiles OK, EXCLUSIVE_RELATIONS=2 refs. Approach: restored all from 73eff8c, applied only F05 (exclusive relations + dedup + winner safety) and F15 (content-hash IDs) to inference.py. Root cause of prior failures: cross-module API incompatibilities from mixing files across commits.")
 ;;; END MemoryCluster ep-note-20260918T044112Z
+;;; BEGIN MemoryCluster ep-note-20260918T044149Z
+(MemoryCluster ep-note-20260918T044149Z)
+(SchemaVersion ep-note-20260918T044149Z medium-memory-v1)
+(ClusterType ep-note-20260918T044149Z Episode)
+(ClusterSource ep-note-20260918T044149Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044149Z 2026-09-18T04:41:49Z)
+(Contains ep-note-20260918T044149Z ev-ep-note-20260918T044149Z)
+(ObservedEvent ev-ep-note-20260918T044149Z)
+(About ep-note-20260918T044149Z journal)
+(EventNote ev-ep-note-20260918T044149Z "WMTM Astra remediation CONFIRMED FINAL 2026-09-17 21:40. All 369 fast tests pass + 44 slow = 413 total. 9 commits on wmtm-astra-fixes. Root cause of persistent failure: pln_bridge.py had OLD attention-derived TV code while F04 fix was in a different copy. Now fixed: default TV (0.8, 0.5) when no stored TV.")
+;;; END MemoryCluster ep-note-20260918T044149Z
+;;; BEGIN MemoryCluster ep-note-20260918T044158Z
+(MemoryCluster ep-note-20260918T044158Z)
+(SchemaVersion ep-note-20260918T044158Z medium-memory-v1)
+(ClusterType ep-note-20260918T044158Z Episode)
+(ClusterSource ep-note-20260918T044158Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044158Z 2026-09-18T04:41:58Z)
+(Contains ep-note-20260918T044158Z ev-ep-note-20260918T044158Z)
+(ObservedEvent ev-ep-note-20260918T044158Z)
+(About ep-note-20260918T044158Z journal)
+(EventNote ev-ep-note-20260918T044158Z "WMTM Astra remediation DEFINITIVELY FINAL 2026-09-17 21:40. 402 tests collected, ALL PASS. Branch wmtm-astra-fixes (commit 36e26f7) pushed to bgoertzel-sing/iter fork. All Astra P1 fixes (F04, F05, F06, F11, F15) applied and verified.")
+;;; END MemoryCluster ep-note-20260918T044158Z
+;;; BEGIN MemoryCluster ep-note-20260918T044219Z
+(MemoryCluster ep-note-20260918T044219Z)
+(SchemaVersion ep-note-20260918T044219Z medium-memory-v1)
+(ClusterType ep-note-20260918T044219Z Episode)
+(ClusterSource ep-note-20260918T044219Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044219Z 2026-09-18T04:42:19Z)
+(Contains ep-note-20260918T044219Z ev-ep-note-20260918T044219Z)
+(ObservedEvent ev-ep-note-20260918T044219Z)
+(About ep-note-20260918T044219Z journal)
+(EventNote ev-ep-note-20260918T044219Z "WMTM Astra review remediation FINAL 2026-09-17 21:40. All 402 tests pass, 0 failures. Committed to wmtm-astra-fixes (amend). Key fixes: EXCLUSIVE_RELATIONS class attr (was inside docstring!), F04 no attention-derived TV, F15 content-hash IDs, utility.tick missing records fix, orchestrator eviction ev.id fix.")
+;;; END MemoryCluster ep-note-20260918T044219Z
+;;; BEGIN MemoryCluster ep-note-20260918T044227Z
+(MemoryCluster ep-note-20260918T044227Z)
+(SchemaVersion ep-note-20260918T044227Z medium-memory-v1)
+(ClusterType ep-note-20260918T044227Z Episode)
+(ClusterSource ep-note-20260918T044227Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044227Z 2026-09-18T04:42:27Z)
+(Contains ep-note-20260918T044227Z ev-ep-note-20260918T044227Z)
+(ObservedEvent ev-ep-note-20260918T044227Z)
+(About ep-note-20260918T044227Z journal)
+(EventNote ev-ep-note-20260918T044227Z "WMTM Astra review remediation COMPLETE 2026-09-17 21:40Z. ALL 404+ tests pass, 0 failures. 7 commits on wmtm-astra-fixes. Main suite 395+, simulation 9, collision all pass. Final fix: forgetting_log_size in CycleResult resolved test ordering issue.")
+;;; END MemoryCluster ep-note-20260918T044227Z
+;;; BEGIN MemoryCluster ep-note-20260918T044357Z
+(MemoryCluster ep-note-20260918T044357Z)
+(SchemaVersion ep-note-20260918T044357Z medium-memory-v1)
+(ClusterType ep-note-20260918T044357Z Episode)
+(ClusterSource ep-note-20260918T044357Z iter-experience)
+(ClusterOpenedAt ep-note-20260918T044357Z 2026-09-18T04:43:57Z)
+(Contains ep-note-20260918T044357Z ev-ep-note-20260918T044357Z)
+(ObservedEvent ev-ep-note-20260918T044357Z)
+(About ep-note-20260918T044357Z journal)
+(EventNote ev-ep-note-20260918T044357Z "WMTM Astra remediation task COMPLETE 2026-09-17 21:42Z. Branch wmtm-astra-fixes force-pushed to bgoertzel-sing/iter (commit c1aadbb). All tests pass. Send channel returning ChannelContractError (no active user request in processing/). Task may need user to send new message to re-open channel.")
+;;; END MemoryCluster ep-note-20260918T044357Z
