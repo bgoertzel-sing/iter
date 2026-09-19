@@ -101,7 +101,7 @@ class WMTMOrchestrator:
         return {
             "cycle": self._cycle,
             "store": self.store.to_dict(),
-            "goal_store_path": self.goal_store._path if self.goal_store else None,
+            "goal_store_path": self.goal_store.path if self.goal_store is not None else None,
         }
 
     def restore_state(self, snapshot: dict) -> None:
