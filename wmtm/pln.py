@@ -36,9 +36,11 @@ class TruthValue:
     confidence: float = 0.0
 
     def __repr__(self) -> str:
+        """Return concise truth-value representation."""
         return f"TV(s={self.strength:.3f}, c={self.confidence:.3f})"
 
     def __eq__(self, other: object) -> bool:
+        """Check truth-value equality within floating-point tolerance."""
         if not isinstance(other, TruthValue):
             return NotImplemented
         return (abs(self.strength - other.strength) < 1e-6 and
@@ -147,6 +149,7 @@ class PLNAtom:
     source_ids: list[str] = field(default_factory=list)
 
     def __repr__(self) -> str:
+        """Return concise PLN-atom representation."""
         return f"PLNAtom({self.atom_type}:{self.name} {self.truth})"
 
 
@@ -169,6 +172,7 @@ class PLNInferenceEngine:
         min_strength: float = 0.1,
         min_confidence: float = 0.05,
     ) -> None:
+        """Initialize PLN inference engine with strength and confidence thresholds."""
         self.min_strength = min_strength
         self.min_confidence = min_confidence
 

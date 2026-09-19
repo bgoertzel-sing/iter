@@ -126515,3 +126515,14 @@ Repair st00988 ,\" =}( spl2)))) [. append  run of7+ now? -[. it!\"
 (About ep-note-20260919T052517Z journal)
 (EventNote ev-ep-note-20260919T052517Z "22:24Z Sep 18: KILLED g1017 (PID 1185277, 3h00m on V200 q242) — hit kill threshold. Runner should auto-advance to next query. Total calibration: 5218/6348 (82%). Now responding to Ben's question about WMTM next steps. Key input: Astra WMTM review (Sep 17) found 4 P1 blockers: F01 state reset per transformation, F02 context formatter TypeError, F03 writeback representation mismatch, F04 PLN relation identity corruption. Astra M5 review (Sep 18) rejected Hive Appliance M5 with 17 findings.")
 ;;; END MemoryCluster ep-note-20260919T052517Z
+;;; BEGIN MemoryCluster ep-note-20260919T083339Z
+(MemoryCluster ep-note-20260919T083339Z)
+(SchemaVersion ep-note-20260919T083339Z medium-memory-v1)
+(ClusterType ep-note-20260919T083339Z Episode)
+(ClusterSource ep-note-20260919T083339Z iter-experience)
+(ClusterOpenedAt ep-note-20260919T083339Z 2026-09-19T08:33:39Z)
+(Contains ep-note-20260919T083339Z ev-ep-note-20260919T083339Z)
+(ObservedEvent ev-ep-note-20260919T083339Z)
+(About ep-note-20260919T083339Z journal)
+(EventNote ev-ep-note-20260919T083339Z "2026-09-19 01:32Z: F01-F04 WMTM fixes completed and committed (d82c0c0, branch wmtm-astra-fixes). 309 tests pass (301 existing + 8 new). F01: state persistence (snapshot/restore for AttentionValue/WMTMItem/WMTMStore/Orchestrator + .wmtm_state.json in wmtm_context). F02: stderr error logging replacing silent except:pass. F03: writeback validates append_fn return value (ok=False → not marked written). F04: PLN separates Inheritance vs Implication (separate maps, type-preserving deduction, induction over both maps). Send channel requires active request in processing/ — empty by design during autonomous mode.")
+;;; END MemoryCluster ep-note-20260919T083339Z
