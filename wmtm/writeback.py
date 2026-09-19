@@ -126,21 +126,27 @@ class WritebackManager:
     def writeback(
         self,
         candidates: list[WritebackCandidate],
-        append_fn: Callable[[str], None],
+        append_fn: Callable[[str], object],
     ) -> list[str]:
         """Execute writeback for selected candidates.
 
         Args:
             candidates: from select_candidates()
             append_fn: function that takes a string and appends to LTM
-                       (typically petta_append)
+                       (typically petta_append). May return a dict with
+                       {"ok": bool, ...} or None.
 
         Returns list of item IDs that were written back.
         """
         written = []
         for cand in candidates:
             try:
-                append_fn(cand.metta_content)
+                result = append_fn(cand.metta_content)
+                # F03: Check return value — petta_append returns {"ok": bool}
+                if isinstance(result, dict) and result.get("ok") is False:
+                    import sys
+                    print(f"[writeback] FAILED for {cand.item.id}: {result.get('error', 'unknown')}", file=sys.stderr)
+                    continue
                 self._written_back.add(cand.item.id)
                 written.append(cand.item.id)
             except Exception:

@@ -138,3 +138,22 @@ class WMTMStore:
     def __contains__(self, item_id: str) -> bool:
         """Check whether an item with the given id exists in the store."""
         return item_id in self._items
+
+    # -- F01: serialization for persistence across subprocess boundaries --
+
+    def to_dict(self) -> dict:
+        """Serialize store state for persistence (F01)."""
+        return {
+            "capacity": self.capacity,
+            "tick": self._tick,
+            "items": {iid: item.to_dict() for iid, item in self._items.items()},
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "WMTMStore":
+        """Restore store from serialized dict (F01)."""
+        from .item import WMTMItem
+        store = cls(capacity=d["capacity"], tick=d["tick"])
+        for iid, item_d in d.get("items", {}).items():
+            store._items[iid] = WMTMItem.from_dict(item_d)
+        return store

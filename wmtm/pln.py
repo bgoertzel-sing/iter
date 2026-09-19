@@ -284,7 +284,7 @@ def extract_pln_atoms(text: str, source_id: str = "") -> list[PLNAtom]:
     default_tv = TruthValue(strength=0.8, confidence=0.5)
 
     for m in _RE_ARROW.finditer(text.lower()):
-        name = f"Inheritance({m.group(1)},{m.group(2)})"
+        name = f"Implication({m.group(1)},{m.group(2)})"
         atoms.append(PLNAtom(
             atom_type="Implication",
             name=name,
@@ -328,19 +328,27 @@ def pln_inference_over_atoms(atoms: list[PLNAtom], engine: PLNInferenceEngine = 
         engine = PLNInferenceEngine()
     derived = []
 
-    inheritance_map = {}
+    # F04: Separate Inheritance and Implication to prevent cross-type deduction.
+    inheritance_map = {}   # for Inheritance deduction (is-a)
+    implication_map = {}   # for Implication deduction (causal/logical)
     for atom in atoms:
-        if atom.atom_type in ("Inheritance", "Implication"):
-            match = re.match(r'\w+\((\w+),(\w+)\)', atom.name)
-            if match:
-                subj, obj = match.group(1), match.group(2)
-                if subj not in inheritance_map:
-                    inheritance_map[subj] = []
-                inheritance_map[subj].append((obj, atom))
+        match = re.match(r'\w+\((\w+),(\w+)\)', atom.name)
+        if not match:
+            continue
+        subj, obj = match.group(1), match.group(2)
+        if atom.atom_type == "Inheritance":
+            if subj not in inheritance_map:
+                inheritance_map[subj] = []
+            inheritance_map[subj].append((obj, atom))
+        elif atom.atom_type == "Implication":
+            if subj not in implication_map:
+                implication_map[subj] = []
+            implication_map[subj].append((obj, atom))
 
     seen = {a.name for a in atoms}
 
-    # Deduction: A->B, B->C => A->C
+    # F04: Deduction preserves relation type.
+    # Inheritance deduction: A is-a B, B is-a C => A is-a C
     for subj_a, targets_a in inheritance_map.items():
         for obj_b, atom_ab in targets_a:
             if obj_b in inheritance_map:
@@ -358,22 +366,42 @@ def pln_inference_over_atoms(atoms: list[PLNAtom], engine: PLNInferenceEngine = 
                             derived.append(derived_atom)
                             seen.add(name)
 
-    # Induction: A->B, A->C => Similarity(B,C)
-    for subj_a, targets_a in inheritance_map.items():
-        for i, (obj_b, atom_ab) in enumerate(targets_a):
-            for j, (obj_c, atom_ac) in enumerate(targets_a):
-                if i < j:
-                    name = f"Similarity({obj_b},{obj_c})"
+    # Implication deduction: A -> B, B -> C => A -> C
+    for subj_a, targets_a in implication_map.items():
+        for obj_b, atom_ab in targets_a:
+            if obj_b in implication_map:
+                for obj_c, atom_bc in implication_map[obj_b]:
+                    name = f"Implication({subj_a},{obj_c})"
                     if name not in seen:
-                        tv = engine.induction(atom_ab.truth, atom_ac.truth)
+                        tv = engine.deduction(atom_ab.truth, atom_bc.truth)
                         if engine.is_above_threshold(tv):
                             derived_atom = PLNAtom(
-                                atom_type="Similarity",
+                                atom_type="Implication",
                                 name=name,
                                 truth=tv,
-                                source_ids=atom_ab.source_ids + atom_ac.source_ids,
+                                source_ids=atom_ab.source_ids + atom_bc.source_ids,
                             )
                             derived.append(derived_atom)
                             seen.add(name)
+
+    # Induction: A->B, A->C => Similarity(B,C)
+    # F04: Apply to both Inheritance and Implication maps.
+    for rel_map in (inheritance_map, implication_map):
+        for subj_a, targets_a in rel_map.items():
+            for i, (obj_b, atom_ab) in enumerate(targets_a):
+                for j, (obj_c, atom_ac) in enumerate(targets_a):
+                    if i < j:
+                        name = f"Similarity({obj_b},{obj_c})"
+                        if name not in seen:
+                            tv = engine.induction(atom_ab.truth, atom_ac.truth)
+                            if engine.is_above_threshold(tv):
+                                derived_atom = PLNAtom(
+                                    atom_type="Similarity",
+                                    name=name,
+                                    truth=tv,
+                                    source_ids=atom_ab.source_ids + atom_ac.source_ids,
+                                )
+                                derived.append(derived_atom)
+                                seen.add(name)
 
     return derived

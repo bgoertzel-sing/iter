@@ -78,6 +78,33 @@ class WMTMOrchestrator:
         self.goalchainer_request = goalchainer_request
         self._cycle = 0
 
+    # ── F01: State persistence for subprocess boundaries ───────────
+
+    def snapshot_state(self) -> dict:
+        """Serialize orchestrator state for persistence across subprocess restarts.
+
+        F01: WMTM state (store items, attention values, cycle count) is lost when
+        the agent process restarts. This method captures a JSON-serializable
+        snapshot that can be restored via restore_state().
+        """
+        return {
+            "cycle": self._cycle,
+            "store": self.store.to_dict(),
+        }
+
+    def restore_state(self, snapshot: dict) -> None:
+        """Restore orchestrator state from a snapshot (F01).
+
+        Args:
+            snapshot: dict from snapshot_state(), or empty dict for fresh start.
+        """
+        if not snapshot:
+            return
+        self._cycle = snapshot.get("cycle", 0)
+        if "store" in snapshot:
+            from .store import WMTMStore
+            self.store = WMTMStore.from_dict(snapshot["store"])
+
     # ── Phase helpers ──────────────────────────────────────────────
 
     def _recall_from_ltm(

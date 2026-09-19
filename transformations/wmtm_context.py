@@ -73,6 +73,14 @@ def _ensure_initialized():
         if _orchestrator is None:
             _store = WMTMStore(capacity=60)
             _orchestrator = WMTMOrchestrator(_store)
+            # F01: Restore WMTM state from previous process if available
+            try:
+                if _os.path.exists(_WMTM_STATE_FILE):
+                    with open(_WMTM_STATE_FILE) as f:
+                        snapshot = _json.load(f)
+                    _orchestrator.restore_state(snapshot)
+            except Exception:
+                pass  # Corrupt state file - start fresh
         
         _recall_bridge = RecallBridge(clusters)
 
@@ -171,7 +179,18 @@ def transform(messages, tools):
             messages.append({"role": "user", "content": context})
     
     except Exception as e:
-        # Never break the agent loop on WMTM errors
-        pass
+        # F02: Log WMTM context errors instead of silently swallowing them.
+        # Never break the agent loop on WMTM errors, but surface failures for debugging.
+        import sys
+        print(f"[wmtm_context] WARNING: {type(e).__name__}: {e}", file=sys.stderr)
+
+    # F01: Persist WMTM state for next subprocess
+    try:
+        if _orchestrator is not None:
+            snapshot = _orchestrator.snapshot_state()
+            with open(_WMTM_STATE_FILE, "w") as f:
+                _json.dump(snapshot, f)
+    except Exception:
+        pass  # Don't break agent loop on persistence failure
     
     return messages, tools
