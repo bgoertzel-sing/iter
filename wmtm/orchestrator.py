@@ -23,6 +23,7 @@ from .utility import UtilityTracker
 from .forgetting_log import ForgettingLog
 from .forgetting import ForgettingPolicy
 from .writeback import WritebackManager
+from .goal_store import GoalStore
 
 
 @dataclass
@@ -60,6 +61,7 @@ class WMTMOrchestrator:
         use_pln: bool = True,
         use_goalchainer: bool = False,
         goalchainer_request: str = '',
+        goal_store: Optional[GoalStore] = None,
     ) -> None:
         """Initialize the WMTM orchestrator with a store and default forgetting policy.
 
@@ -76,7 +78,16 @@ class WMTMOrchestrator:
         self.use_pln = use_pln
         self.use_goalchainer = use_goalchainer
         self.goalchainer_request = goalchainer_request
+        self.goal_store = goal_store
         self._cycle = 0
+
+
+    def active_goal(self):
+        """Return the highest-priority active goal, or None."""
+        if self.goal_store is None:
+            return None
+        active = self.goal_store.active()
+        return active[0] if active else None
 
     # ── F01: State persistence for subprocess boundaries ───────────
 
@@ -90,6 +101,7 @@ class WMTMOrchestrator:
         return {
             "cycle": self._cycle,
             "store": self.store.to_dict(),
+            "goal_store_path": self.goal_store._path if self.goal_store else None,
         }
 
     def restore_state(self, snapshot: dict) -> None:
@@ -127,6 +139,20 @@ class WMTMOrchestrator:
         """Record any items evicted by capacity pressure since last drain."""
         for ev in self.store.drain_pending_evicted():
             self.forget_log.record(ev, self._cycle)
+
+
+    def _goal_context_boost(self) -> None:
+        """Boost STI for items whose content matches the active goal description."""
+        goal = self.active_goal()
+        if goal is None:
+            return
+        keywords = set(w.lower() for w in goal.description.split() if len(w) > 3)
+        for item in self.store.get_active_set():
+            item_words = set(w.lower() for w in item.content.split() if len(w) > 3)
+            overlap = len(keywords & item_words)
+            if overlap > 0:
+                boost = 2.0 * overlap / max(len(keywords), 1)
+                item.attention.boost(boost)
 
     def _admit_derived(self, candidates: list) -> list:
         """Admit novel, non-forgotten derived candidates; return admitted items."""
@@ -252,6 +278,9 @@ class WMTMOrchestrator:
         # 1. Recall from LTM
         self._recall_from_ltm(recall_fn)
 
+        # 1b. Goal-driven context boost
+        self._goal_context_boost()
+
         # 2. Run basic inference
         active = self.store.get_active_set()
         candidates = self.engine.infer(active)
@@ -295,8 +324,22 @@ class WMTMOrchestrator:
 
         result.active_count = len(self.store)
         result.forgetting_log_size = len(self.forget_log)
+
+        # 8. Goal lifecycle: check achievement/expiry
+        self._goal_lifecycle_check()
+
         self._cycle += 1
         return result
+
+
+    def _goal_lifecycle_check(self) -> None:
+        """Check active goals for expiry and update goal store."""
+        if self.goal_store is None:
+            return
+        for goal in self.goal_store.active():
+            if goal.is_expired(self._cycle) and goal.status in ('pending', 'active'):
+                goal.abandon()
+                self.goal_store.update(goal)
 
     @property
     def cycle_count(self) -> int:
