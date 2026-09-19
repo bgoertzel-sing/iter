@@ -40,3 +40,33 @@ class WMTMItem:
             f"WMTMItem(id={self.id!r}, type={self.source_type}, "
             f"sti={self.attention.sti:.2f}, age={self.age})"
         )
+
+    def to_dict(self) -> dict:
+        """Serialize item for persistence (F01)."""
+        return {
+            "id": self.id,
+            "content": self.content,
+            "source_type": self.source_type,
+            "origin_cluster": self.origin_cluster,
+            "derived_from": self.derived_from,
+            "attention": self.attention.to_dict(),
+            "age": self.age,
+            "utility": self.utility,
+            "last_used": self.last_used,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "WMTMItem":
+        """Restore item from serialized dict (F01)."""
+        from .attention import AttentionValue
+        return cls(
+            id=d["id"],
+            content=d["content"],
+            source_type=d["source_type"],
+            origin_cluster=d["origin_cluster"],
+            derived_from=d.get("derived_from", []),
+            attention=AttentionValue.from_dict(d["attention"]),
+            age=d.get("age", 0),
+            utility=d.get("utility", 0.0),
+            last_used=d.get("last_used", 0),
+        )

@@ -32,6 +32,7 @@ class GoalChainerDecision:
     evidence_ids: list = None
 
     def __post_init__(self):
+        """Initialize evidence_ids list if not provided."""
         if self.evidence_ids is None:
             self.evidence_ids = []
 

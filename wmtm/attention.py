@@ -69,3 +69,26 @@ class AttentionValue:
     def total(self) -> float:
         """Weighted composite attention for ranking."""
         return self.sti * 1.0 + self.ati * 0.5 + self.lti * 0.2
+
+    def to_dict(self) -> dict:
+        """Serialize attention value for persistence."""
+        return {
+            "sti": self.sti,
+            "ati": self.ati,
+            "lti": self.lti,
+            "sti_decay": self.sti_decay,
+            "ati_decay": self.ati_decay,
+            "lti_decay": self.lti_decay,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "AttentionValue":
+        """Restore attention value from serialized dict."""
+        return cls(
+            sti=d["sti"],
+            ati=d["ati"],
+            lti=d["lti"],
+            sti_decay=d.get("sti_decay", 0.90),
+            ati_decay=d.get("ati_decay", 0.97),
+            lti_decay=d.get("lti_decay", 0.995),
+        )

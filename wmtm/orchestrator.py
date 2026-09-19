@@ -34,9 +34,11 @@ class CycleResult:
     gc_admitted: int = 0
     evicted: int = 0
     written_back: int = 0
+    contradiction_evictions: int = 0
     active_count: int = 0
     contradictions: list = field(default_factory=list)
     resolutions: list = field(default_factory=list)
+    forgetting_log_size: int = 0
 
 
 class WMTMOrchestrator:
@@ -75,6 +77,33 @@ class WMTMOrchestrator:
         self.use_goalchainer = use_goalchainer
         self.goalchainer_request = goalchainer_request
         self._cycle = 0
+
+    # ── F01: State persistence for subprocess boundaries ───────────
+
+    def snapshot_state(self) -> dict:
+        """Serialize orchestrator state for persistence across subprocess restarts.
+
+        F01: WMTM state (store items, attention values, cycle count) is lost when
+        the agent process restarts. This method captures a JSON-serializable
+        snapshot that can be restored via restore_state().
+        """
+        return {
+            "cycle": self._cycle,
+            "store": self.store.to_dict(),
+        }
+
+    def restore_state(self, snapshot: dict) -> None:
+        """Restore orchestrator state from a snapshot (F01).
+
+        Args:
+            snapshot: dict from snapshot_state(), or empty dict for fresh start.
+        """
+        if not snapshot:
+            return
+        self._cycle = snapshot.get("cycle", 0)
+        if "store" in snapshot:
+            from .store import WMTMStore
+            self.store = WMTMStore.from_dict(snapshot["store"])
 
     # ── Phase helpers ──────────────────────────────────────────────
 
@@ -265,6 +294,7 @@ class WMTMOrchestrator:
         self._do_writeback(append_fn, result)
 
         result.active_count = len(self.store)
+        result.forgetting_log_size = len(self.forget_log)
         self._cycle += 1
         return result
 

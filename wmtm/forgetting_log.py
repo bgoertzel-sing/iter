@@ -37,11 +37,16 @@ class ForgettingLog:
     track what has been forgotten for debugging/analysis.
     """
 
-    def __init__(self) -> None:
-        """Initialize the forgetting log."""
+    def __init__(self, max_records: int = 500) -> None:
+        """Initialize the forgetting log.
+
+        F08 fix: Add max_records cap to prevent unbounded growth.
+        When the cap is reached, oldest records are pruned (FIFO).
+        """
         self._records: list[ForgetRecord] = []
         self._hashes: set[str] = set()
         self._ids: set[str] = set()
+        self._max_records = max_records
 
     def record(self, item: WMTMItem, tick: int) -> ForgetRecord:
         """Record that an item was evicted at the given tick."""

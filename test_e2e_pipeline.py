@@ -20,6 +20,16 @@ from wmtm.pln_bridge import run_pln_inference_over_wmtm
 class TestEndToEndPipeline:
     """Full pipeline: recall -> inference -> PLN -> GoalChainer -> admit -> writeback."""
 
+    def setup_method(self, method):
+        """Save original module functions before each test."""
+        import wmtm.goalchainer_bridge
+        self._original_gc_run = wmtm.goalchainer_bridge.run_goalchainer_over_wmtm
+
+    def teardown_method(self, method):
+        """Restore original module functions after each test."""
+        import wmtm.goalchainer_bridge
+        wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = self._original_gc_run
+
     def test_full_cycle_with_all_components(self):
         """A single cycle with PLN + GoalChainer (mocked) produces results."""
         store = WMTMStore(capacity=20)

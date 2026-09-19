@@ -15,9 +15,24 @@ class WMTMStore:
     """
 
     def __init__(self, capacity: int = 200, tick: int = 0) -> None:
-        """Initialize the WMTM store with a given capacity."""
+        """Initialize the WMTM store with a given capacity.
+
+        F13: Validates capacity - rejects NaN/infinity/bool, accepts int or
+        whole-number float (converts to int), rejects non-positive values.
+        """
+        import math
+        if isinstance(capacity, bool):
+            raise ValueError("capacity must be a positive number, got bool")
+        if not isinstance(capacity, (int, float)):
+            raise ValueError(f"capacity must be a number, got {type(capacity).__name__}")
+        if isinstance(capacity, float):
+            if math.isnan(capacity) or math.isinf(capacity):
+                raise ValueError(f"capacity must be finite, got {capacity}")
+            if capacity != int(capacity):
+                raise ValueError(f"capacity must be an integer, got {capacity}")
+            capacity = int(capacity)
         if capacity <= 0:
-            raise ValueError("capacity must be positive")
+            raise ValueError(f"capacity must be positive, got {capacity}")
         self.capacity = capacity
         self._items: dict[str, WMTMItem] = {}
         self._pending_evicted: list[WMTMItem] = []
@@ -123,3 +138,22 @@ class WMTMStore:
     def __contains__(self, item_id: str) -> bool:
         """Check whether an item with the given id exists in the store."""
         return item_id in self._items
+
+    # -- F01: serialization for persistence across subprocess boundaries --
+
+    def to_dict(self) -> dict:
+        """Serialize store state for persistence (F01)."""
+        return {
+            "capacity": self.capacity,
+            "tick": self._tick,
+            "items": {iid: item.to_dict() for iid, item in self._items.items()},
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "WMTMStore":
+        """Restore store from serialized dict (F01)."""
+        from .item import WMTMItem
+        store = cls(capacity=d["capacity"], tick=d["tick"])
+        for iid, item_d in d.get("items", {}).items():
+            store._items[iid] = WMTMItem.from_dict(item_d)
+        return store

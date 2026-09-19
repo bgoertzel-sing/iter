@@ -113,6 +113,7 @@ class LiveGoalChainerAdapter:
     """
 
     def __init__(self):
+        """Initialize live tool bridge with empty parse state."""
         self.last_raw_output = None
         self.last_parsed = None
 
