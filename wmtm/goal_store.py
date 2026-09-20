@@ -22,6 +22,7 @@ class GoalStore:
     """
 
     def __init__(self, path: str, auto_save: bool = True) -> None:
+        """Initialize the store, loading existing goals from *path* if present."""
         self.path = path
         self.auto_save = auto_save
         self._goals: dict[str, Goal] = {}
@@ -113,11 +114,14 @@ class GoalStore:
             self.save()
 
     def __len__(self) -> int:
+        """Return the number of goals in the store."""
         return len(self._goals)
 
     def __contains__(self, goal_id: str) -> bool:
+        """Check whether *goal_id* exists in the store."""
         return goal_id in self._goals
 
     def __repr__(self) -> str:
+        """Return a concise summary of the store state."""
         n_active = len(self.active())
         return f"GoalStore(path={self.path!r}, total={len(self)}, active={n_active})"

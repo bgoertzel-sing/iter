@@ -10,6 +10,7 @@ _MAX_BYTES = 45 * 1024 * 1024  # telegram bot limit is 50MB; stay under
 
 
 def _channel_root():
+    """Return the bound outer-channel root directory."""
     root = os.environ.get("ITER_OUTER_CHANNEL_ROOT")
     if not root:
         raise RuntimeError("ITER_OUTER_CHANNEL_ROOT is not set (protocosmo2 channel inactive)")
@@ -33,6 +34,7 @@ def _source():
 
 
 def _bot_token():
+    """Resolve the Telegram bot token from env or telegram_token.txt."""
     # reuse the repo token resolution: env first, then telegram_token.txt beside the repo
     token = os.environ.get("TG_BOT_TOKEN")
     if token:
@@ -50,6 +52,7 @@ def _bot_token():
 
 
 def run(file_path: str, caption: str = ""):
+    """Post a document to the protocosmo2 Telegram group via the bot API."""
     # NOTE: parameter must NOT be named ``path`` — it collides with
     # invoke_dynamic(path, function, *args, **kwargs) in iter.py, causing
     # "got multiple values for argument 'path'" when the model passes

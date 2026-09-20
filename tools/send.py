@@ -4,6 +4,7 @@ from pathlib import Path
 DESCRIPTION = "Send a message through a communication channel."
 
 def run(channel, content):
+    """Send a message through the named communication channel."""
     path = Path("channels") / (channel + ".py")
     # Guard against path traversal — channel must be a simple name
     if "/" in channel or "\\" in channel or ".." in channel:

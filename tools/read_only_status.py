@@ -5,6 +5,7 @@ DESCRIPTION = "Return a read-only status snapshot of git state, running processe
 import json, os, subprocess
 
 def run(cmd):
+    """Execute *cmd* with a 2s timeout and return stdout."""
     try:
         r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=2)
         return r.stdout.strip()

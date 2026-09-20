@@ -62,6 +62,7 @@ API_KEY = os.getenv("AI_API_KEY", "dummy")
 # 1. Dynamic execution:
 # --------------------------------------------------------------------
 def dynamic_worker():
+    """Execute a dynamic tool function in a subprocess and write JSON result."""
     path = Path(sys.argv[2])
     function = sys.argv[3]
     result_path = Path(sys.argv[4])
@@ -92,6 +93,7 @@ def dynamic_worker():
         result_path.write_text(json.dumps({"ok": False, "error": f"Result serialization failed: {type(error).__name__}: {error}"}, ensure_ascii=False))
 
 def invoke_dynamic(path, /, function, *args, **kwargs):
+    """Invoke *function* from the module at *path* in a subprocess, returning its JSON result."""
     result_fd, result_file = tempfile.mkstemp(prefix="iter-result-", suffix=".json")
     payload_fd, payload_file = tempfile.mkstemp(prefix="iter-payload-", suffix=".json")
     try:
@@ -138,9 +140,11 @@ if len(sys.argv) > 1 and sys.argv[1] == "--invoke":
 # 2. Runtime helpers:
 # --------------------------------------------------------------------
 def get_current_time():
+    """Return the current wall-clock time as a formatted string."""
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def receive():
+    """Poll all channel modules for inbound events and return them as a joined string."""
     events = []
     paths = [path for path in sorted(Path("channels").glob("*.py")) if not path.name.startswith("_")]
     for path in paths:
@@ -179,6 +183,7 @@ def resume_claimed():
     return "\n".join(events)
 
 def slow_wait_for_input():
+    """Sleep up to SLOW_STEP_DELAY seconds, checking for input each second."""
     for second in range(SLOW_STEP_DELAY):
         time.sleep(1)
         event_append = receive()
@@ -187,6 +192,7 @@ def slow_wait_for_input():
     return ""
 
 def save_experience(experience):
+    """Atomically write the experience list to experience.json."""
     with open("experience.tmp", "w", encoding="utf-8") as file:
         json.dump(experience, file, ensure_ascii=False, indent=2)
     os.replace("experience.tmp", "experience.json")
@@ -327,6 +333,7 @@ _active_branch = None  # holds BranchState or None
 class BranchState:
     """State for a promoted background LLM call branch (R11: deep copy, R12: separate client)."""
     def __init__(self, branch_id, branch_client, branch_messages, thread, result_container):
+        """Initialize branch state for a background LLM call."""
         self.branch_id = branch_id
         self.branch_client = branch_client
         self.branch_messages = branch_messages  # deep copy per R11
@@ -747,6 +754,7 @@ def graceful_shutdown():
 # 3. Dynamic components:
 # --------------------------------------------------------------------
 def load_tools():
+    """Load tool metadata from tools/*.py, returning (inops, overflow_count, errors)."""
     inops = {}
     errors = []
     paths = [path for path in sorted(Path("tools").glob("*.py")) if not path.name.startswith("_")]
@@ -762,12 +770,14 @@ def load_tools():
     return inops, len(paths) - MAX_TOOLS, "\n".join(errors)
 
 def native_tools(inops):
+    """Convert loaded tool metadata into OpenAI function-calling tool definitions."""
     tools = []
     for name, (path, description, parameters) in inops.items():
         tools.append({"type": "function", "function": {"name": name, "description": description, "parameters": {"type": "object", "properties": { parameter: { "type": "string" } for parameter in parameters }, "required": [parameter for parameter in parameters], "additionalProperties": False}}})
     return tools
 
 def load_transformation_descriptions():
+    """Load DESCRIPTION constants from transformations/*.py and return as a joined string."""
     entries = []
     for path in sorted(Path("transformations").glob("*.py")):
         if path.name.startswith("_"):
@@ -780,6 +790,7 @@ def load_transformation_descriptions():
     return "\n".join(entries)
 
 def apply_transformation(messages, tools):
+    """Apply all transformation modules to (messages, tools) and return updated values plus errors."""
     errors = []
     paths = sorted(path for path in Path("transformations").glob("*.py") if not path.name.startswith("_"))
     for path in paths:
