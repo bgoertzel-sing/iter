@@ -38,6 +38,12 @@ recall → attention → inference(basic) → PLN(step 2b) → GoalChainer(step 
 | `wmtm/pln_bridge.py` | Converts WMTM items ↔ PLN atoms, runs PLN inference over working memory |
 | `wmtm/goalchainer_bridge.py` | Converts WMTM evidence → GoalChainer input, parses decisions → InferenceCandidates |
 | `wmtm/live_tool_bridge.py` | Parses real goalchainer_decide/wmtm_derive tool output → WMTM candidates |
+| `control/orchestrator.py` | **WP7:** OODA Orchestrator — observe→infer→plan→authorize→dispatch→effect→writeback |
+| `control/adapters.py` | **WP8:** Real adapters for WMTM/PLN/GoalChainer — factory pattern, ActionOperator, hooks |
+| `control/types.py` | **WP7:** Control types — Observation, Plan, Action, Goal, CycleResult, SystemState |
+| `control/event_store.py` | Event sourcing for control cycle — append-only event log |
+| `control/reference_monitor.py` | Deontic reference monitor — forbid/obligate/permit action authorization |
+| `control/plan_validator.py` | Plan validation — precondition checks, parameter schema validation |
 
 ### Supporting Files
 
@@ -46,7 +52,7 @@ recall → attention → inference(basic) → PLN(step 2b) → GoalChainer(step 
 | `_petta_journal.py` | PeTTa journal parser/writer for LTM persistence |
 | `benchmark_wmtm.py` | Performance benchmarks and parameter sweeps |
 | `simulate_incident.py` | 8-phase incident response simulation (uses real GoalChainer output) |
-| `test_*.py` | 400 tests across 27 files (100% module coverage) |
+| `test_*.py` | 657 tests across 39 files (100% module coverage) |
 
 ## Quick Start
 
@@ -63,6 +69,17 @@ store.admit("i2", "animal is a organism", initial_sti=3.0)
 # Run a cognitive cycle — basic + PLN + GoalChainer fire simultaneously
 result = orch.cycle()
 print(f"Candidates: {len(result.candidates)}, Evicted: {len(result.evicted)}")
+
+# --- WP7+ OODA Orchestrator ---
+from control.orchestrator import Orchestrator
+from control.adapters import RealAdapterFactory
+from control.types import Goal
+
+factory = RealAdapterFactory(wmtm_store=store)
+orch = Orchestrator(adapters=factory.create_all())
+orch.set_goal(Goal(name="monitor", description="Keep system healthy"))
+cycle_result = orch.run_cycle()
+print(f"Plans: {len(cycle_result.plans)}, Effects: {len(cycle_result.effects)}")
 ```
 
 ## Benchmark Results
@@ -74,7 +91,7 @@ print(f"Candidates: {len(result.candidates)}, Evicted: {len(result.evicted)}")
 - **GoalChainer Bridge:** 11 tests — evidence conversion, decision parsing, STI boosts/penalties
 - **Live Tool Bridge:** 15 tests — real goalchainer_decide + wmtm_derive output parsing
 - **Simulation:** 8-phase cognitive cycle with real GoalChainer integration
-- **Tests:** 400/400 pass (27 files, `--timeout=15`)
+- **Tests:** 657/657 pass (39 files, `--timeout=15`)
 
 ## Design Principles
 
@@ -85,6 +102,16 @@ print(f"Candidates: {len(result.candidates)}, Evicted: {len(result.evicted)}")
 5. **Multi-engine inference** — basic inference + PLN + GoalChainer fire in each cycle
 6. **Writeback** — high-value derived items are promoted to LTM for persistence
 7. **Live integration** — real tool bridges parse actual goalchainer_decide/wmtm_derive output
+
+## Milestones
+
+| Milestone | Status | Description |
+|---|---|---|
+| F01-F04 | ✅ Complete | Core WMTM: item, store, attention, inference, forgetting, writeback |
+| M1-M4 | ✅ Complete | Goal-driven WMTM: Goal+GoalStore, PLN bridge, GoalChainer bridge, live tool integration |
+| WP7 | ✅ Complete | OODA Orchestrator (248 lines, 37 tests) — full cognitive control loop |
+| WP8 | ✅ Complete | Real adapters (352 lines, 7 adapters+factory, 25 tests) |
+| WP9 | ✅ Complete | E2E integration tests (9 tests) — full OODA with real adapters, goal satisfaction, error handling |
 
 ## Running Tests
 
