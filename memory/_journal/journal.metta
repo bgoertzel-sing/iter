@@ -127890,3 +127890,14 @@ Repair st00988 ,\" =}( spl2)))) [. append  run of7+ now? -[. it!\"
 (About ep-note-20260920T065129Z journal)
 (EventNote ev-ep-note-20260920T065129Z "23:51Z Sep 19 -- Autonomous cycle complete. WP8 committed (bfeb0ec), 480 tests pass. send() fails as expected (no active user request). System stable. Next milestone: WP9 end-to-end integration.")
 ;;; END MemoryCluster ep-note-20260920T065129Z
+;;; BEGIN MemoryCluster ep-note-20260920T075145Z
+(MemoryCluster ep-note-20260920T075145Z)
+(SchemaVersion ep-note-20260920T075145Z medium-memory-v1)
+(ClusterType ep-note-20260920T075145Z Episode)
+(ClusterSource ep-note-20260920T075145Z iter-experience)
+(ClusterOpenedAt ep-note-20260920T075145Z 2026-09-20T07:51:45Z)
+(Contains ep-note-20260920T075145Z ev-ep-note-20260920T075145Z)
+(ObservedEvent ev-ep-note-20260920T075145Z)
+(About ep-note-20260920T075145Z journal)
+(EventNote ev-ep-note-20260920T075145Z "WP9 E2E test debugging: 8/9 pass. Last failure is test_full_cycle_with_real_adapters — PLN produces 0 beliefs from plain-text items like 'CPU usage at 95%' because extract_pln_atoms only matches is-a/implies/has/similar patterns. Concept atoms don't produce derived atoms. Need to either change test items to include inference-triggering patterns, or relax the assertion.")
+;;; END MemoryCluster ep-note-20260920T075145Z
