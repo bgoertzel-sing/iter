@@ -129,13 +129,14 @@ class PLNBeliefAdapter:
             return []
 
         beliefs = []
-        for cand in candidates:
+        for i, cand in enumerate(candidates):
             obs_ids = [
                 obs.observation_id for obs in observations
                 if obs.observation_id in (cand.derived_from or [])
             ]
+            cand_id = f"cand_{i}"
             belief = Belief(
-                belief_id=cand.candidate_id,
+                belief_id=cand_id,
                 claim=cand.content,
                 truth_value=cand.confidence,
                 confidence=cand.confidence,
@@ -169,16 +170,17 @@ class GoalChainerPlanAdapter:
 
         plans = []
         state_rev = observations[0].state_revision if observations else 0
-        for cand in candidates:
+        for i, cand in enumerate(candidates):
+            cand_id = f"cand_{i}"
             step = PlanStep(
-                step_id=f"step_{cand.candidate_id}",
+                step_id=f"step_{cand_id}",
                 operator_id="goalchainer_decision",
                 operator_revision=1,
                 arguments={"content": cand.content, "confidence": cand.confidence},
                 target=goal.goal_id,
             )
             plan = Plan(
-                plan_id=f"plan_{cand.candidate_id}",
+                plan_id=f"plan_{cand_id}",
                 goal_id=goal.goal_id,
                 goal_revision=goal.revision,
                 state_revision=state_rev,

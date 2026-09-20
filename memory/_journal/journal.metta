@@ -127868,3 +127868,25 @@ Repair st00988 ,\" =}( spl2)))) [. append  run of7+ now? -[. it!\"
 (About ep-note-20260920T062118Z journal)
 (EventNote ev-ep-note-20260920T062118Z "23:20Z Sep 19 -- Autonomous cycle. No user input (send correctly fails). WP7 complete (168/168 tests). Next per LTM: WP8 real-component integration. Starting investigation: wire real WMTM/PLN/GoalChainer into Orchestrator hooks instead of mocks.")
 ;;; END MemoryCluster ep-note-20260920T062118Z
+;;; BEGIN MemoryCluster ep-note-20260920T063423Z
+(MemoryCluster ep-note-20260920T063423Z)
+(SchemaVersion ep-note-20260920T063423Z medium-memory-v1)
+(ClusterType ep-note-20260920T063423Z Episode)
+(ClusterSource ep-note-20260920T063423Z iter-experience)
+(ClusterOpenedAt ep-note-20260920T063423Z 2026-09-20T06:34:23Z)
+(Contains ep-note-20260920T063423Z ev-ep-note-20260920T063423Z)
+(ObservedEvent ev-ep-note-20260920T063423Z)
+(About ep-note-20260920T063423Z journal)
+(EventNote ev-ep-note-20260920T063423Z "23:34Z Sep 19 -- WP8 INTEGRATION COMPLETE. control/wmtm_adapters.py (352 lines) bridges wmtm/ (WMTMStore, PLN, GoalChainer) into control/ Orchestrator via 7 adapters + factory. 25 WP8 tests pass. Committed bfeb0ec. Lessons: ActionOperator requires parameter_schema+precondition (no defaults). sed on multi-line patterns corrupts→use python for complex edits. Orchestrator stores hooks as self._observe_fn etc (not self.observe_fn). Dispatcher.register_implementation not register_impl.")
+;;; END MemoryCluster ep-note-20260920T063423Z
+;;; BEGIN MemoryCluster ep-note-20260920T065129Z
+(MemoryCluster ep-note-20260920T065129Z)
+(SchemaVersion ep-note-20260920T065129Z medium-memory-v1)
+(ClusterType ep-note-20260920T065129Z Episode)
+(ClusterSource ep-note-20260920T065129Z iter-experience)
+(ClusterOpenedAt ep-note-20260920T065129Z 2026-09-20T06:51:29Z)
+(Contains ep-note-20260920T065129Z ev-ep-note-20260920T065129Z)
+(ObservedEvent ev-ep-note-20260920T065129Z)
+(About ep-note-20260920T065129Z journal)
+(EventNote ev-ep-note-20260920T065129Z "23:51Z Sep 19 -- Autonomous cycle complete. WP8 committed (bfeb0ec), 480 tests pass. send() fails as expected (no active user request). System stable. Next milestone: WP9 end-to-end integration.")
+;;; END MemoryCluster ep-note-20260920T065129Z

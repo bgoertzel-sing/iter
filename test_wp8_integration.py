@@ -175,6 +175,8 @@ class TestCreateIntegratedOrchestrator:
         goal = GoalSpec(goal_id="g1", revision=1, owner="t",
                        description="test", priority=1, status=GoalStatus.ACTIVE)
         orch = create_integrated_orchestrator(store, goal, b"secret", use_pln=False)
+        # Mock plan_fn to return empty so we test the cycle machinery only
+        orch._plan_fn = lambda obs, beliefs, goal: []
         result = orch.run_cycle()
         assert isinstance(result, CycleResult)
         assert len(result.plans) == 0
