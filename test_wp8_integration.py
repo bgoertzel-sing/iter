@@ -178,3 +178,68 @@ class TestCreateIntegratedOrchestrator:
         result = orch.run_cycle()
         assert isinstance(result, CycleResult)
         assert len(result.plans) == 0
+
+
+    def test_cycle_with_mocked_plan(self):
+        store = WMTMStore(capacity=20)
+        store.admit("f1", "CPU at 95%", source_type="recalled")
+        goal = GoalSpec(goal_id="g1", revision=1, owner="t",
+                       description="Investigate CPU", priority=1,
+                       status=GoalStatus.ACTIVE)
+        orch = create_integrated_orchestrator(store, goal, b"secret", use_pln=False)
+        def mock_plan(observations, beliefs, goal):
+            step = PlanStep(step_id="s1", operator_id="noop",
+                           operator_revision=1, arguments={"q": "cpu"},
+                           target=goal.goal_id)
+            state_rev = observations[0].state_revision if observations else 0
+            return [Plan(plan_id="p1", goal_id=goal.goal_id,
+                        goal_revision=goal.revision, state_revision=state_rev,
+                        steps=[step], terminal_predicate="done")]
+        orch._plan_fn = mock_plan
+        orch._validate_fn._validator.register_operator(
+            ActionOperator(operator_id="noop", revision=1,
+                          parameter_schema="v1", precondition="")
+        )
+        result = orch.run_cycle()
+        assert isinstance(result, CycleResult)
+        assert len(result.plans) == 1
+        assert result.goal_status == GoalStatus.ACTIVE
+
+
+class TestFullIntegration:
+    def test_shadow_mode_no_dispatch(self):
+        store = WMTMStore(capacity=10)
+        store.admit("i1", "test fact", source_type="recalled")
+        goal = GoalSpec(goal_id="g1", revision=1, owner="t",
+                       description="test", priority=1, status=GoalStatus.ACTIVE)
+        orch = create_integrated_orchestrator(store, goal, b"secret", use_pln=False)
+        result = orch.run_cycle()
+        assert len(result.dispatches) == 0
+
+    def test_stop_flag(self):
+        store = WMTMStore(capacity=10)
+        store.admit("i1", "test", source_type="recalled")
+        goal = GoalSpec(goal_id="g1", revision=1, owner="t",
+                       description="test", priority=1, status=GoalStatus.ACTIVE)
+        orch = create_integrated_orchestrator(store, goal, b"secret")
+        orch.stop()
+        result = orch.run_cycle()
+        assert result.stopped
+
+    def test_multiple_cycles(self):
+        store = WMTMStore(capacity=10)
+        store.admit("i1", "test", source_type="recalled")
+        goal = GoalSpec(goal_id="g1", revision=1, owner="t",
+                       description="test", priority=1, status=GoalStatus.ACTIVE)
+        orch = create_integrated_orchestrator(store, goal, b"secret", use_pln=False)
+        for i in range(3):
+            result = orch.run_cycle()
+            assert isinstance(result, CycleResult)
+        assert orch.cycle_count == 3
+
+    def test_no_goal_no_op(self):
+        store = WMTMStore(capacity=10)
+        store.admit("i1", "test", source_type="recalled")
+        orch = create_integrated_orchestrator(store, None, b"secret", use_pln=False)
+        result = orch.run_cycle()
+        assert result.error == "No active goal"
