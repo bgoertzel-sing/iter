@@ -5,6 +5,7 @@ import inspect
 import json
 import os
 import queue
+import re
 import sys
 import openai
 import time
@@ -324,6 +325,45 @@ def send_checkpoint_message(checkpoint_data, checkpoint_path):
     except Exception as error:
         print(f"CHECKPOINT_SEND_EXCEPTION: {type(error).__name__}: {error}")
         return False
+
+TERMINAL_PROVIDER_STATUS_CODES = frozenset({400, 401, 402, 403, 413})
+
+def terminal_provider_status(error):
+    """Return a non-retryable provider HTTP status, if one is observable."""
+    for candidate in (error, getattr(error, "response", None)):
+        status = getattr(candidate, "status_code", None)
+        if type(status) is int and status in TERMINAL_PROVIDER_STATUS_CODES:
+            return status
+    text = str(error)
+    patterns = (
+        r"\bError code:\s*(400|401|402|403|413)\b",
+        r"[\"']code[\"']\s*:\s*(400|401|402|403|413)\b",
+        r"\bstatus(?:_code)?\s*[=:]\s*(400|401|402|403|413)\b",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, text, re.IGNORECASE)
+        if match:
+            return int(match.group(1))
+    return None
+
+def send_terminal_provider_failure(error):
+    """Finish the active outer request with a bounded, non-secret failure."""
+    status = terminal_provider_status(error)
+    if status is None:
+        return False
+    content = (
+        "ProtoCosmo2 stopped this request because its model provider rejected "
+        f"the call with terminal HTTP status {status}. The request was not "
+        "retried indefinitely; please retry after correcting provider access, "
+        "credit, or context size."
+    )
+    result = invoke_dynamic(Path("tools/send.py"), "run",
+                            channel=CHECKPOINT_CHANNEL, content=content)
+    if not result["ok"] or result["result"] != "SUCCESS":
+        print(f"TERMINAL_PROVIDER_BREAKER_SEND_FAILED: {result}")
+        return False
+    print(f"TERMINAL_PROVIDER_BREAKER_SENT: status={status}")
+    return True
 
 # --- M2 Step 2.1: Threaded LLM call wrapper with deadline T ---
 # Background branch state (populated when ITER_CONCURRENCY_ENABLED)
@@ -848,6 +888,7 @@ while True:
     if ITER_CONCURRENCY_ENABLED:
         drain_merge_queue()
     history_checkpoint = len(experience) #before user input
+    turn_checkpoint = len(experience)
     try:
         time.sleep(DEFAULT_DELAY)
         print("BEFORE RECEIVE")
@@ -991,5 +1032,12 @@ while True:
             pending_event_append = slow_wait_for_input()
     except Exception as error:
         print(f"Output> {type(error).__name__}: {error}")
+        if send_terminal_provider_failure(error):
+            experience = experience[:turn_checkpoint]
+            save_experience(experience)
+            autonomous_steps, new_burst, post_task_mode = 0, False, False
+            send_since_checkpoint = False
+            pending_event_append = slow_wait_for_input()
+            continue
         experience = experience[:history_checkpoint]
         time.sleep(ERROR_RECOVERY_TIME)
