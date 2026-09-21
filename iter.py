@@ -347,7 +347,7 @@ def terminal_provider_status(error):
     return None
 
 def send_terminal_provider_failure(error):
-    """Finish the active outer request with a bounded, non-secret failure."""
+    """Attempt one bounded, non-secret failure notice for a terminal error."""
     status = terminal_provider_status(error)
     if status is None:
         return False
@@ -361,7 +361,7 @@ def send_terminal_provider_failure(error):
                             channel=CHECKPOINT_CHANNEL, content=content)
     if not result["ok"] or result["result"] != "SUCCESS":
         print(f"TERMINAL_PROVIDER_BREAKER_SEND_FAILED: {result}")
-        return False
+        return True
     print(f"TERMINAL_PROVIDER_BREAKER_SENT: status={status}")
     return True
 
