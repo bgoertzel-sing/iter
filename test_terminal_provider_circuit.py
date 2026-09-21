@@ -48,3 +48,21 @@ def test_main_loop_breaks_terminal_error_before_generic_retry():
     retry = source.index("experience = experience[:history_checkpoint]", breaker)
     assert breaker < retry
     assert "pending_event_append = slow_wait_for_input()" in source[breaker:retry]
+
+
+def test_terminal_breaker_is_handled_even_when_notice_fails():
+    tree = ast.parse(SOURCE.read_text(encoding="utf-8"))
+    function = next(node for node in tree.body
+                    if isinstance(node, ast.FunctionDef)
+                    and node.name == "send_terminal_provider_failure")
+    namespace = {
+        "Path": Path,
+        "CHECKPOINT_CHANNEL": "test",
+        "terminal_provider_status": lambda error: 402,
+        "invoke_dynamic": lambda *args, **kwargs: {
+            "ok": False,
+            "result": "delivery failed",
+        },
+    }
+    exec(compile(ast.Module(body=[function], type_ignores=[]), str(SOURCE), "exec"), namespace)
+    assert namespace["send_terminal_provider_failure"](Exception("402")) is True
