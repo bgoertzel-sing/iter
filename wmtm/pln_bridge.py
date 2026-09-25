@@ -168,3 +168,126 @@ def run_pln_inference_over_wmtm(
     candidates = pln_atoms_to_wmtm_candidates(derived_atoms)
 
     return candidates
+
+
+
+# ─── F04: Deontic constraint propagation into PLN ─────────────────────
+
+# Deontic status → truth value modifiers for PLN inference.
+# When a GoalChainer decision labels an action with a deontic status,
+# PLN atoms whose content relates to that action have their truth
+# values adjusted before inference, so PLN reasoning reflects
+# governance constraints.
+DEONTIC_TV_MODIFIERS = {
+    "forbidden": {"strength_factor": 0.1, "confidence_boost": 0.2},
+    "obligated": {"strength_factor": 1.0, "confidence_boost": 0.3},
+    "recommended": {"strength_factor": 0.9, "confidence_boost": 0.1},
+    "permitted": {"strength_factor": 1.0, "confidence_boost": 0.0},
+    "unregulated": {"strength_factor": 1.0, "confidence_boost": 0.0},
+}
+
+
+def apply_deontic_constraints_to_atoms(
+    atoms: list[PLNAtom],
+    deontic_decisions: list[dict],
+    min_keyword_overlap: int = 1,
+) -> list[PLNAtom]:
+    """Adjust PLN atom truth values based on deontic constraints.
+
+    For each decision with a non-neutral deontic status, find atoms whose
+    names/source content overlap with the decision's action keywords, and
+    adjust their truth values:
+
+    - **forbidden**: Strength reduced to 10% (strong suppression in PLN).
+      Confidence slightly boosted (we're confident it's bad).
+    - **obligated**: Strength stays at 100%, confidence boosted (we're more
+      certain about this action's relevance).
+    - **recommended**: Slight strength preservation, minor confidence boost.
+
+    This ensures PLN inference treats forbidden actions as unlikely/low-truth
+    and obligated actions as high-confidence, propagating governance constraints
+    through the reasoning chain.
+
+    Args:
+        atoms: PLN atoms to modify (modified in place and returned).
+        deontic_decisions: List of decision dicts from GoalChainer,
+            each with action_id, label, status fields.
+        min_keyword_overlap: Minimum keyword overlap to consider a match.
+
+    Returns:
+        The same atom list (modified in place) for chaining.
+    """
+    if not deontic_decisions:
+        return atoms
+
+    for dec in deontic_decisions:
+        status = dec.get("status", "unregulated")
+        if status in ("permitted", "unregulated"):
+            continue
+
+        modifiers = DEONTIC_TV_MODIFIERS.get(status, DEONTIC_TV_MODIFIERS["unregulated"])
+        keywords = set(
+            w.lower() for w in
+            f"{dec.get('label', '')} {dec.get('action_id', '')}".split()
+            if len(w) > 3
+        )
+        if not keywords:
+            continue
+
+        for atom in atoms:
+            atom_words = set(
+                w.lower() for w in
+                re.sub(r'[^a-zA-Z0-9_ ]', ' ', atom.name).split()
+                if len(w) > 3
+            )
+            overlap = len(keywords & atom_words)
+            if overlap >= min_keyword_overlap:
+                old_s = atom.truth.strength
+                old_c = atom.truth.confidence
+                atom.truth = TruthValue(
+                    strength=max(0.0, min(1.0, old_s * modifiers["strength_factor"])),
+                    confidence=max(0.0, min(1.0, old_c + modifiers["confidence_boost"])),
+                )
+
+    return atoms
+
+
+def run_pln_inference_over_wmtm_with_deontic(
+    store: WMTMStore,
+    deontic_decisions: list[dict] | None = None,
+    engine: Optional[PLNInferenceEngine] = None,
+) -> list[InferenceCandidate]:
+    """Run PLN inference with deontic constraints applied to input atoms.
+
+    Like run_pln_inference_over_wmtm but applies deontic truth-value
+    adjustments before inference, so PLN reasoning reflects governance.
+
+    Args:
+        store: WMTM store with active set.
+        deontic_decisions: Decisions from GoalChainer with deontic status.
+        engine: Optional PLN engine instance.
+
+    Returns:
+        Candidates with governance-aware truth values.
+    """
+    if engine is None:
+        engine = PLNInferenceEngine()
+
+    active_set = store.get_active_set()
+    if not active_set:
+        return []
+
+    # Step 1: Convert WMTM items to PLN atoms
+    atoms = wmtm_to_pln_atoms(active_set)
+
+    # Step 1b (F04): Apply deontic constraints to atom truth values
+    if deontic_decisions:
+        apply_deontic_constraints_to_atoms(atoms, deontic_decisions)
+
+    # Step 2: Run PLN inference
+    derived_atoms = pln_inference_over_atoms(atoms, engine=engine)
+
+    # Step 3: Convert back to WMTM candidates
+    candidates = pln_atoms_to_wmtm_candidates(derived_atoms)
+
+    return candidates

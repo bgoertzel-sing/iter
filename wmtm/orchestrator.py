@@ -86,6 +86,7 @@ class WMTMOrchestrator:
         self.goal_store = goal_store
         self.gov_bridge = gov_bridge
         self._cycle = 0
+        self._last_deontic_decisions: list = []  # F04: cached for PLN deontic propagation
 
 
     def active_goal(self):
@@ -194,16 +195,26 @@ class WMTMOrchestrator:
             initial_sti=cand.initial_sti,
         )
 
-    def _run_pln_phase(self) -> list:
+    def _run_pln_phase(self, deontic_decisions: list = None) -> list:
         """Run PLN inference over the WMTM active set and admit candidates.
+
+        When a GovernanceBridge is active (F04), deontic constraints from
+        GoalChainer decisions are propagated into PLN atom truth values
+        before inference, so PLN reasoning reflects governance.
 
         Returns the list of admitted PLN-derived items.
         """
         if not self.use_pln:
             return []
         try:
-            from .pln_bridge import run_pln_inference_over_wmtm
-            pln_candidates = run_pln_inference_over_wmtm(self.store)
+            if deontic_decisions and self.gov_bridge is not None:
+                from .pln_bridge import run_pln_inference_over_wmtm_with_deontic
+                pln_candidates = run_pln_inference_over_wmtm_with_deontic(
+                    self.store, deontic_decisions=deontic_decisions
+                )
+            else:
+                from .pln_bridge import run_pln_inference_over_wmtm
+                pln_candidates = run_pln_inference_over_wmtm(self.store)
             if not pln_candidates:
                 return []
             return self._admit_derived(pln_candidates)
@@ -238,6 +249,9 @@ class WMTMOrchestrator:
                 )
                 result.gov_enforcement = gov_out.get("enforcement", {})
                 result.gov_lifecycle_changes = gov_out.get("lifecycle_changes", [])
+
+            # F04: Cache deontic decisions for PLN propagation
+            self._last_deontic_decisions = gc_result.get("decisions", [])
 
             # Convert decisions to WMTM candidates and admit
             source_ids = [item.id for item in self.store.get_active_set()[:20]]
@@ -313,8 +327,8 @@ class WMTMOrchestrator:
         admitted = self._admit_derived(candidates)
         result.admitted_derived = len(admitted)
 
-        # 2b. Run PLN inference and admit its candidates
-        pln_admitted = self._run_pln_phase()
+        # 2b. Run PLN inference and admit its candidates (F04: with deontic constraints)
+        pln_admitted = self._run_pln_phase(deontic_decisions=self._last_deontic_decisions)
         result.pln_admitted = len(pln_admitted)
 
         # 2c. Run GoalChainer feedback loop and admit its decisions
