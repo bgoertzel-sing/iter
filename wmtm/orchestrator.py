@@ -24,6 +24,7 @@ from .forgetting_log import ForgettingLog
 from .forgetting import ForgettingPolicy
 from .writeback import WritebackManager
 from .goal_store import GoalStore
+from .gov_bridge import GovernanceBridge, DecisionHistory
 
 
 @dataclass
@@ -40,6 +41,8 @@ class CycleResult:
     contradictions: list = field(default_factory=list)
     resolutions: list = field(default_factory=list)
     forgetting_log_size: int = 0
+    gov_enforcement: dict = field(default_factory=dict)
+    gov_lifecycle_changes: list = field(default_factory=list)
 
 
 class WMTMOrchestrator:
@@ -62,11 +65,13 @@ class WMTMOrchestrator:
         use_goalchainer: bool = False,
         goalchainer_request: str = '',
         goal_store: Optional[GoalStore] = None,
+        gov_bridge: Optional[GovernanceBridge] = None,
     ) -> None:
         """Initialize the WMTM orchestrator with a store and default forgetting policy.
 
         Args:
             use_pln: if True, run PLN inference (via pln_bridge) in each cycle.
+            gov_bridge: if provided, enables F04 governance enforcement.
         """
         self.store = store
         self.engine = inference_engine or WMTMInferenceEngine()
@@ -79,6 +84,7 @@ class WMTMOrchestrator:
         self.use_goalchainer = use_goalchainer
         self.goalchainer_request = goalchainer_request
         self.goal_store = goal_store
+        self.gov_bridge = gov_bridge
         self._cycle = 0
 
 
@@ -204,21 +210,39 @@ class WMTMOrchestrator:
         except Exception:
             return []
 
-    def _run_goalchainer_phase(self) -> list:
+    def _run_goalchainer_phase(self, result: CycleResult) -> list:
         """Run GoalChainer over the WMTM active set and admit decisions.
 
         This is the feedback loop: GoalChainer reads WMTM evidence,
         makes a decision, and the results are admitted back into WMTM.
+        When a GovernanceBridge is configured (F04), decisions also go
+        through deontic enforcement and goal-lifecycle updates.
 
         Returns the list of admitted GoalChainer-derived items.
         """
         if not self.use_goalchainer or not self.goalchainer_request:
             return []
         try:
-            from .goalchainer_bridge import run_goalchainer_over_wmtm
-            gc_candidates = run_goalchainer_over_wmtm(
-                self.store,
-                self.goalchainer_request,
+            from .goalchainer_bridge import run_goalchainer, goalchainer_result_to_candidates
+
+            gc_result = run_goalchainer(self.goalchainer_request, self.store)
+            if gc_result is None:
+                return []
+
+            # F04: Run governance bridge if configured
+            if self.gov_bridge is not None:
+                goal = self.active_goal()
+                goal_id = goal.id if goal else ""
+                gov_out = self.gov_bridge.process_goalchainer_result(
+                    gc_result, self.store, self._cycle, goal_id=goal_id
+                )
+                result.gov_enforcement = gov_out.get("enforcement", {})
+                result.gov_lifecycle_changes = gov_out.get("lifecycle_changes", [])
+
+            # Convert decisions to WMTM candidates and admit
+            source_ids = [item.id for item in self.store.get_active_set()[:20]]
+            gc_candidates = goalchainer_result_to_candidates(
+                gc_result, cycle=self._cycle, source_ids=source_ids
             )
             if not gc_candidates:
                 return []
@@ -294,7 +318,7 @@ class WMTMOrchestrator:
         result.pln_admitted = len(pln_admitted)
 
         # 2c. Run GoalChainer feedback loop and admit its decisions
-        gc_admitted = self._run_goalchainer_phase()
+        gc_admitted = self._run_goalchainer_phase(result)
         result.gc_admitted = len(gc_admitted)
 
         # 3c/3d. Detect and resolve contradictions
