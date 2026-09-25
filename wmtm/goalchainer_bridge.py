@@ -10,7 +10,7 @@ enforcement and goal lifecycle tracking before being admitted to WMTM.
 Flow:
   1. wmtm_to_goalchainer_evidence: Convert WMTM active set -> memory_items
   2. run_goalchainer: Call GoalChainer pipeline with evidence
-  3. GovernanceBridge.process_result: enforce deontic constraints, update goals
+  3. GovernanceBridge.process_goalchainer_result: enforce deontic constraints, update goals
   4. goalchainer_result_to_candidates: Convert decisions -> WMTM candidates
   5. WMTM orchestrator admits novel candidates (step 2c)
 """
@@ -218,7 +218,7 @@ def run_goalchainer_over_wmtm(
     # F04: Process through governance bridge if available
     deontic_adjustments = {}
     if gov_bridge is not None:
-        gov_result = gov_bridge.process_result(
+        gov_result = gov_bridge.process_goalchainer_result(
             result, store, goal_id=goal_id, cycle=cycle,
         )
         # Convert enforcement actions to STI multipliers for candidates
