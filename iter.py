@@ -183,6 +183,27 @@ def resume_claimed():
             events.append("[" + path.stem + "] " + str(event))
     return "\n".join(events)
 
+def close_unfinished_requests():
+    """Turn-end safety net: ask each channel that supports it to close a
+    request left open without a final send (multi-send channels only).
+    Skipped while a background branch is active, since the branch may own it."""
+    if ITER_CONCURRENCY_ENABLED:
+        with _branch_lock:
+            if _active_branch is not None:
+                return
+    for channel_path in sorted(Path("channels").glob("*.py")):
+        try:
+            source = channel_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if "close_active" not in source:
+            continue
+        result = invoke_dynamic(channel_path, "close_active")
+        if result.get("ok") and result.get("result"):
+            print(f"UNFINISHED_REQUEST_CLOSED: channel={channel_path.stem}")
+        elif not result.get("ok"):
+            print(f"UNFINISHED_REQUEST_CLOSE_FAILED: channel={channel_path.stem} error={result.get('error')}")
+
 def slow_wait_for_input():
     """Sleep up to SLOW_STEP_DELAY seconds, checking for input each second."""
     for second in range(SLOW_STEP_DELAY):
@@ -1013,6 +1034,7 @@ while True:
             save_experience(experience)
         if called_nop:
             new_burst, autonomous_steps = True, 0
+            close_unfinished_requests()
             pending_event_append = slow_wait_for_input()
         elif autonomous_steps >= MAX_FAST_STEPS:
             # M1 Step 1.1: Tier-1 mechanical checkpoint extraction (flag-guarded)
@@ -1029,6 +1051,7 @@ while True:
                 _checkpoint_data = None
                 _checkpoint_path = None
             autonomous_steps = 0
+            close_unfinished_requests()
             pending_event_append = slow_wait_for_input()
     except Exception as error:
         print(f"Output> {type(error).__name__}: {error}")
