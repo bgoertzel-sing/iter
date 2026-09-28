@@ -183,20 +183,31 @@ def resume_claimed():
             events.append("[" + path.stem + "] " + str(event))
     return "\n".join(events)
 
+ITER_REQUEST_TIMEOUT = float(os.getenv("ITER_REQUEST_TIMEOUT", "3600"))
+
 def close_unfinished_requests():
-    """Turn-end safety net: ask each channel that supports it to close a
-    request left open without a final send (multi-send channels only).
-    Skipped while a background branch is active, since the branch may own it."""
+    """Turn-end safety net (multi-send channels only):
+    1. expire_stale: close any request open longer than ITER_REQUEST_TIMEOUT,
+       even while a background branch runs (a hung branch must not hold it forever).
+    2. close_active: close a request left open without a final send.
+       Skipped while a background branch is active, since the branch may own it."""
+    branch_active = False
     if ITER_CONCURRENCY_ENABLED:
         with _branch_lock:
-            if _active_branch is not None:
-                return
+            branch_active = _active_branch is not None
     for channel_path in sorted(Path("channels").glob("*.py")):
         try:
             source = channel_path.read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
-        if "close_active" not in source:
+        if "expire_stale" in source and ITER_REQUEST_TIMEOUT > 0:
+            result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT)
+            if result.get("ok") and result.get("result"):
+                print(f"STALE_REQUEST_EXPIRED: channel={channel_path.stem}")
+                continue
+            elif not result.get("ok"):
+                print(f"STALE_REQUEST_EXPIRE_FAILED: channel={channel_path.stem} error={result.get('error')}")
+        if branch_active or "close_active" not in source:
             continue
         result = invoke_dynamic(channel_path, "close_active")
         if result.get("ok") and result.get("result"):
