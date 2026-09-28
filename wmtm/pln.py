@@ -276,10 +276,25 @@ class PLNInferenceEngine:
 
 # ─── Triple extraction ───────────────────────────────────────────────
 
-_RE_ARROW = re.compile(r'(\w+)\s*(?:->|implies|causes|leads to)\s*(\w+)')
-_RE_ISA = re.compile(r'(\w+)\s+is\s+(?:a|an)\s+(\w+)')
-_RE_HAS = re.compile(r'(\w+)\s+ha(?:s|ve)\s+(\w+)')
-_RE_SIMILAR = re.compile(r'(\w+)\s+(?:is similar to|resembles|~)\s+(\w+)')
+# Concept tokens must start with a letter/underscore: bare numbers such as
+# "2 ~ 20" are not concepts. Bare "~" is not treated as similarity (it is
+# almost always an approximate range in operational notes).
+_TOK = r'\b([a-z_][a-z0-9_-]*)'
+_RE_ARROW = re.compile(_TOK + r'\s*(?:->|implies|causes|leads to)\s*' + _TOK)
+_RE_ISA = re.compile(_TOK + r'\s+is\s+(?:a|an)\s+' + _TOK)
+_RE_HAS = re.compile(_TOK + r'\s+ha(?:s|ve)\s+' + _TOK)
+_RE_SIMILAR = re.compile(_TOK + r'\s+(?:is similar to|resembles)\s+' + _TOK)
+
+_PLN_STOPWORDS = frozenset({
+    "a", "an", "the", "it", "this", "that", "these", "those", "he", "she",
+    "we", "they", "i", "you", "there", "here", "which", "what", "who",
+    "not", "no", "also", "just", "only", "then", "so", "and", "or", "but",
+})
+
+
+def _concept_ok(*toks: str) -> bool:
+    """Reject stopwords and 1-char tokens as PLN concepts."""
+    return all(len(t) >= 2 and t not in _PLN_STOPWORDS for t in toks)
 
 
 def extract_pln_atoms(text: str, source_id: str = "") -> list[PLNAtom]:
@@ -288,6 +303,8 @@ def extract_pln_atoms(text: str, source_id: str = "") -> list[PLNAtom]:
     default_tv = TruthValue(strength=0.8, confidence=0.5)
 
     for m in _RE_ARROW.finditer(text.lower()):
+        if not _concept_ok(m.group(1), m.group(2)):
+            continue
         name = f"Implication({m.group(1)},{m.group(2)})"
         atoms.append(PLNAtom(
             atom_type="Implication",
@@ -297,6 +314,8 @@ def extract_pln_atoms(text: str, source_id: str = "") -> list[PLNAtom]:
         ))
 
     for m in _RE_ISA.finditer(text.lower()):
+        if not _concept_ok(m.group(1), m.group(2)):
+            continue
         name = f"Inheritance({m.group(1)},{m.group(2)})"
         atoms.append(PLNAtom(
             atom_type="Inheritance",
@@ -306,6 +325,8 @@ def extract_pln_atoms(text: str, source_id: str = "") -> list[PLNAtom]:
         ))
 
     for m in _RE_HAS.finditer(text.lower()):
+        if not _concept_ok(m.group(1), m.group(2)):
+            continue
         name = f"Evaluation(has,{m.group(1)},{m.group(2)})"
         atoms.append(PLNAtom(
             atom_type="Evaluation",
@@ -315,6 +336,8 @@ def extract_pln_atoms(text: str, source_id: str = "") -> list[PLNAtom]:
         ))
 
     for m in _RE_SIMILAR.finditer(text.lower()):
+        if not _concept_ok(m.group(1), m.group(2)):
+            continue
         name = f"Similarity({m.group(1)},{m.group(2)})"
         atoms.append(PLNAtom(
             atom_type="Similarity",
