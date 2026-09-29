@@ -229,6 +229,10 @@ class WMTMOrchestrator:
         """
         if not self.use_goalchainer or not self.goalchainer_request:
             return []
+        # No evidence -> nothing for GoalChainer to decide on (matches
+        # run_goalchainer_over_wmtm; lost when F04 inlined the call).
+        if not self.store.get_active_set():
+            return []
         try:
             from .goalchainer_bridge import run_goalchainer_over_wmtm
             gc_candidates = run_goalchainer_over_wmtm(

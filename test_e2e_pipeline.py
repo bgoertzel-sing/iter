@@ -23,12 +23,12 @@ class TestEndToEndPipeline:
     def setup_method(self, method):
         """Save original module functions before each test."""
         import wmtm.goalchainer_bridge
-        self._original_gc_run = wmtm.goalchainer_bridge.run_goalchainer_over_wmtm
+        self._original_gc_run = wmtm.goalchainer_bridge.run_goalchainer
 
     def teardown_method(self, method):
         """Restore original module functions after each test."""
         import wmtm.goalchainer_bridge
-        wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = self._original_gc_run
+        wmtm.goalchainer_bridge.run_goalchainer = self._original_gc_run
 
     def test_full_cycle_with_all_components(self):
         """A single cycle with PLN + GoalChainer (mocked) produces results."""
@@ -49,24 +49,18 @@ class TestEndToEndPipeline:
         # Mock GoalChainer to avoid slow real pipeline call
         from wmtm.inference import InferenceCandidate as IC
 
-        def mock_gc_run(store, request, max_evidence=20):
-            return [IC(
-                content="GoalChainer decision: investigate-cpu (Investigate CPU) -- status=recommended, score=0.900",
-                confidence=0.9,
-                derived_from=["fact-1", "fact-2", "fact-3"],
-                inference_type="goalchainer_decision",
-                triple=None,
-                initial_sti=18.0,
-            )]
+        def mock_gc_run(request, store, max_evidence=20):
+            return {"decisions": [{"action_id": "investigate-cpu", "label": "Investigate CPU",
+                                   "status": "recommended", "score": 0.9}]}
 
         import wmtm.goalchainer_bridge
-        original = wmtm.goalchainer_bridge.run_goalchainer_over_wmtm
-        wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = mock_gc_run
+        original = wmtm.goalchainer_bridge.run_goalchainer
+        wmtm.goalchainer_bridge.run_goalchainer = mock_gc_run
 
         try:
             result = orch.cycle()
         finally:
-            wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = original
+            wmtm.goalchainer_bridge.run_goalchainer = original
 
         # Verify cycle completed
         assert isinstance(result, CycleResult)
@@ -118,24 +112,18 @@ class TestEndToEndPipeline:
 
         from wmtm.inference import InferenceCandidate as IC
 
-        def mock_gc_run(store, request, max_evidence=20):
-            return [IC(
-                content="GoalChainer decision: clean-logs (Clean Logs) -- status=recommended, score=0.850",
-                confidence=0.85,
-                derived_from=["e1", "e2"],
-                inference_type="goalchainer_decision",
-                triple=None,
-                initial_sti=17.0,
-            )]
+        def mock_gc_run(request, store, max_evidence=20):
+            return {"decisions": [{"action_id": "clean-logs", "label": "Clean Logs",
+                                   "status": "recommended", "score": 0.85}]}
 
         import wmtm.goalchainer_bridge
-        original = wmtm.goalchainer_bridge.run_goalchainer_over_wmtm
-        wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = mock_gc_run
+        original = wmtm.goalchainer_bridge.run_goalchainer
+        wmtm.goalchainer_bridge.run_goalchainer = mock_gc_run
 
         try:
             result = orch.cycle()
         finally:
-            wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = original
+            wmtm.goalchainer_bridge.run_goalchainer = original
 
         # Find the admitted GoalChainer item
         active = store.get_active_set()
@@ -181,24 +169,18 @@ class TestEndToEndPipeline:
         )
 
         from wmtm.inference import InferenceCandidate as IC
-        def mock_gc_run(store, request, max_evidence=20):
-            return [IC(
-                content="GoalChainer decision: restart-service",
-                confidence=0.8,
-                derived_from=["f1"],
-                inference_type="goalchainer_decision",
-                triple=None,
-                initial_sti=16.0,
-            )]
+        def mock_gc_run(request, store, max_evidence=20):
+            return {"decisions": [{"action_id": "restart-service", "label": "Restart Service",
+                                   "status": "recommended", "score": 0.8}]}
 
         import wmtm.goalchainer_bridge
-        original = wmtm.goalchainer_bridge.run_goalchainer_over_wmtm
-        wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = mock_gc_run
+        original = wmtm.goalchainer_bridge.run_goalchainer
+        wmtm.goalchainer_bridge.run_goalchainer = mock_gc_run
 
         try:
             result = orch.cycle()
         finally:
-            wmtm.goalchainer_bridge.run_goalchainer_over_wmtm = original
+            wmtm.goalchainer_bridge.run_goalchainer = original
 
         assert isinstance(result, CycleResult)
         assert result.pln_admitted == 0
