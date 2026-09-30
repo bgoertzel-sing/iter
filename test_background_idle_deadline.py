@@ -20,7 +20,7 @@ def seg(name):
 
 
 def deadline_ns(branch, deadline=300):
-    ns = {"time": time, "_branch_lock": threading.Lock(), "_active_branch": branch,
+    ns = {"time": time, "_branch_lock": threading.Lock(), "_active_branches": {branch.branch_id: branch},
           "BACKGROUND_DEADLINE": deadline, "_merge_queue": queue.Queue()}
     exec(seg("check_background_deadline"), ns)
     return ns
@@ -43,13 +43,13 @@ class IdleDeadlineTest(unittest.TestCase):
         # The Sep 28 bg-448e8aff case: 301 s old, but still working.
         ns = deadline_ns(make_branch(age=900, last_progress_ago=10))
         self.assertFalse(ns["check_background_deadline"]())
-        self.assertIsNotNone(ns["_active_branch"])
+        self.assertIn("bg-test", ns["_active_branches"])
         self.assertTrue(ns["_merge_queue"].empty())
 
     def test_idle_branch_is_abandoned(self):
         ns = deadline_ns(make_branch(age=900, last_progress_ago=301))
         self.assertTrue(ns["check_background_deadline"]())
-        self.assertIsNone(ns["_active_branch"])
+        self.assertNotIn("bg-test", ns["_active_branches"])
         marker = ns["_merge_queue"].get_nowait()
         self.assertTrue(marker["abandoned"])
         self.assertIn("idle=", marker["content"])
@@ -86,7 +86,8 @@ class MiniLoopProgressTest(unittest.TestCase):
         client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(
             create=lambda **kw: follow.pop(0))))
         ns = {"json": json, "time": time, "_merge_queue": queue.Queue(),
-              "_branch_lock": threading.Lock(), "_active_branch": None,
+              "_branch_lock": threading.Lock(), "_active_branches": {},
+              "_tool_context": threading.local(), "_release_branch": lambda *a: True,
               "load_tools": lambda: ({"noop": ("p",)}, [], []), "native_tools": lambda i: [],
               "invoke_dynamic": lambda *a, **k: {"ok": True, "result": "ok"},
               "MAX_TOOL_CALLS": 5, "MAX_TOOL_OUTPUT_CHARS": 1000, "get_current_time": lambda: "t",

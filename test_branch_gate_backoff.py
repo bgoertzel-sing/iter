@@ -88,8 +88,8 @@ def test_main_loop_polls_instead_of_calling_llm_while_branch_active():
 def test_promotion_never_overwrites_active_branch():
     source = SOURCE.read_text(encoding="utf-8")
     body = source[source.index("def threaded_llm_call"):source.index("_merge_queue = queue.Queue()")]
-    skip = body.index("background_branch_active()")
-    assign = body.index("_active_branch = branch")
+    skip = body.index("background_branch_count() >= ITER_MAX_BACKGROUND_BRANCHES")
+    assign = body.index("_active_branches[branch_id] = branch")
     assert skip < assign
 
 

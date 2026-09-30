@@ -20,3 +20,9 @@ try:  # multi-send hooks (agent/protocosmo2-multi-send); absent on older contrac
     from src.iter_outer_channel_protocosmo2 import close_active, expire_stale  # noqa: E402,F401
 except ImportError:  # pragma: no cover
     pass
+
+try:  # multi-branch hooks (agent/protocosmo2-multi-branch); absent on older contracts
+    from src.iter_outer_channel_protocosmo2 import (  # noqa: E402,F401
+        active_request_ids, receive_request, resume_all)
+except ImportError:  # pragma: no cover
+    pass

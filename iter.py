@@ -45,6 +45,28 @@ ITER_PROMOTE_SECONDS = int(os.getenv("ITER_PROMOTE_SECONDS", "30"))
 BACKGROUND_DEADLINE = max(2 * ITER_PROMOTE_SECONDS, 300)
 # --- M3 Step 3.5: Branch step budget + branch checkpoint queuing (R20) ---
 BRANCH_STEP_BUDGET = int(os.getenv("ITER_BRANCH_STEP_BUDGET", "25"))
+# Multi-branch: up to ITER_MAX_BACKGROUND_BRANCHES promoted branches run at once
+# (default 3, clamped to 1..MAX_BACKGROUND_BRANCHES_LIMIT). 1 = the old single slot.
+MAX_BACKGROUND_BRANCHES_LIMIT = 8
+
+def _max_background_branches(raw=None):
+    """Parse the configured branch cap; invalid values fall back to 1 (the old behaviour)."""
+    raw = os.getenv("ITER_MAX_BACKGROUND_BRANCHES", "3") if raw is None else raw
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        print(f"ITER_MAX_BACKGROUND_BRANCHES invalid ({raw!r}); using 1")
+        value = 1
+    return max(1, min(MAX_BACKGROUND_BRANCHES_LIMIT, value))
+
+ITER_MAX_BACKGROUND_BRANCHES = _max_background_branches()
+# Request binding: with more than one branch, every turn/branch answers only the
+# request it was started from (tools/send.py reads ITER_REQUEST_IDS).
+ITER_REQUEST_BINDING = ITER_CONCURRENCY_ENABLED and ITER_MAX_BACKGROUND_BRANCHES > 1
+if ITER_REQUEST_BINDING:
+    # one foreground request + one per background branch may be open at once
+    os.environ.setdefault("ITER_MAX_OPEN_REQUESTS", str(ITER_MAX_BACKGROUND_BRANCHES + 1))
+_foreground_request_ids = {}  # channel stem -> request_id owned by the foreground turn
 SLOW_STEP_DELAY = 10
 ERROR_RECOVERY_TIME = 1 #after how long to retry when exception occurs
 RETRY_BACKOFF_BASE = 5 #first wait after a retryable provider error (429/5xx/timeout); doubles per consecutive failure
@@ -182,6 +204,17 @@ def dynamic_worker():
     except BaseException as error:
         result_path.write_text(json.dumps({"ok": False, "error": f"Result serialization failed: {type(error).__name__}: {error}"}, ensure_ascii=False))
 
+_tool_context = threading.local()  # per-thread request binding for tool subprocesses
+
+def _tool_env():
+    """Environment for tool subprocesses: adds ITER_REQUEST_IDS when this thread is bound."""
+    ids = getattr(_tool_context, "request_ids", None)
+    if ids is None:
+        return None
+    env = dict(os.environ)
+    env["ITER_REQUEST_IDS"] = json.dumps(ids, sort_keys=True)
+    return env
+
 def invoke_dynamic(path, /, function, *args, **kwargs):
     """Invoke *function* from the module at *path* in a subprocess, returning its JSON result."""
     result_fd, result_file = tempfile.mkstemp(prefix="iter-result-", suffix=".json")
@@ -197,7 +230,8 @@ def invoke_dynamic(path, /, function, *args, **kwargs):
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             start_new_session=not inherit_stdin,
-            close_fds=True
+            close_fds=True,
+            env=_tool_env(),
         )
         try:
             process.wait(timeout=DYNAMIC_TIMEOUT)
@@ -233,12 +267,55 @@ def get_current_time():
     """Return the current wall-clock time as a formatted string."""
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+def _channel_has(path, name):
+    """True if the channel module source mentions *name* (feature probe, like close_active)."""
+    try:
+        return name in Path(path).read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return False
+
+def _foreground_busy(path):
+    """True while the foreground's bound request on this channel is still open."""
+    rid = _foreground_request_ids.get(path.stem)
+    if rid is None:
+        return False
+    result = invoke_dynamic(path, "active_request_ids")
+    if result.get("ok") and rid in (result.get("result") or []):
+        return True
+    _foreground_request_ids.pop(path.stem, None)  # answered/closed: foreground is free
+    return False
+
+def _resume_bound(path):
+    """Startup recovery with binding: resume the oldest open request, close the rest."""
+    result = invoke_dynamic(path, "resume_all")
+    if not result["ok"]:
+        return f"[CHANNEL RECOVERY ERROR in {path}: {result['error']}. Repair {path} if needed.]"
+    claims = result["result"] or []
+    if not claims:
+        return ""
+    for extra in claims[1:]:
+        closed = invoke_dynamic(path, "close_active", request_id=extra["request_id"])
+        print(f"RESUME_EXTRA_REQUEST_CLOSED: channel={path.stem} request={extra['request_id'][:12]} ok={closed.get('ok')}")
+    _foreground_request_ids[path.stem] = claims[0]["request_id"]
+    return "[" + path.stem + "] " + str(claims[0]["prompt"])
+
 def receive():
     """Poll all channel modules for inbound events and return them as a joined string."""
     events = []
     paths = [path for path in sorted(Path("channels").glob("*.py")) if not path.name.startswith("_")]
     for path in paths:
         try:
+            if ITER_REQUEST_BINDING and _channel_has(path, "receive_request"):
+                if _foreground_busy(path):
+                    continue  # one foreground request at a time; new input waits in the inbox
+                result = invoke_dynamic(path, "receive_request")
+                if not result["ok"]:
+                    raise RuntimeError(result["error"])
+                claimed = result["result"]
+                if claimed:
+                    _foreground_request_ids[path.stem] = claimed["request_id"]
+                    events.append("[" + path.stem + "] " + str(claimed["prompt"]))
+                continue
             result = invoke_dynamic(path, "receive")
             if not result["ok"]:
                 raise RuntimeError(result["error"])
@@ -259,6 +336,11 @@ def resume_claimed():
     events = []
     paths = [path for path in sorted(Path("channels").glob("*.py")) if not path.name.startswith("_")]
     for path in paths:
+        if ITER_REQUEST_BINDING and _channel_has(path, "resume_all"):
+            event = _resume_bound(path)
+            if event:
+                events.append(event)
+            continue
         result = invoke_dynamic(path, "resume")
         if not result["ok"]:
             if "AttributeError" in result["error"] and "resume" in result["error"]:
@@ -280,10 +362,7 @@ def close_unfinished_requests():
        even while a background branch runs (a hung branch must not hold it forever).
     2. close_active: close a request left open without a final send.
        Skipped while a background branch is active, since the branch may own it."""
-    branch_active = False
-    if ITER_CONCURRENCY_ENABLED:
-        with _branch_lock:
-            branch_active = _active_branch is not None
+    branch_active = ITER_CONCURRENCY_ENABLED and background_branch_active()
     for channel_path in sorted(Path("channels").glob("*.py")):
         try:
             source = channel_path.read_text(encoding="utf-8", errors="replace")
@@ -293,12 +372,22 @@ def close_unfinished_requests():
             result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT)
             if result.get("ok") and result.get("result"):
                 print(f"STALE_REQUEST_EXPIRED: channel={channel_path.stem}")
-                continue
+                if not ITER_REQUEST_BINDING:
+                    continue
             elif not result.get("ok"):
                 print(f"STALE_REQUEST_EXPIRE_FAILED: channel={channel_path.stem} error={result.get('error')}")
-        if branch_active or "close_active" not in source:
+        if "close_active" not in source:
             continue
-        result = invoke_dynamic(channel_path, "close_active")
+        if ITER_REQUEST_BINDING and "receive_request" in source:
+            # Close only the foreground's own request; branches close theirs when they finish.
+            rid = _foreground_request_ids.pop(channel_path.stem, None)
+            if rid is None:
+                continue
+            result = invoke_dynamic(channel_path, "close_active", request_id=rid)
+        elif branch_active:
+            continue
+        else:
+            result = invoke_dynamic(channel_path, "close_active")
         if result.get("ok") and result.get("result"):
             print(f"UNFINISHED_REQUEST_CLOSED: channel={channel_path.stem}")
         elif not result.get("ok"):
@@ -581,7 +670,12 @@ def send_text_only_fallback(content):
 def background_branch_active():
     """True while a promoted background branch still owns the current task."""
     with _branch_lock:
-        return _active_branch is not None
+        return bool(_active_branches)
+
+def background_branch_count():
+    """Number of promoted background branches currently running."""
+    with _branch_lock:
+        return len(_active_branches)
 
 _branch_error = None  # last provider error raised inside a background branch, for main-loop backoff
 
@@ -601,11 +695,11 @@ def pop_branch_error():
 # --- M2 Step 2.1: Threaded LLM call wrapper with deadline T ---
 # Background branch state (populated when ITER_CONCURRENCY_ENABLED)
 _branch_lock = threading.Lock()
-_active_branch = None  # holds BranchState or None
+_active_branches = {}  # branch_id -> BranchState; at most ITER_MAX_BACKGROUND_BRANCHES
 
 class BranchState:
     """State for a promoted background LLM call branch (R11: deep copy, R12: separate client)."""
-    def __init__(self, branch_id, branch_client, branch_messages, thread, result_container):
+    def __init__(self, branch_id, branch_client, branch_messages, thread, result_container, request_ids=None):
         """Initialize branch state for a background LLM call."""
         self.branch_id = branch_id
         self.branch_client = branch_client
@@ -614,6 +708,42 @@ class BranchState:
         self.result_container = result_container
         self.created_at = time.time()
         self.completed = False
+        self.request_ids = dict(request_ids or {})  # channel -> request this branch answers
+
+def _release_branch(branch_id, result_container, reason):
+    """Free a branch's slot and ask the main thread to close any request it left open."""
+    result_container["finished"] = True
+    with _branch_lock:
+        branch = _active_branches.pop(branch_id, None)
+    if branch is None:
+        return False
+    if branch.request_ids:
+        _merge_queue.put({"_branch_done": True, "branch": branch_id, "reason": reason,
+                          "request_ids": dict(branch.request_ids)})
+    return True
+
+def _call_bound(request_ids, function, *args):
+    """Run *function* with tool subprocesses bound to *request_ids* (main-thread sends for a branch)."""
+    if request_ids is None or not ITER_REQUEST_BINDING:
+        return function(*args)
+    previous = getattr(_tool_context, "request_ids", None)
+    _tool_context.request_ids = dict(request_ids)
+    try:
+        return function(*args)
+    finally:
+        _tool_context.request_ids = previous
+
+def _close_branch_requests(done):
+    """Main thread: close requests a finished branch left unanswered (safety net)."""
+    for channel, rid in sorted((done.get("request_ids") or {}).items()):
+        if _foreground_request_ids.get(channel) == rid:
+            continue  # the foreground owns it again
+        path = Path("channels") / (channel + ".py")
+        result = invoke_dynamic(path, "close_active", request_id=rid)
+        if result.get("ok") and result.get("result"):
+            print(f"BRANCH_REQUEST_CLOSED: branch_id={done.get('branch')} reason={done.get('reason')} request={rid[:12]}")
+        elif not result.get("ok"):
+            print(f"BRANCH_REQUEST_CLOSE_FAILED: branch_id={done.get('branch')} request={rid[:12]} error={result.get('error')}")
 
 def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_tokens, extra_body, result_container):
     """Thread target for background LLM call; stores result in result_container.
@@ -662,11 +792,8 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
             }
             _merge_queue.put(error_marker)
             record_branch_error(e)
-            # Free the branch slot if we're still the active branch
-            global _active_branch
-            with _branch_lock:
-                if _active_branch is not None and _active_branch.branch_id == branch_id:
-                    _active_branch = None
+            # Free the branch slot and hand its request back to the main thread
+            _release_branch(branch_id, result_container, "error")
             print(f"BACKGROUND_ERROR: branch_id={branch_id} error={type(e).__name__}: {e}")
 
 # --- M3 Step 3.5: Background branch mini-loop (R20: branch step budget + checkpoint queuing) ---
@@ -683,7 +810,8 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
 
     Flag-off: never called; threaded_llm_call is behind ITER_CONCURRENCY_ENABLED.
     """
-    global _active_branch
+    if result_container.get("request_ids") is not None:
+        _tool_context.request_ids = dict(result_container["request_ids"])  # sends answer this branch's request
     response = initial_response
     branch_steps = 0
 
@@ -761,9 +889,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
             }
             _merge_queue.put(error_marker)
             record_branch_error(e)
-            with _branch_lock:
-                if _active_branch is not None and _active_branch.branch_id == branch_id:
-                    _active_branch = None
+            _release_branch(branch_id, result_container, "error")
             print(f"BACKGROUND_ERROR: branch_id={branch_id} error={type(e).__name__}: {e}")
             return
 
@@ -772,14 +898,13 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
         # R20: Queue Tier-1 checkpoint data to main thread (never write files directly)
         checkpoint_data = extract_tier1_checkpoint(branch_messages, branch_steps)
         checkpoint_data["branch"] = branch_id
+        checkpoint_data["request_ids"] = result_container.get("request_ids")
         checkpoint_data["_checkpoint_payload"] = True
         _merge_queue.put(checkpoint_data)
         print(f"BRANCH_CHECKPOINT_QUEUED: branch_id={branch_id} steps={branch_steps}")
 
-    # Free the branch slot (compare-and-swap to avoid racing with deadline check)
-    with _branch_lock:
-        if _active_branch is not None and _active_branch.branch_id == branch_id:
-            _active_branch = None
+    # Free the branch slot (pop by id: a deadline abandon may already have removed it)
+    _release_branch(branch_id, result_container, "complete")
     print(f"BRANCH_COMPLETE: branch_id={branch_id} steps={branch_steps}")
 
 
@@ -792,7 +917,7 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
       a separate OpenAI client (R12), and branch id bg-<uuid8>. Returns (None, BranchState).
 
     The original thread continues running (R9: no token waste). The branch's
-    result_container is populated when the thread completes; _active_branch
+    result_container is populated when the thread completes; _active_branches
     holds the branch for merge-queue integration (step 2.2).
 
     Flag-off: not called; the existing direct client.chat.completions.create path is used.
@@ -806,10 +931,10 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
     thread.start()
     thread.join(timeout=ITER_PROMOTE_SECONDS)
 
-    if thread.is_alive() and background_branch_active():
-        # Only one background branch may exist: never overwrite it (that would reset its
-        # deadline and orphan the old thread). Answer this call in the foreground instead.
-        print(f"LLM_PROMOTION_SKIPPED: background branch already active; waiting in foreground")
+    if thread.is_alive() and background_branch_count() >= ITER_MAX_BACKGROUND_BRANCHES:
+        # The branch set is full: never evict a running branch (that would orphan its
+        # thread). Answer this call in the foreground instead.
+        print(f"LLM_PROMOTION_SKIPPED: {ITER_MAX_BACKGROUND_BRANCHES} background branch(es) already active; waiting in foreground")
         thread.join(timeout=LLM_TIMEOUT + 30)
         if thread.is_alive():
             raise Exception("Background LLM call failed: APITimeoutError: foreground call exceeded LLM_TIMEOUT")
@@ -817,6 +942,8 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
     if thread.is_alive():
         # Deadline expired — promote to background branch
         branch_id = f"bg-{uuid.uuid4().hex[:8]}"
+        request_ids = dict(_foreground_request_ids) if ITER_REQUEST_BINDING else {}
+        result_container["request_ids"] = request_ids if ITER_REQUEST_BINDING else None
         result_container["branch_id"] = branch_id  # R14: thread reads this on error to push marker
         bg_messages = copy.deepcopy(messages)
         bg_client = openai.OpenAI(
@@ -833,11 +960,18 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
             branch_messages=bg_messages,
             thread=thread,
             result_container=result_container,
+            request_ids=request_ids,
         )
         with _branch_lock:
-            global _active_branch
-            _active_branch = branch
-        print(f"LLM_PROMOTED: branch_id={branch_id} deadline={ITER_PROMOTE_SECONDS}s")
+            _active_branches[branch_id] = branch
+            active_count = len(_active_branches)
+        if result_container.get("finished"):  # branch finished before it was registered
+            _release_branch(branch_id, result_container, "complete")
+        if ITER_REQUEST_BINDING:
+            _foreground_request_ids.clear()  # the branch now owns these requests
+        print(f"LLM_PROMOTED: branch_id={branch_id} deadline={ITER_PROMOTE_SECONDS}s "
+              f"active={active_count}/{ITER_MAX_BACKGROUND_BRANCHES} "
+              f"requests={sorted(rid[:12] for rid in request_ids.values())}")
         return None, branch
 
     # Call completed within deadline
@@ -877,6 +1011,7 @@ def drain_merge_queue():
     # Collect all pending entries, separating checkpoint payloads (R20) from regular entries
     merged_entries = []
     checkpoint_payloads = []
+    done_payloads = []
     while True:
         try:
             entry = _merge_queue.get_nowait()
@@ -888,6 +1023,9 @@ def drain_merge_queue():
         if entry.get("_checkpoint_payload"):
             checkpoint_payloads.append(entry)
             continue
+        if entry.get("_branch_done"):
+            done_payloads.append(entry)
+            continue
         # Ensure branch tag is present (R16)
         if "branch" not in entry:
             entry["branch"] = "unknown"
@@ -895,19 +1033,23 @@ def drain_merge_queue():
 
     # R20: Main thread handles checkpoint file write + send (single-writer discipline)
     for cp in checkpoint_payloads:
-        cp_data = {k: v for k, v in cp.items() if k not in ("branch", "_checkpoint_payload")}
+        cp_data = {k: v for k, v in cp.items() if k not in ("branch", "_checkpoint_payload", "request_ids")}
         cp_path = write_checkpoint_file(cp_data)
         if cp_path:
             print(f"BRANCH_CHECKPOINT_FILE_WRITTEN: {cp_path}")
         else:
             print("BRANCH_CHECKPOINT_FILE_WRITE_FAILED — will still attempt send")
-        send_checkpoint_message(cp_data, cp_path)
+        _call_bound(cp.get("request_ids"), send_checkpoint_message, cp_data, cp_path)
         # Add a system marker to experience so the LLM sees the branch checkpoint
         experience.append({
             "role": "system",
             "content": f"[BACKGROUND_BRANCH_CHECKPOINT] branch={cp.get('branch', '?')} steps={cp_data.get('step_count', '?')} file={cp_path}",
             "branch": cp.get("branch", "unknown"),
         })
+
+    # Multi-branch: close requests that finished branches left without a final answer
+    for done in done_payloads:
+        _close_branch_requests(done)
 
     if not merged_entries:
         save_experience(experience) if checkpoint_payloads else None
@@ -949,49 +1091,52 @@ def drain_merge_queue():
 
 # --- M3 Step 3.1: BACKGROUND_DEADLINE — abandon + marker + slot frees (R13) ---
 def check_background_deadline():
-    """Check if the active background branch has exceeded BACKGROUND_DEADLINE (R13).
+    """Abandon every background branch idle longer than BACKGROUND_DEADLINE (R13).
 
-    If the branch has been running longer than BACKGROUND_DEADLINE seconds:
-    - its results are discarded (the daemon thread continues but we ignore it);
+    For each branch whose last progress (LLM response or tool result; creation
+    time if none yet) is older than BACKGROUND_DEADLINE seconds:
+    - its results are discarded and its thread is told to stop;
     - an abandon marker is queued to _merge_queue with branch id and timing;
-    - the branch slot is freed (_active_branch = None), allowing a new promotion.
+    - its slot is freed, allowing a new promotion, and its request is handed
+      back to the main thread for closing.
 
-    Returns True if a branch was abandoned, False otherwise.
-    Flag-off: never called; _active_branch is always None when flag is off.
+    Returns True if any branch was abandoned, False otherwise.
+    Flag-off: never called; _active_branches is always empty when flag is off.
     """
-    global _active_branch
+    now = time.time()
+    abandoned = []
     with _branch_lock:
-        branch = _active_branch
-        if branch is None:
-            return False
-        now = time.time()
-        elapsed = now - branch.created_at
-        # R13 (revised): idle deadline — measured from the branch's last progress
-        # (LLM response or tool result), not from creation. A branch that keeps
-        # making progress is bounded by BRANCH_STEP_BUDGET, not by wall-clock.
-        last_progress = branch.result_container.get("last_progress_at", branch.created_at)
-        idle = now - last_progress
-        if idle <= BACKGROUND_DEADLINE:
-            return False
-        # Branch has exceeded the deadline — abandon it
+        for branch_id, branch in list(_active_branches.items()):
+            elapsed = now - branch.created_at
+            # R13 (revised): idle deadline, measured from the branch's last progress,
+            # not from creation. A branch that keeps making progress is bounded by
+            # BRANCH_STEP_BUDGET, not by wall-clock.
+            last_progress = branch.result_container.get("last_progress_at", branch.created_at)
+            idle = now - last_progress
+            if idle <= BACKGROUND_DEADLINE:
+                continue
+            has_result = bool(branch.result_container.get("ok", False))
+            branch.result_container["abandoned"] = True  # tells the branch thread to stop
+            branch.result_container["finished"] = True
+            del _active_branches[branch_id]  # free the slot (R13)
+            abandoned.append((branch, elapsed, idle, has_result))
+    for branch, elapsed, idle, has_result in abandoned:
         branch_id = branch.branch_id
-        has_result = bool(branch.result_container.get("ok", False))
-        branch.result_container["abandoned"] = True  # tells the branch thread to stop
-        _active_branch = None  # free the slot (R13)
-    # Queue abandon marker (R13: "an abandon marker is queued")
-    abandon_marker = {
-        "role": "system",
-        "content": (
-            f"[BACKGROUND_BRANCH_ABANDONED] branch_id={branch_id} "
-            f"elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s. "
-            f"LLM call completed: {has_result}. Results discarded."
-        ),
-        "branch": branch_id,
-        "abandoned": True,
-    }
-    _merge_queue.put(abandon_marker)
-    print(f"BACKGROUND_ABANDONED: branch_id={branch_id} elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s llm_completed={has_result}")
-    return True
+        _merge_queue.put({
+            "role": "system",
+            "content": (
+                f"[BACKGROUND_BRANCH_ABANDONED] branch_id={branch_id} "
+                f"elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s. "
+                f"LLM call completed: {has_result}. Results discarded."
+            ),
+            "branch": branch_id,
+            "abandoned": True,
+        })
+        if branch.request_ids:
+            _merge_queue.put({"_branch_done": True, "branch": branch_id, "reason": "abandoned",
+                              "request_ids": dict(branch.request_ids)})
+        print(f"BACKGROUND_ABANDONED: branch_id={branch_id} elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s llm_completed={has_result}")
+    return bool(abandoned)
 
 # --- M3 Step 3.3: Shutdown protocol (R17: SIGTERM/SIGINT stop event, 5s grace, drain, save, exit) ---
 SHUTDOWN_GRACE = int(os.getenv("ITER_SHUTDOWN_GRACE", "5"))
@@ -1034,15 +1179,12 @@ def graceful_shutdown():
     - Exit cleanly. Branch threads are daemon threads so they cannot block exit.
     """
     print(f"SHUTDOWN: grace={SHUTDOWN_GRACE}s")
-    global _active_branch
     deadline = time.time() + SHUTDOWN_GRACE
     while time.time() < deadline:
         with _branch_lock:
-            branch = _active_branch
-        if branch is None:
-            break
-        # Check if branch thread has completed (ok key present = success or error)
-        if branch.result_container.get("ok") is not None:
+            branches = list(_active_branches.values())
+        # Stop waiting once every branch thread has a result (ok key present = success or error)
+        if all(branch.result_container.get("ok") is not None for branch in branches):
             break
         time.sleep(0.1)
     drained = drain_merge_queue()
@@ -1120,6 +1262,7 @@ post_task_mode, autonomous_steps, new_burst = False, 0, True
 _last_autonomous_ts = 0.0
 retryable_failures, capped_waits, provider_idle = 0, 0, False
 send_since_checkpoint = False
+_tool_context.request_ids = _foreground_request_ids if ITER_REQUEST_BINDING else None
 pending_event_append = resume_claimed()
 cleanup_interval = MAX_EXPERIENCE_SIZE - RETAIN_EXPERIENCE_SIZE
 cleanup_bucket = len(experience) // cleanup_interval
@@ -1161,7 +1304,8 @@ while True:
         print("AFTER RECEIVE")
         if event_append:
             provider_idle = False
-        elif provider_idle or (ITER_CONCURRENCY_ENABLED and background_branch_active()):
+        elif provider_idle or (ITER_CONCURRENCY_ENABLED and background_branch_active()
+                               and not (ITER_REQUEST_BINDING and _foreground_request_ids)):
             # A background branch owns the task, or the provider gave up: only poll for input.
             # Starting another "continue" turn here would run a second worker on stale context.
             time.sleep(BRANCH_IDLE_POLL_SECONDS)
@@ -1252,6 +1396,8 @@ while True:
             except:
                 retry_message = [{"role": "user", "content": f"[YOUR PREVIOUS RESPONSE CONTAINED NO TOOL CALL AND WAS NOT DELIVERED. CALL AT LEAST ONE TOOL NOW. IF YOU INTENDED THIS CONTENT AS COMMUNICATION, USE send: {message.content!r}]"}]
         if _promoted:
+            if ITER_REQUEST_BINDING:
+                new_burst = True  # the branch owns this task now; the foreground is free
             continue
         if text_only_idle:
             retryable_failures, capped_waits = 0, 0
