@@ -923,8 +923,17 @@ def transform(messages, tools):
             pending_path = Path(__file__).resolve().parent.parent / 'memory' / '_wmtm_pending_derives.jsonl'
             if pending_path.exists():
                 try:
-                    lines = pending_path.read_text().strip().splitlines()
-                    pending_path.write_text('')  # clear after read
+                    import fcntl
+                    # Read + clear under the same flock the writer uses, so an
+                    # append landing between read and clear is not lost.
+                    with open(pending_path, 'r+') as pf:
+                        fcntl.flock(pf, fcntl.LOCK_EX)
+                        try:
+                            lines = pf.read().strip().splitlines()
+                            pf.seek(0)
+                            pf.truncate()
+                        finally:
+                            fcntl.flock(pf, fcntl.LOCK_UN)
                     for line in lines:
                         if not line.strip():
                             continue
