@@ -97,15 +97,24 @@ class WMTMOrchestrator:
         F01: WMTM state (store items, attention values, cycle count) is lost when
         the agent process restarts. This method captures a JSON-serializable
         snapshot that can be restored via restore_state().
+
+        F01b: Also persists UtilityTracker and ForgettingLog state. Without this,
+        utility scores reset to 0.0 on every restart, making the forgetting policy
+        unable to distinguish useful items from noise (all items show util=0.0).
         """
         return {
             "cycle": self._cycle,
             "store": self.store.to_dict(),
+            "utility": self.utility.to_dict(),
+            "forgetting_log": self.forget_log.to_dict(),
             "goal_store_path": self.goal_store.path if self.goal_store is not None else None,
         }
 
     def restore_state(self, snapshot: dict) -> None:
         """Restore orchestrator state from a snapshot (F01).
+
+        F01b: Also restores UtilityTracker and ForgettingLog state so that
+        utility scores and forgetting history survive process restarts.
 
         Args:
             snapshot: dict from snapshot_state(), or empty dict for fresh start.
@@ -116,6 +125,12 @@ class WMTMOrchestrator:
         if "store" in snapshot:
             from .store import WMTMStore
             self.store = WMTMStore.from_dict(snapshot["store"])
+        if "utility" in snapshot:
+            from .utility import UtilityTracker
+            self.utility = UtilityTracker.from_dict(snapshot["utility"])
+        if "forgetting_log" in snapshot:
+            from .forgetting_log import ForgettingLog
+            self.forget_log = ForgettingLog.from_dict(snapshot["forgetting_log"])
 
     # ── Phase helpers ──────────────────────────────────────────────
 

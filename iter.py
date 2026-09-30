@@ -47,14 +47,103 @@ BACKGROUND_DEADLINE = max(2 * ITER_PROMOTE_SECONDS, 300)
 BRANCH_STEP_BUDGET = int(os.getenv("ITER_BRANCH_STEP_BUDGET", "25"))
 SLOW_STEP_DELAY = 10
 ERROR_RECOVERY_TIME = 1 #after how long to retry when exception occurs
+RETRY_BACKOFF_BASE = 5 #first wait after a retryable provider error (429/5xx/timeout); doubles per consecutive failure
+RETRY_BACKOFF_CAP = 300 #maximum wait between retryable provider errors
+RETRY_CAP_HITS_BEFORE_IDLE = 3 #consecutive capped waits before giving up and idling until new user input
+BRANCH_IDLE_POLL_SECONDS = 1 #receive() poll interval while a background branch owns the current task
 RETURN_VALUE_PRESERVE = 0
 RETURN_VALUE_PRESERVE_MESSAGES = 10
 DEFAULT_DELAY = 0 #default delay added irregard of whether in slow mode
-MAX_TOKENS = 2524
+AUTONOMOUS_CHECKIN_INTERVAL = 900 #min seconds between idle autonomous continuation turns (post_task_mode); receive() polling for real user input is never delayed by this
+TEXT_ONLY_RETRY_CAP = 2 #text-only (no tool call) replies re-prompted before the turn is treated as nop; autonomous turns treat the first one as nop
+MAX_TOKENS = 32000
 INIT_WAIT = 10
 MAX_TOOLS = 30
 MAX_TOOL_DESCRIPTION_CHARS = 500
 DYNAMIC_TIMEOUT = 30
+
+# BEGIN PDF_TURN_IMAGES (2026-09-29, Ben Telegram 7223)
+# The Telegram receiver renders low-text PDF pages to PNGs inside this agent's
+# private attachments directory and lists each one on a receipt line
+#   PDF_PAGE_IMAGE page=N path=/abs/file.png sha256=<hex>
+# Attach those images (as OpenAI-style image_url data parts, which the OpenClaw
+# chat-completions gateway forwards for the active user turn) to the model
+# request only.  experience/history keeps the text; files outside the private
+# root, non-PNGs, oversize files, and hash mismatches are ignored.
+import base64 as _pdf_b64
+import re as _pdf_re
+import stat as _pdf_stat
+PDF_TURN_IMAGE_MAX = 6
+PDF_TURN_IMAGE_MAX_BYTES = 3_000_000
+PDF_TURN_IMAGE_TOTAL_BYTES = 8_000_000
+_PDF_TURN_IMAGE_RE = _pdf_re.compile(r"^PDF_PAGE_IMAGE page=(\d{1,5}) path=(/\S+\.png) sha256=([0-9a-f]{64})$", _pdf_re.MULTILINE)
+
+
+def _pdf_turn_image_root():
+    override = os.getenv("ITER_ATTACHMENT_IMAGE_ROOT", "")
+    if override:
+        return Path(override)
+    channel_root = os.getenv("ITER_OUTER_CHANNEL_ROOT", "")
+    if channel_root:
+        return Path(channel_root).parent / "attachments"
+    return None
+
+
+def attach_turn_pdf_images(request_messages):
+    """Return a request copy whose final user message carries the PDF page images."""
+    try:
+        if not request_messages:
+            return request_messages
+        last = request_messages[-1]
+        if not isinstance(last, dict) or last.get("role") != "user" or not isinstance(last.get("content"), str):
+            return request_messages
+        trailing = []
+        for message in reversed(request_messages):
+            if not isinstance(message, dict) or message.get("role") != "user":
+                break
+            if isinstance(message.get("content"), str):
+                trailing.append(message["content"])
+        matches = []
+        for text in reversed(trailing):
+            matches.extend(_PDF_TURN_IMAGE_RE.findall(text))
+        if not matches:
+            return request_messages
+        root = _pdf_turn_image_root()
+        if root is None or not root.is_dir() or root.is_symlink():
+            return request_messages
+        root_real = os.path.realpath(root)
+        parts, seen, total = [], set(), 0
+        for _page, path, digest in matches:
+            if len(parts) >= PDF_TURN_IMAGE_MAX:
+                break
+            real = os.path.realpath(path)
+            if real != path or not real.startswith(root_real + os.sep) or real in seen:
+                continue
+            try:
+                info = os.lstat(real)
+            except OSError:
+                continue
+            if (not _pdf_stat.S_ISREG(info.st_mode) or info.st_size > PDF_TURN_IMAGE_MAX_BYTES
+                    or total + info.st_size > PDF_TURN_IMAGE_TOTAL_BYTES):
+                continue
+            with open(real, "rb") as handle:
+                data = handle.read(PDF_TURN_IMAGE_MAX_BYTES + 1)
+            if (len(data) > PDF_TURN_IMAGE_MAX_BYTES or data[:8] != b"\x89PNG\r\n\x1a\n"
+                    or hashlib.sha256(data).hexdigest() != digest):
+                continue
+            seen.add(real)
+            total += len(data)
+            parts.append({"type": "image_url", "image_url": {
+                "url": "data:image/png;base64," + _pdf_b64.b64encode(data).decode("ascii")}})
+        if not parts:
+            return request_messages
+        print(f"PDF_TURN_IMAGES_ATTACHED count={len(parts)} bytes={total}")
+        return list(request_messages[:-1]) + [dict(last, content=[{"type": "text", "text": last["content"]}] + parts)]
+    except Exception as error:
+        print(f"PDF_TURN_IMAGES_SKIPPED {type(error).__name__}")
+        return request_messages
+# END PDF_TURN_IMAGES
+
 MODEL = os.getenv("LLM_MODEL", "mlx-community/gemma-4-26b-a4b-it-4bit")
 BASE_URL = os.getenv("BASE_URL", "http://192.168.64.1:2277/v1")
 API_KEY = os.getenv("AI_API_KEY", "dummy")
@@ -182,6 +271,38 @@ def resume_claimed():
         if event:
             events.append("[" + path.stem + "] " + str(event))
     return "\n".join(events)
+
+ITER_REQUEST_TIMEOUT = float(os.getenv("ITER_REQUEST_TIMEOUT", "3600"))
+
+def close_unfinished_requests():
+    """Turn-end safety net (multi-send channels only):
+    1. expire_stale: close any request open longer than ITER_REQUEST_TIMEOUT,
+       even while a background branch runs (a hung branch must not hold it forever).
+    2. close_active: close a request left open without a final send.
+       Skipped while a background branch is active, since the branch may own it."""
+    branch_active = False
+    if ITER_CONCURRENCY_ENABLED:
+        with _branch_lock:
+            branch_active = _active_branch is not None
+    for channel_path in sorted(Path("channels").glob("*.py")):
+        try:
+            source = channel_path.read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if "expire_stale" in source and ITER_REQUEST_TIMEOUT > 0:
+            result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT)
+            if result.get("ok") and result.get("result"):
+                print(f"STALE_REQUEST_EXPIRED: channel={channel_path.stem}")
+                continue
+            elif not result.get("ok"):
+                print(f"STALE_REQUEST_EXPIRE_FAILED: channel={channel_path.stem} error={result.get('error')}")
+        if branch_active or "close_active" not in source:
+            continue
+        result = invoke_dynamic(channel_path, "close_active")
+        if result.get("ok") and result.get("result"):
+            print(f"UNFINISHED_REQUEST_CLOSED: channel={channel_path.stem}")
+        elif not result.get("ok"):
+            print(f"UNFINISHED_REQUEST_CLOSE_FAILED: channel={channel_path.stem} error={result.get('error')}")
 
 def slow_wait_for_input():
     """Sleep up to SLOW_STEP_DELAY seconds, checking for input each second."""
@@ -365,6 +486,118 @@ def send_terminal_provider_failure(error):
     print(f"TERMINAL_PROVIDER_BREAKER_SENT: status={status}")
     return True
 
+RETRYABLE_PROVIDER_STATUS_CODES = frozenset({408, 409, 429, 500, 502, 503, 504, 529})
+QUOTA_EXHAUSTED_PATTERN = re.compile(
+    r"usage limit|next reset in|insufficient_quota|quota exceeded|exceeded your current quota",
+    re.IGNORECASE)
+
+def retryable_provider_error(error):
+    """True for transient provider failures (rate limit, 5xx, timeout, disconnect) that deserve backoff."""
+    for candidate in (error, getattr(error, "response", None)):
+        status = getattr(candidate, "status_code", None)
+        if type(status) is int and status in RETRYABLE_PROVIDER_STATUS_CODES:
+            return True
+    if isinstance(error, (openai.APITimeoutError, openai.APIConnectionError)):
+        return True
+    text = str(error)
+    codes = "|".join(str(code) for code in sorted(RETRYABLE_PROVIDER_STATUS_CODES))
+    if re.search(rf"\bError code:\s*({codes})\b", text):
+        return True
+    return bool(re.search(r"RateLimitError|APITimeoutError|APIConnectionError|InternalServerError|timed out|ClientDisconnect",
+                          text))
+
+def provider_quota_exhausted(error):
+    """True when the provider reports a long-lived quota/usage limit rather than a short rate limit."""
+    return bool(QUOTA_EXHAUSTED_PATTERN.search(str(error)))
+
+def retry_after_seconds(error):
+    """Return the provider's Retry-After hint in seconds, if present."""
+    response = getattr(error, "response", None)
+    headers = getattr(response, "headers", None)
+    if not headers:
+        return None
+    try:
+        value = float(headers.get("retry-after"))
+    except (TypeError, ValueError):
+        return None
+    return value if value >= 0 else None
+
+def retry_backoff_delay(consecutive_failures, retry_after=None, jitter=None):
+    """Exponential backoff: RETRY_BACKOFF_BASE * 2^(n-1), capped, plus up to 10% jitter; honours Retry-After."""
+    exponent = max(consecutive_failures - 1, 0)
+    delay = min(RETRY_BACKOFF_BASE * (2 ** min(exponent, 16)), RETRY_BACKOFF_CAP)
+    if retry_after is not None:
+        delay = max(delay, min(retry_after, 3600))
+    if jitter is None:
+        jitter = int.from_bytes(os.urandom(2), "big") / 65535
+    return delay + delay * 0.1 * jitter
+
+def backoff_wait(seconds):
+    """Sleep `seconds` while polling receive() each second; return any inbound events (never dropped)."""
+    events = []
+    deadline = time.time() + seconds
+    while time.time() < deadline:
+        time.sleep(min(1, max(deadline - time.time(), 0)))
+        event_append = receive()
+        if event_append:
+            events.append(event_append)
+    return "\n".join(events)
+
+def send_provider_exhausted_notice(error):
+    """Send one bounded, non-secret notice that the provider is unavailable and Iter is idling."""
+    content = (
+        "ProtoCosmo2 paused this request: its model provider keeps rejecting calls "
+        "(rate limit or exhausted usage quota). It will not retry automatically; "
+        "send a new message to try again."
+    )
+    result = invoke_dynamic(Path("tools/send.py"), "run",
+                            channel=CHECKPOINT_CHANNEL, content=content)
+    if not result["ok"] or result["result"] != "SUCCESS":
+        print(f"PROVIDER_EXHAUSTED_NOTICE_SEND_FAILED: {result}")
+        return
+    print(f"PROVIDER_EXHAUSTED_NOTICE_SENT: {type(error).__name__}")
+
+TEXT_ONLY_FALLBACK_MAX_CHARS = 3500
+
+def send_text_only_fallback(content):
+    """Post a text-only reply that would otherwise be dropped. Best-effort; returns True on success."""
+    text = (content or "").strip()
+    if not text:
+        print("TEXT_ONLY_FALLBACK_SKIPPED: empty")
+        return False
+    if len(text) > TEXT_ONLY_FALLBACK_MAX_CHARS:
+        text = text[:TEXT_ONLY_FALLBACK_MAX_CHARS] + " [...truncated]"
+    try:
+        result = invoke_dynamic(Path("tools/send.py"), "run", channel=CHECKPOINT_CHANNEL, content=text)
+    except Exception as error:
+        print(f"TEXT_ONLY_FALLBACK_EXCEPTION: {type(error).__name__}: {error}")
+        return False
+    if not result["ok"] or result["result"] != "SUCCESS":
+        print(f"TEXT_ONLY_FALLBACK_SEND_FAILED: {result}")
+        return False
+    print(f"TEXT_ONLY_FALLBACK_SENT: chars={len(text)}")
+    return True
+
+def background_branch_active():
+    """True while a promoted background branch still owns the current task."""
+    with _branch_lock:
+        return _active_branch is not None
+
+_branch_error = None  # last provider error raised inside a background branch, for main-loop backoff
+
+def record_branch_error(error):
+    """Hand a background-branch provider error to the main loop (terminal breaker / backoff)."""
+    global _branch_error
+    with _branch_lock:
+        _branch_error = error
+
+def pop_branch_error():
+    """Return and clear the pending background-branch error, if any."""
+    global _branch_error
+    with _branch_lock:
+        error, _branch_error = _branch_error, None
+    return error
+
 # --- M2 Step 2.1: Threaded LLM call wrapper with deadline T ---
 # Background branch state (populated when ITER_CONCURRENCY_ENABLED)
 _branch_lock = threading.Lock()
@@ -399,8 +632,12 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
         )
         result_container["ok"] = True
         result_container["response"] = response
+        result_container["last_progress_at"] = time.time()  # R13: progress resets idle deadline
         # M3 Step 3.5: if promoted, run the branch mini-loop (R20: step budget + checkpoint queuing)
         branch_id = result_container.get("branch_id")
+        if branch_id and result_container.get("abandoned"):
+            print(f"BACKGROUND_ABANDONED_RESULT_DROPPED: branch_id={branch_id}")
+            return
         if branch_id:
             branch_client = result_container.get("branch_client")
             branch_messages = result_container.get("branch_messages")
@@ -424,6 +661,7 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
                 "error_message": str(e)[:500],
             }
             _merge_queue.put(error_marker)
+            record_branch_error(e)
             # Free the branch slot if we're still the active branch
             global _active_branch
             with _branch_lock:
@@ -454,6 +692,10 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
     tools = native_tools(inops)
 
     while branch_steps < BRANCH_STEP_BUDGET:
+        if result_container.get("abandoned"):
+            # Deadline abandonment must actually stop work, not just discard results.
+            print(f"BRANCH_STOPPED_AFTER_ABANDON: branch_id={branch_id} steps={branch_steps}")
+            return
         message = response.choices[0].message
 
         # Build assistant entry for merge queue (tagged) and branch_messages (untagged)
@@ -490,6 +732,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
             tool_content = "Step " + get_current_time() + ": " + ret
             _merge_queue.put({"role": "tool", "tool_call_id": tool_call.id, "content": tool_content, "branch": branch_id})
             branch_messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": tool_content})
+            result_container["last_progress_at"] = time.time()  # R13: tool result = progress
 
         branch_steps += 1
         if branch_steps >= BRANCH_STEP_BUDGET:
@@ -499,9 +742,10 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
         try:
             response = branch_client.chat.completions.create(
                 model=MODEL, messages=branch_messages, tools=tools,
-                tool_choice="required", max_tokens=MAX_TOKENS,
+                tool_choice="auto", max_tokens=MAX_TOKENS,
                 extra_body={"enable_thinking": True},
             )
+            result_container["last_progress_at"] = time.time()  # R13: LLM step = progress
         except Exception as e:
             # R14: push error marker and free slot
             error_marker = {
@@ -516,6 +760,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
                 "error_message": str(e)[:500],
             }
             _merge_queue.put(error_marker)
+            record_branch_error(e)
             with _branch_lock:
                 if _active_branch is not None and _active_branch.branch_id == branch_id:
                     _active_branch = None
@@ -560,6 +805,14 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
     )
     thread.start()
     thread.join(timeout=ITER_PROMOTE_SECONDS)
+
+    if thread.is_alive() and background_branch_active():
+        # Only one background branch may exist: never overwrite it (that would reset its
+        # deadline and orphan the old thread). Answer this call in the foreground instead.
+        print(f"LLM_PROMOTION_SKIPPED: background branch already active; waiting in foreground")
+        thread.join(timeout=LLM_TIMEOUT + 30)
+        if thread.is_alive():
+            raise Exception("Background LLM call failed: APITimeoutError: foreground call exceeded LLM_TIMEOUT")
 
     if thread.is_alive():
         # Deadline expired — promote to background branch
@@ -711,26 +964,33 @@ def check_background_deadline():
         branch = _active_branch
         if branch is None:
             return False
-        elapsed = time.time() - branch.created_at
-        if elapsed <= BACKGROUND_DEADLINE:
+        now = time.time()
+        elapsed = now - branch.created_at
+        # R13 (revised): idle deadline — measured from the branch's last progress
+        # (LLM response or tool result), not from creation. A branch that keeps
+        # making progress is bounded by BRANCH_STEP_BUDGET, not by wall-clock.
+        last_progress = branch.result_container.get("last_progress_at", branch.created_at)
+        idle = now - last_progress
+        if idle <= BACKGROUND_DEADLINE:
             return False
         # Branch has exceeded the deadline — abandon it
         branch_id = branch.branch_id
         has_result = bool(branch.result_container.get("ok", False))
+        branch.result_container["abandoned"] = True  # tells the branch thread to stop
         _active_branch = None  # free the slot (R13)
     # Queue abandon marker (R13: "an abandon marker is queued")
     abandon_marker = {
         "role": "system",
         "content": (
             f"[BACKGROUND_BRANCH_ABANDONED] branch_id={branch_id} "
-            f"elapsed={elapsed:.1f}s deadline={BACKGROUND_DEADLINE}s. "
+            f"elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s. "
             f"LLM call completed: {has_result}. Results discarded."
         ),
         "branch": branch_id,
         "abandoned": True,
     }
     _merge_queue.put(abandon_marker)
-    print(f"BACKGROUND_ABANDONED: branch_id={branch_id} elapsed={elapsed:.1f}s deadline={BACKGROUND_DEADLINE}s llm_completed={has_result}")
+    print(f"BACKGROUND_ABANDONED: branch_id={branch_id} elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s llm_completed={has_result}")
     return True
 
 # --- M3 Step 3.3: Shutdown protocol (R17: SIGTERM/SIGINT stop event, 5s grace, drain, save, exit) ---
@@ -857,6 +1117,8 @@ time.sleep(INIT_WAIT)
 Path("memory").mkdir(exist_ok=True)
 Path("transformations").mkdir(exist_ok=True)
 post_task_mode, autonomous_steps, new_burst = False, 0, True
+_last_autonomous_ts = 0.0
+retryable_failures, capped_waits, provider_idle = 0, 0, False
 send_since_checkpoint = False
 pending_event_append = resume_claimed()
 cleanup_interval = MAX_EXPERIENCE_SIZE - RETAIN_EXPERIENCE_SIZE
@@ -891,9 +1153,19 @@ while True:
     turn_checkpoint = len(experience)
     try:
         time.sleep(DEFAULT_DELAY)
+        branch_error = pop_branch_error() if ITER_CONCURRENCY_ENABLED else None
+        if branch_error is not None:
+            raise branch_error  # same terminal/backoff handling as a foreground failure
         print("BEFORE RECEIVE")
         event_append = pending_event_append or receive()
         print("AFTER RECEIVE")
+        if event_append:
+            provider_idle = False
+        elif provider_idle or (ITER_CONCURRENCY_ENABLED and background_branch_active()):
+            # A background branch owns the task, or the provider gave up: only poll for input.
+            # Starting another "continue" turn here would run a second worker on stale context.
+            time.sleep(BRANCH_IDLE_POLL_SECONDS)
+            continue
         if event_append:
             autonomous_steps, new_burst, post_task_mode = 0, False, False
             send_since_checkpoint = False
@@ -904,14 +1176,21 @@ while True:
             base_temporary_message = []
         elif new_burst:
             post_task_mode, new_burst = True, False
+            _last_autonomous_ts = time.time()  # the throttle window starts at this post-task turn
             base_temporary_message = [{"role": "user", "content": "Step " + get_current_time() + ": [TASK COMPLETED. DO NOT RE-SEND THE COMPLETED RESPONSE BUT SEND IN CASE YOU FORGOT. NOW QUERY FOR AND PICK A TASK BASED ON YOUR GOALS, PREFERABLY MEMORY CONSOLIDATION: FINDING EPISODES WHICH SUPPORT / CONTRADICT LTM ITEMS, LINKING EPISODES, PROMOTING USEFUL MEMORIES]"}]
         elif post_task_mode:
+            if time.time() - _last_autonomous_ts < AUTONOMOUS_CHECKIN_INTERVAL:
+                time.sleep(BRANCH_IDLE_POLL_SECONDS)
+                continue  # idle: keep polling receive() cheaply without firing an LLM turn
+            _last_autonomous_ts = time.time()
             base_temporary_message = [{"role": "user", "content": "Step " + get_current_time() + ": [NO NEW USER INPUT. CONTINUE AUTONOMOUS WORK. DO NOT REPEAT THE PREVIOUS RESPONSE. ONLY USE send FOR GENUINELY NEW INFORMATION OR WHEN USER INPUT IS NEEDED.]"}]
         else:
             base_temporary_message = [{"role": "user", "content": "Step " + get_current_time() + ": [NO ADDITIONAL USER INPUT. CONTINUE THE CURRENT USER TASK.]"}]
         history_checkpoint = len(experience) #as we want not to loose user input even when exception
         retry_message = None
         _promoted = False
+        last_text_only_content = None
+        text_only_idle, text_only_retries = False, 0
         while True:
             temporary_message = list(base_temporary_message)
             if retry_message:
@@ -941,21 +1220,30 @@ while True:
             request_messages, request_tools, transformation_error = apply_transformation(request_messages, TOOLS)
             if transformation_error:
                 request_messages += [{"role": "user", "content": transformation_error}]
+            request_messages = attach_turn_pdf_images(request_messages)
             print("BEFORE LLM")
             if ITER_CONCURRENCY_ENABLED:
-                response, _branch = threaded_llm_call(client, MODEL, request_messages, request_tools, "required", MAX_TOKENS, {"enable_thinking": True})
+                response, _branch = threaded_llm_call(client, MODEL, request_messages, request_tools, "auto", MAX_TOKENS, {"enable_thinking": True})
                 if response is None:
                     _promoted = True
                     break
             else:
-                response = client.chat.completions.create(model=MODEL, messages=request_messages, tools=request_tools, tool_choice="required", max_tokens=MAX_TOKENS, extra_body={ "enable_thinking": True})
+                response = client.chat.completions.create(model=MODEL, messages=request_messages, tools=request_tools, tool_choice="auto", max_tokens=MAX_TOKENS, extra_body={ "enable_thinking": True})
             print("AFTER LLM", response)
             message = response.choices[0].message
+            last_text_only_content = message.content if not message.tool_calls else None
             if message.content:
                 message.content += "\n[NOT DELIVERED TO ANY CHANNEL. IF THIS WAS INTENDED AS COMMUNICATION, USE send.]"
             if message.tool_calls:
                 message.tool_calls = message.tool_calls[:MAX_TOOL_CALLS]
                 break
+            if response.choices[0].finish_reason != "length":
+                # Text-only reply: in autonomous mode it means "nothing to do"; otherwise re-prompt at most TEXT_ONLY_RETRY_CAP times.
+                if post_task_mode or text_only_retries >= TEXT_ONLY_RETRY_CAP:
+                    print(f"TEXT_ONLY_IDLE: post_task_mode={post_task_mode} retries={text_only_retries}")
+                    text_only_idle = True
+                    break
+                text_only_retries += 1
             try:
                 if response.choices[0].finish_reason == "length":
                     retry_message = [{"role": "user", "content": "[OUTPUT TOKEN LIMIT REACHED. CALL THE REQUIRED TOOL CONCISELY.]"}]
@@ -965,6 +1253,19 @@ while True:
                 retry_message = [{"role": "user", "content": f"[YOUR PREVIOUS RESPONSE CONTAINED NO TOOL CALL AND WAS NOT DELIVERED. CALL AT LEAST ONE TOOL NOW. IF YOU INTENDED THIS CONTENT AS COMMUNICATION, USE send: {message.content!r}]"}]
         if _promoted:
             continue
+        if text_only_idle:
+            retryable_failures, capped_waits = 0, 0
+            if not post_task_mode and not send_since_checkpoint:
+                # A user request is still unanswered and the model kept replying with text only:
+                # deliver that text instead of silently dropping it.
+                if send_text_only_fallback(last_text_only_content):
+                    send_since_checkpoint = True
+            if not post_task_mode:
+                new_burst = True
+            autonomous_steps = 0
+            pending_event_append = slow_wait_for_input()
+            continue
+        retryable_failures, capped_waits = 0, 0
         print(f"RESPONSE {response}\nFINISH_REASON {response.choices[0].finish_reason}\nUSAGE {response.usage}")
         experience += [{key: value for key, value in message.model_dump(exclude_none=True).items() if KEEP_REASONING_IN_EPISODE or key not in ("reasoning", "reasoning_details", "reasoning_content")}]
         tool_outputs = []
@@ -1012,7 +1313,10 @@ while True:
                 f"Do not wait until the task is fully complete.")}]
             save_experience(experience)
         if called_nop:
-            new_burst, autonomous_steps = True, 0
+            if not post_task_mode:
+                new_burst = True  # a nop during autonomous work must not re-arm the post-task prompt (bypassed the throttle)
+            autonomous_steps = 0
+            close_unfinished_requests()
             pending_event_append = slow_wait_for_input()
         elif autonomous_steps >= MAX_FAST_STEPS:
             # M1 Step 1.1: Tier-1 mechanical checkpoint extraction (flag-guarded)
@@ -1029,6 +1333,7 @@ while True:
                 _checkpoint_data = None
                 _checkpoint_path = None
             autonomous_steps = 0
+            close_unfinished_requests()
             pending_event_append = slow_wait_for_input()
     except Exception as error:
         print(f"Output> {type(error).__name__}: {error}")
@@ -1037,7 +1342,24 @@ while True:
             save_experience(experience)
             autonomous_steps, new_burst, post_task_mode = 0, False, False
             send_since_checkpoint = False
+            retryable_failures, capped_waits = 0, 0
+            provider_idle = True  # terminal: do not re-run the task until new user input
             pending_event_append = slow_wait_for_input()
             continue
         experience = experience[:history_checkpoint]
-        time.sleep(ERROR_RECOVERY_TIME)
+        if not retryable_provider_error(error):
+            time.sleep(ERROR_RECOVERY_TIME)
+            continue
+        retryable_failures += 1
+        delay = retry_backoff_delay(retryable_failures, retry_after_seconds(error))
+        capped_waits = capped_waits + 1 if delay >= RETRY_BACKOFF_CAP else 0
+        if provider_quota_exhausted(error) or capped_waits >= RETRY_CAP_HITS_BEFORE_IDLE:
+            print(f"PROVIDER_EXHAUSTED_IDLE: failures={retryable_failures} quota={provider_quota_exhausted(error)}")
+            send_provider_exhausted_notice(error)
+            autonomous_steps, new_burst, post_task_mode = 0, False, False
+            retryable_failures, capped_waits = 0, 0
+            provider_idle = True
+            pending_event_append = slow_wait_for_input()
+            continue
+        print(f"PROVIDER_BACKOFF: failures={retryable_failures} delay={delay:.1f}s")
+        pending_event_append = backoff_wait(delay)

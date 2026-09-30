@@ -48,15 +48,21 @@ class WMTMStore:
         origin_cluster: Optional[str] = None,
         derived_from: Optional[list[str]] = None,
         initial_sti: float = 1.0,
+        origin_timestamp: float = 0.0,
     ) -> WMTMItem:
         """Add an item. If at/over capacity, evict lowest-STI first.
 
         If the item already exists, refresh its attention and return it.
+        F25: origin_timestamp preserves the journal entry's original date
+        so staleness checks use the real age, not re-admission age.
         """
         if item_id in self._items:
             existing = self._items[item_id]
             existing.attention.boost(initial_sti)
             existing.last_used = self._tick
+            # F25: Preserve the oldest known origin timestamp on re-admission
+            if origin_timestamp > 0 and (existing.origin_timestamp <= 0 or origin_timestamp < existing.origin_timestamp):
+                existing.origin_timestamp = origin_timestamp
             return existing
 
         item = WMTMItem(
@@ -69,6 +75,7 @@ class WMTMStore:
             age=0,
             utility=0.0,
             last_used=self._tick,
+            origin_timestamp=origin_timestamp,
         )
 
         while len(self._items) >= self.capacity:

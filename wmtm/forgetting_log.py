@@ -64,6 +64,16 @@ class ForgettingLog:
         self._records.append(rec)
         self._hashes.add(ch)
         self._ids.add(item.id)
+        # F08b: Enforce max_records cap (FIFO pruning).
+        # Without this, the forgetting log grows unboundedly despite
+        # having a max_records parameter set in __init__.
+        while len(self._records) > self._max_records:
+            pruned = self._records.pop(0)
+            # Only remove hash/id if no other record shares them
+            if not any(r.content_hash == pruned.content_hash for r in self._records):
+                self._hashes.discard(pruned.content_hash)
+            if not any(r.item_id == pruned.item_id for r in self._records):
+                self._ids.discard(pruned.item_id)
         return rec
 
     def is_forgotten(self, content: str) -> bool:
@@ -102,3 +112,44 @@ class ForgettingLog:
     def __len__(self) -> int:
         """Return the number of logged eviction events."""
         return len(self._records)
+
+    # -- F01b: serialization for persistence across subprocess boundaries --
+
+    def to_dict(self) -> dict:
+        """Serialize forgetting log state for persistence."""
+        return {
+            "max_records": self._max_records,
+            "records": [
+                {
+                    "item_id": rec.item_id,
+                    "content_hash": rec.content_hash,
+                    "source_type": rec.source_type,
+                    "evicted_at_tick": rec.evicted_at_tick,
+                    "age_at_eviction": rec.age_at_eviction,
+                    "final_utility": rec.final_utility,
+                    "final_sti": rec.final_sti,
+                    "derived_from": rec.derived_from,
+                }
+                for rec in self._records
+            ],
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ForgettingLog":
+        """Restore forgetting log from serialized dict."""
+        log = cls(max_records=d.get("max_records", 500))
+        for rec_d in d.get("records", []):
+            rec = ForgetRecord(
+                item_id=rec_d["item_id"],
+                content_hash=rec_d["content_hash"],
+                source_type=rec_d.get("source_type", "recalled"),
+                evicted_at_tick=rec_d.get("evicted_at_tick", 0),
+                age_at_eviction=rec_d.get("age_at_eviction", 0),
+                final_utility=rec_d.get("final_utility", 0.0),
+                final_sti=rec_d.get("final_sti", 0.0),
+                derived_from=rec_d.get("derived_from", []),
+            )
+            log._records.append(rec)
+            log._hashes.add(rec.content_hash)
+            log._ids.add(rec.item_id)
+        return log

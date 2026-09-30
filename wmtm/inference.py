@@ -35,30 +35,57 @@ _RE_ISA = re.compile(r'(\w+)\s+is\s+(?:a|an)\s+(\w+)')
 _RE_HAS = re.compile(r'(\w+)\s+has\s+(\w+)')
 
 
+# Words too generic or short to form meaningful triples
+_STOPWORDS = frozenset({
+    'a', 'an', 'the', 'is', 'it', 'its', 'was', 'has', 'had', 'have',
+    'be', 'been', 'are', 'were', 'do', 'does', 'did', 'not', 'no',
+    'and', 'or', 'but', 'if', 'then', 'than', 'that', 'this', 'these',
+    'also', 'just', 'only', 'now', 'here', 'there', 'when', 'where',
+    'which', 'what', 'who', 'how', 'all', 'each', 'every', 'some',
+    'any', 'can', 'will', 'may', 'should', 'could', 'would', 'might',
+    'head', 'set', 'get', 'got', 'one', 'two', 'new', 'old', 'still',
+    'see', 'use', 'used', 'using', 'make', 'made', 'run', 'running',
+})
+
+
+def _is_meaningful_term(term: str) -> bool:
+    """Return True if a term is meaningful enough for a belief triple.
+
+    Rejects: numbers, single characters, stopwords, purely numeric strings,
+    and very short terms that produce garbage inference output like
+    'head has 1' or 'also has heuristic'.
+    """
+    if len(term) < 3:
+        return False
+    if term in _STOPWORDS:
+        return False
+    if term.isdigit():
+        return False
+    # Reject hex-like strings (commit hashes, UUIDs)
+    if all(c in '0123456789abcdef' for c in term):
+        return False
+    return True
+
+
 def extract_triples(text: str) -> list[BeliefTriple]:
     """Extract (subject, relation, object) triples from text.
 
     Uses simple pattern matching for A->B and "A is a B" patterns.
+    Filters out trivial/meaningless triples (F14: quality gate).
     """
     triples = []
     for m in _RE_ARROW.finditer(text.lower()):
-        triples.append(BeliefTriple(
-            subject=m.group(1),
-            relation='implies',
-            object=m.group(2),
-        ))
+        s, o = m.group(1), m.group(2)
+        if _is_meaningful_term(s) and _is_meaningful_term(o):
+            triples.append(BeliefTriple(subject=s, relation='implies', object=o))
     for m in _RE_ISA.finditer(text.lower()):
-        triples.append(BeliefTriple(
-            subject=m.group(1),
-            relation='is-a',
-            object=m.group(2),
-        ))
+        s, o = m.group(1), m.group(2)
+        if _is_meaningful_term(s) and _is_meaningful_term(o):
+            triples.append(BeliefTriple(subject=s, relation='is-a', object=o))
     for m in _RE_HAS.finditer(text.lower()):
-        triples.append(BeliefTriple(
-            subject=m.group(1),
-            relation='has',
-            object=m.group(2),
-        ))
+        s, o = m.group(1), m.group(2)
+        if _is_meaningful_term(s) and _is_meaningful_term(o):
+            triples.append(BeliefTriple(subject=s, relation='has', object=o))
     return triples
 
 
@@ -168,6 +195,15 @@ class WMTMInferenceEngine:
         candidates.extend(self._evidence_aggregation(focus_set))
 
         candidates = [c for c in candidates if c.confidence >= self.min_confidence]
+
+        # F14: Filter out trivially short or meaningless derived content.
+        # Derived items like "head has 1" or "also has heuristic" are noise
+        # from regex matching fragments within long technical text.
+        candidates = [
+            c for c in candidates
+            if len(c.content.split()) >= 3  # minimum 3 words
+            and len(c.content) >= 12  # minimum 12 chars
+        ]
 
         candidates.sort(key=lambda c: c.confidence, reverse=True)
         candidates = candidates[:self.inference_budget]

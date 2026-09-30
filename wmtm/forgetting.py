@@ -28,10 +28,14 @@ class ForgettingPolicy:
         """Run the forgetting policy over the store.
 
         Returns list of evicted items.
+        
+        F15: Also applies wall-clock-based eviction since cycle-based age
+        never exceeds 1 (iter process restarts every step).
         """
         evicted = []
         evicted.extend(self._evict_below_sti(store))
         evicted.extend(self._evict_aged_low_utility(store))
+        evicted.extend(self._evict_wallclock_stale(store))
         evicted.extend(self._evict_over_capacity(store))
         return [e for e in evicted if e is not None]
 
@@ -60,6 +64,28 @@ class ForgettingPolicy:
         while len(store) > store.capacity:
             lowest = min(store._items.values(), key=lambda it: it.utility)
             evicted.append(store.evict(lowest.id))
+        return evicted
+
+    @staticmethod
+    def _evict_wallclock_stale(store: WMTMStore) -> list:
+        """Evict items that are stale by wall-clock time (F15).
+        
+        Since iter process restarts every step, item.age never exceeds 1.
+        Wall-clock timestamps are the only reliable staleness measure.
+        Items older than 6 hours with zero utility are evicted.
+        """
+        import time as _t
+        now = _t.time()
+        evicted = []
+        for item in list(store._items.values()):
+            if item.created_at <= 0:
+                # Legacy item without timestamp — skip here, handled by
+                # _cleanup_stale_items in wmtm_context.py
+                continue
+            wall_age_hours = (now - item.created_at) / 3600.0
+            # Zero-utility items older than 6 hours
+            if item.utility <= 0.0 and wall_age_hours >= 6.0:
+                evicted.append(store.evict(item.id))
         return evicted
 
     def _sti_threshold_for(self, item: WMTMItem) -> float:

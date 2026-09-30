@@ -80,7 +80,23 @@ def recall(limit: int = 20) -> dict:
     resolved = resolve_supersedes(lines)
     return {"ok": True, "count": len(resolved), "view": resolved[-limit:] if limit else resolved}
 
-def append_note(note: str) -> dict:
+_ID_COUNTER = [0]
+
+def _unique_cluster_id(prefix: str = "ep-note-") -> str:
+    """Return a cluster id unique within this journal (F31: second-resolution ids collided)."""
+    base = prefix + datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    try:
+        existing = set(_RE_MEMORY_CLUSTER.findall(_journal_path().read_text(encoding="utf-8", errors="replace")))
+    except Exception:
+        existing = set()
+    cid = base
+    n = 1
+    while cid in existing:
+        n += 1
+        cid = f"{base}-{n}"
+    return cid
+
+def append_note(note: str, supersedes=None, about=None) -> dict:
     """Append a note as a structured Episode cluster (append-only write).
 
     Structured (not loose) so MediumMemoryStore.append_cluster keeps working
@@ -90,8 +106,15 @@ def append_note(note: str) -> dict:
         note = str(note)
         safe = note.replace("\\", "\\\\").replace('"', '\\"')
         ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        cid = "ep-note-" + datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        if isinstance(supersedes, str):
+            supersedes = [supersedes]
+        supersedes = [s for s in (supersedes or []) if s and re.fullmatch(r"[A-Za-z0-9._:-]+", s)]
+        abouts = [a for a in (about or []) if a and re.fullmatch(r"[A-Za-z0-9._:-]+", a)] or ["journal"]
+        with _LOCK:
+            cid = _unique_cluster_id()
         ev = "ev-" + cid
+        sup_lines = "".join(f"(Supersedes {cid} {old})\n" for old in supersedes if old != cid)
+        about_lines = "".join(f"(About {cid} {a})\n" for a in abouts)
         blk = (
             f";;; BEGIN MemoryCluster {cid}\n"
             f"(MemoryCluster {cid})\n"
@@ -101,15 +124,16 @@ def append_note(note: str) -> dict:
             f"(ClusterOpenedAt {cid} {ts})\n"
             f"(Contains {cid} {ev})\n"
             f"(ObservedEvent {ev})\n"
-            f"(About {cid} journal)\n"
+            + about_lines +
             f'(EventNote {ev} "{safe}")\n'
+            + sup_lines +
             f";;; END MemoryCluster {cid}\n"
         )
         with _LOCK:
             p = _journal_path()
             with open(p, "a", encoding="utf-8") as f:
                 f.write(blk)
-        return {"ok": True}
+        return {"ok": True, "id": cid, "supersedes": supersedes}
     except Exception as e:
         return {"ok": False, "error": str(e)}
 
