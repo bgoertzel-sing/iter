@@ -431,6 +431,7 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
         )
         result_container["ok"] = True
         result_container["response"] = response
+        result_container["last_progress_at"] = time.time()  # R13: progress resets idle deadline
         # M3 Step 3.5: if promoted, run the branch mini-loop (R20: step budget + checkpoint queuing)
         branch_id = result_container.get("branch_id")
         if branch_id:
@@ -522,6 +523,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
             tool_content = "Step " + get_current_time() + ": " + ret
             _merge_queue.put({"role": "tool", "tool_call_id": tool_call.id, "content": tool_content, "branch": branch_id})
             branch_messages.append({"role": "tool", "tool_call_id": tool_call.id, "content": tool_content})
+            result_container["last_progress_at"] = time.time()  # R13: tool result = progress
 
         branch_steps += 1
         if branch_steps >= BRANCH_STEP_BUDGET:
@@ -534,6 +536,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
                 tool_choice="required", max_tokens=MAX_TOKENS,
                 extra_body={"enable_thinking": True},
             )
+            result_container["last_progress_at"] = time.time()  # R13: LLM step = progress
         except Exception as e:
             # R14: push error marker and free slot
             error_marker = {
@@ -743,8 +746,14 @@ def check_background_deadline():
         branch = _active_branch
         if branch is None:
             return False
-        elapsed = time.time() - branch.created_at
-        if elapsed <= BACKGROUND_DEADLINE:
+        now = time.time()
+        elapsed = now - branch.created_at
+        # R13 (revised): idle deadline — measured from the branch's last progress
+        # (LLM response or tool result), not from creation. A branch that keeps
+        # making progress is bounded by BRANCH_STEP_BUDGET, not by wall-clock.
+        last_progress = branch.result_container.get("last_progress_at", branch.created_at)
+        idle = now - last_progress
+        if idle <= BACKGROUND_DEADLINE:
             return False
         # Branch has exceeded the deadline — abandon it
         branch_id = branch.branch_id
@@ -755,14 +764,14 @@ def check_background_deadline():
         "role": "system",
         "content": (
             f"[BACKGROUND_BRANCH_ABANDONED] branch_id={branch_id} "
-            f"elapsed={elapsed:.1f}s deadline={BACKGROUND_DEADLINE}s. "
+            f"elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s. "
             f"LLM call completed: {has_result}. Results discarded."
         ),
         "branch": branch_id,
         "abandoned": True,
     }
     _merge_queue.put(abandon_marker)
-    print(f"BACKGROUND_ABANDONED: branch_id={branch_id} elapsed={elapsed:.1f}s deadline={BACKGROUND_DEADLINE}s llm_completed={has_result}")
+    print(f"BACKGROUND_ABANDONED: branch_id={branch_id} elapsed={elapsed:.1f}s idle={idle:.1f}s deadline={BACKGROUND_DEADLINE}s llm_completed={has_result}")
     return True
 
 # --- M3 Step 3.3: Shutdown protocol (R17: SIGTERM/SIGINT stop event, 5s grace, drain, save, exit) ---
