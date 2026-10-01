@@ -94,8 +94,13 @@ class MiniLoopProgressTest(unittest.TestCase):
               "KEEP_REASONING_IN_EPISODE": False, "BRANCH_STEP_BUDGET": 25, "MODEL": "m",
               "MAX_TOKENS": 10, "extract_tier1_checkpoint": lambda *a: {},
               "_llm_call_semaphore": threading.BoundedSemaphore(4), "LLM_TIMEOUT": 5,
-              "ITER_MAX_CONCURRENT_LLM_CALLS": 4}
+              "ITER_MAX_CONCURRENT_LLM_CALLS": 4,
+              "BG_LLM_ATTEMPTS": 1, "RETRY_BACKOFF_BASE": 0, "BG_RETRY_BACKOFF_CAP": 0,
+              "retryable_provider_error": lambda e: False,
+              "provider_quota_exhausted": lambda e: False,
+              "record_branch_error": lambda e: str(e)}
         exec(seg("_capped_llm_create"), ns)
+        exec(seg("_bg_llm_create"), ns)
         exec(seg("_bg_branch_mini_loop"), ns)
         ns["_bg_branch_mini_loop"]("bg-test", client, [], resp(True), RC())
         # one tool result + one follow-up LLM response

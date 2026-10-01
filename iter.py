@@ -95,6 +95,49 @@ def _capped_llm_create(llm_client, **kwargs):
         return llm_client.chat.completions.create(**kwargs)
     finally:
         _llm_call_semaphore.release()
+
+# Hung-call fix (bg-89ff37ae): the 300 s idle deadline used to drop a branch whose single
+# LLM call was still in flight. Now an in-flight call is bounded by its own limits
+# (slot wait + client timeout), and a promoted branch retries a timed-out/disconnected call.
+def _bg_llm_attempts(raw=None):
+    """Parse ITER_BG_LLM_ATTEMPTS (default 2 = one retry); invalid -> 2, clamped to 1..5."""
+    raw = os.getenv("ITER_BG_LLM_ATTEMPTS", "2") if raw is None else raw
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        print(f"ITER_BG_LLM_ATTEMPTS invalid ({raw!r}); using 2")
+        value = 2
+    return max(1, min(5, value))
+
+BG_LLM_ATTEMPTS = _bg_llm_attempts()
+BG_INFLIGHT_LIMIT = 2 * LLM_TIMEOUT + 60  # slot wait (LLM_TIMEOUT) + client timeout (LLM_TIMEOUT) + grace
+BG_RETRY_BACKOFF_CAP = 60
+
+def _bg_llm_create(llm_client, result_container, **kwargs):
+    """_capped_llm_create for branch threads: marks the call in flight (so the idle
+    deadline waits for it) and, once promoted, retries retryable provider errors
+    (timeout, disconnect, 429/5xx; not quota exhaustion) up to BG_LLM_ATTEMPTS."""
+    attempt = 0
+    while True:
+        attempt += 1
+        result_container["llm_inflight_since"] = time.time()
+        try:
+            return _capped_llm_create(llm_client, **kwargs)
+        except Exception as error:
+            result_container.pop("llm_inflight_since", None)
+            if (not result_container.get("branch_id") or attempt >= BG_LLM_ATTEMPTS
+                    or result_container.get("abandoned")
+                    or not retryable_provider_error(error) or provider_quota_exhausted(error)):
+                raise
+            wait = min(RETRY_BACKOFF_BASE * 2 ** (attempt - 1), BG_RETRY_BACKOFF_CAP)
+            print(f"BG_LLM_RETRY: branch_id={result_container.get('branch_id')} attempt={attempt}/{BG_LLM_ATTEMPTS} "
+                  f"wait={wait}s error={type(error).__name__}: {str(error)[:200]}")
+            result_container["last_progress_at"] = time.time() + wait  # retry = still alive
+            time.sleep(wait)
+            if result_container.get("abandoned"):
+                raise
+        finally:
+            result_container.pop("llm_inflight_since", None)
 SLOW_STEP_DELAY = 10
 ERROR_RECOVERY_TIME = 1 #after how long to retry when exception occurs
 RETRY_BACKOFF_BASE = 5 #first wait after a retryable provider error (429/5xx/timeout); doubles per consecutive failure
@@ -784,8 +827,8 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
     experience, so the marker goes through the queue, not directly).
     """
     try:
-        response = _capped_llm_create(
-            llm_client, model=model, messages=messages, tools=tools,
+        response = _bg_llm_create(
+            llm_client, result_container, model=model, messages=messages, tools=tools,
             tool_choice=tool_choice, max_tokens=max_tokens, extra_body=extra_body,
         )
         result_container["ok"] = True
@@ -896,8 +939,8 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
 
         # Make follow-up LLM call with branch_client (R12: separate client)
         try:
-            response = _capped_llm_create(
-                branch_client, model=MODEL, messages=branch_messages, tools=tools,
+            response = _bg_llm_create(
+                branch_client, result_container, model=MODEL, messages=branch_messages, tools=tools,
                 tool_choice="auto", max_tokens=MAX_TOKENS,
                 extra_body={"enable_thinking": True},
             )
@@ -963,9 +1006,9 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
         # The branch set is full: never evict a running branch (that would orphan its
         # thread). Answer this call in the foreground instead.
         print(f"LLM_PROMOTION_SKIPPED: {ITER_MAX_BACKGROUND_BRANCHES} background branch(es) already active; waiting in foreground")
-        thread.join(timeout=LLM_TIMEOUT + 30)
+        thread.join(timeout=BG_INFLIGHT_LIMIT)  # slot wait + client timeout + grace
         if thread.is_alive():
-            raise Exception("Background LLM call failed: APITimeoutError: foreground call exceeded LLM_TIMEOUT")
+            raise Exception("Background LLM call failed: APITimeoutError: foreground call exceeded BG_INFLIGHT_LIMIT")
 
     if thread.is_alive():
         # Deadline expired — promote to background branch
@@ -1143,6 +1186,9 @@ def check_background_deadline():
             idle = now - last_progress
             if idle <= BACKGROUND_DEADLINE:
                 continue
+            inflight_since = branch.result_container.get("llm_inflight_since")
+            if inflight_since is not None and now - inflight_since <= BG_INFLIGHT_LIMIT:
+                continue  # a call is in flight within its own timeout: it will return, fail or retry
             has_result = bool(branch.result_container.get("ok", False))
             branch.result_container["abandoned"] = True  # tells the branch thread to stop
             branch.result_container["finished"] = True

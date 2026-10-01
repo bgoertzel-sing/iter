@@ -34,8 +34,13 @@ def load(*names, **extra):
           "_merge_queue": queue.Queue(), "_foreground_request_ids": {},
           "_tool_context": threading.local(), "ITER_REQUEST_BINDING": True,
           "_llm_call_semaphore": threading.BoundedSemaphore(16), "LLM_TIMEOUT": 5,
-          "ITER_MAX_CONCURRENT_LLM_CALLS": 16, **extra}
+          "ITER_MAX_CONCURRENT_LLM_CALLS": 16,
+          "BG_LLM_ATTEMPTS": 1, "RETRY_BACKOFF_BASE": 0, "BG_RETRY_BACKOFF_CAP": 0,
+          "BG_INFLIGHT_LIMIT": 70,
+          "retryable_provider_error": lambda e: False,
+          "provider_quota_exhausted": lambda e: False, **extra}
     exec(seg("_capped_llm_create"), ns)
+    exec(seg("_bg_llm_create"), ns)
     exec(seg(*names), ns)
     return ns
 
