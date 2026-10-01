@@ -92,7 +92,10 @@ class MiniLoopProgressTest(unittest.TestCase):
               "invoke_dynamic": lambda *a, **k: {"ok": True, "result": "ok"},
               "MAX_TOOL_CALLS": 5, "MAX_TOOL_OUTPUT_CHARS": 1000, "get_current_time": lambda: "t",
               "KEEP_REASONING_IN_EPISODE": False, "BRANCH_STEP_BUDGET": 25, "MODEL": "m",
-              "MAX_TOKENS": 10, "extract_tier1_checkpoint": lambda *a: {}}
+              "MAX_TOKENS": 10, "extract_tier1_checkpoint": lambda *a: {},
+              "_llm_call_semaphore": threading.BoundedSemaphore(4), "LLM_TIMEOUT": 5,
+              "ITER_MAX_CONCURRENT_LLM_CALLS": 4}
+        exec(seg("_capped_llm_create"), ns)
         exec(seg("_bg_branch_mini_loop"), ns)
         ns["_bg_branch_mini_loop"]("bg-test", client, [], resp(True), RC())
         # one tool result + one follow-up LLM response

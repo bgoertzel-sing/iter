@@ -32,7 +32,10 @@ def load(*names, **extra):
     ns = {"time": time, "threading": threading, "json": json, "os": os, "Path": Path,
           "queue": queue, "_branch_lock": threading.Lock(), "_active_branches": {},
           "_merge_queue": queue.Queue(), "_foreground_request_ids": {},
-          "_tool_context": threading.local(), "ITER_REQUEST_BINDING": True, **extra}
+          "_tool_context": threading.local(), "ITER_REQUEST_BINDING": True,
+          "_llm_call_semaphore": threading.BoundedSemaphore(16), "LLM_TIMEOUT": 5,
+          "ITER_MAX_CONCURRENT_LLM_CALLS": 16, **extra}
+    exec(seg("_capped_llm_create"), ns)
     exec(seg(*names), ns)
     return ns
 

@@ -67,6 +67,34 @@ if ITER_REQUEST_BINDING:
     # one foreground request + one per background branch may be open at once
     os.environ.setdefault("ITER_MAX_OPEN_REQUESTS", str(ITER_MAX_BACKGROUND_BRANCHES + 1))
 _foreground_request_ids = {}  # channel stem -> request_id owned by the foreground turn
+
+# Multi-branch: cap on concurrent LLM calls (foreground + background branches).
+# Default = ITER_MAX_BACKGROUND_BRANCHES + 1, i.e. no extra limit; set
+# ITER_MAX_CONCURRENT_LLM_CALLS lower to protect the provider. Clamped to 1..default.
+def _max_concurrent_llm_calls(raw=None):
+    default = ITER_MAX_BACKGROUND_BRANCHES + 1
+    raw = os.getenv("ITER_MAX_CONCURRENT_LLM_CALLS", "") if raw is None else raw
+    if str(raw).strip() == "":
+        return default
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        print(f"ITER_MAX_CONCURRENT_LLM_CALLS invalid ({raw!r}); using {default}")
+        return default
+    return max(1, min(default, value))
+
+ITER_MAX_CONCURRENT_LLM_CALLS = _max_concurrent_llm_calls()
+_llm_call_semaphore = threading.BoundedSemaphore(ITER_MAX_CONCURRENT_LLM_CALLS)
+
+def _capped_llm_create(llm_client, **kwargs):
+    """chat.completions.create under the concurrency cap; waits at most LLM_TIMEOUT for a slot."""
+    if not _llm_call_semaphore.acquire(timeout=LLM_TIMEOUT):
+        raise Exception(f"LLM concurrency cap: no slot free within {LLM_TIMEOUT}s "
+                        f"(ITER_MAX_CONCURRENT_LLM_CALLS={ITER_MAX_CONCURRENT_LLM_CALLS})")
+    try:
+        return llm_client.chat.completions.create(**kwargs)
+    finally:
+        _llm_call_semaphore.release()
 SLOW_STEP_DELAY = 10
 ERROR_RECOVERY_TIME = 1 #after how long to retry when exception occurs
 RETRY_BACKOFF_BASE = 5 #first wait after a retryable provider error (429/5xx/timeout); doubles per consecutive failure
@@ -756,8 +784,8 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
     experience, so the marker goes through the queue, not directly).
     """
     try:
-        response = llm_client.chat.completions.create(
-            model=model, messages=messages, tools=tools,
+        response = _capped_llm_create(
+            llm_client, model=model, messages=messages, tools=tools,
             tool_choice=tool_choice, max_tokens=max_tokens, extra_body=extra_body,
         )
         result_container["ok"] = True
@@ -868,8 +896,8 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
 
         # Make follow-up LLM call with branch_client (R12: separate client)
         try:
-            response = branch_client.chat.completions.create(
-                model=MODEL, messages=branch_messages, tools=tools,
+            response = _capped_llm_create(
+                branch_client, model=MODEL, messages=branch_messages, tools=tools,
                 tool_choice="auto", max_tokens=MAX_TOKENS,
                 extra_body={"enable_thinking": True},
             )
