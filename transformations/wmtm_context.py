@@ -31,6 +31,22 @@ _refresh_interval = 300  # refresh journal every 300s (5 min)
 _LOCK = threading.Lock()
 _cached_journal_mod = None
 
+
+def _drain_pending_derives(pending_path):
+    """Read + clear the pending-derives file under the same flock that
+    tools/wmtm_derive.py uses, so an append landing between read and clear
+    is never lost.  Returns the list of raw lines read."""
+    import fcntl
+    with open(pending_path, 'r+') as pf:
+        fcntl.flock(pf, fcntl.LOCK_EX)
+        try:
+            lines = pf.read().strip().splitlines()
+            pf.seek(0)
+            pf.truncate()
+        finally:
+            fcntl.flock(pf, fcntl.LOCK_UN)
+    return lines
+
 def _wmtm_dir():
     """Return the directory containing the wmtm package."""
     return Path(__file__).resolve().parent.parent / "wmtm"
@@ -923,17 +939,7 @@ def transform(messages, tools):
             pending_path = Path(__file__).resolve().parent.parent / 'memory' / '_wmtm_pending_derives.jsonl'
             if pending_path.exists():
                 try:
-                    import fcntl
-                    # Read + clear under the same flock the writer uses, so an
-                    # append landing between read and clear is not lost.
-                    with open(pending_path, 'r+') as pf:
-                        fcntl.flock(pf, fcntl.LOCK_EX)
-                        try:
-                            lines = pf.read().strip().splitlines()
-                            pf.seek(0)
-                            pf.truncate()
-                        finally:
-                            fcntl.flock(pf, fcntl.LOCK_UN)
+                    lines = _drain_pending_derives(pending_path)
                     for line in lines:
                         if not line.strip():
                             continue
