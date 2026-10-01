@@ -39,7 +39,22 @@ def load(*names, **extra):
           "BG_LLM_ATTEMPTS": 1, "RETRY_BACKOFF_BASE": 0, "BG_RETRY_BACKOFF_CAP": 0,
           "BG_INFLIGHT_LIMIT": 70,
           "retryable_provider_error": lambda e: False,
-          "provider_quota_exhausted": lambda e: False, **extra}
+          "provider_quota_exhausted": lambda e: False,
+          "_CHANNEL_PROBE_NAMES": ("receive_request", "resume_all", "active_request_ids",
+                                   "close_active", "expire_stale"),
+          "_channel_probe_cache": {}, **extra}
+    if "invoke_dynamic" in ns:  # answer the hasattr probe by really importing the fake channel
+        fake = ns["invoke_dynamic"]
+
+        def invoke(path, function, *a, **k):
+            if function == "__has_attrs__":
+                spec = importlib.util.spec_from_file_location("_probe_" + Path(path).stem, path)
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                return {"ok": True, "result": {n: callable(getattr(mod, n, None)) for n in a}}
+            return fake(path, function, *a, **k)
+        ns["invoke_dynamic"] = invoke
+    exec(seg("_channel_has"), ns)
     exec(seg("_capped_llm_create"), ns)
     exec(seg("_bg_llm_create"), ns)
     exec(seg(*names), ns)

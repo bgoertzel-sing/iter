@@ -411,6 +411,8 @@ def dynamic_worker():
         spec.loader.exec_module(module)
         if function == "__description__":
             result = str(module.DESCRIPTION)
+        elif function == "__has_attrs__":
+            result = {name: callable(getattr(module, name, None)) for name in payload.get("args", [])}
         elif function == "__tool_metadata__":
             parameters = inspect.signature(module.run).parameters.values()
             description = str(module.DESCRIPTION)
@@ -492,12 +494,32 @@ def get_current_time():
     """Return the current wall-clock time as a formatted string."""
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+_CHANNEL_PROBE_NAMES = ("receive_request", "resume_all", "active_request_ids", "close_active", "expire_stale")
+_channel_probe_cache = {}  # resolved path -> (mtime_ns, size, {name: bool})
+
 def _channel_has(path, name):
-    """True if the channel module source mentions *name* (feature probe, like close_active)."""
+    """True if the channel module actually exposes callable *name* once imported.
+
+    A text search is not enough: a channel can mention a hook in a guarded
+    `try: from ... import hook / except ImportError: pass` block while the
+    backing library lacks it (19:01 Sep 30 deploy outage). Probe with hasattr
+    in a subprocess, cached per file mtime/size; probe failure -> False."""
     try:
-        return name in Path(path).read_text(encoding="utf-8", errors="replace")
+        stat = Path(path).stat()
     except OSError:
         return False
+    key = str(Path(path).resolve())
+    cached = _channel_probe_cache.get(key)
+    if cached is None or cached[:2] != (stat.st_mtime_ns, stat.st_size):
+        names = tuple(dict.fromkeys(_CHANNEL_PROBE_NAMES + (name,)))
+        result = invoke_dynamic(path, "__has_attrs__", *names)
+        found = result.get("result") if result.get("ok") and isinstance(result.get("result"), dict) else {}
+        cached = (stat.st_mtime_ns, stat.st_size, {n: bool(found.get(n)) for n in names})
+        _channel_probe_cache[key] = cached
+    if name not in cached[2]:
+        _channel_probe_cache.pop(key, None)
+        return _channel_has(path, name)
+    return cached[2][name]
 
 def _foreground_busy(path):
     """True while the foreground's bound request on this channel is still open."""
@@ -589,11 +611,9 @@ def close_unfinished_requests():
        Skipped while a background branch is active, since the branch may own it."""
     branch_active = ITER_CONCURRENCY_ENABLED and background_branch_active()
     for channel_path in sorted(Path("channels").glob("*.py")):
-        try:
-            source = channel_path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+        if not channel_path.is_file():
             continue
-        if "expire_stale" in source and ITER_REQUEST_TIMEOUT > 0:
+        if _channel_has(channel_path, "expire_stale") and ITER_REQUEST_TIMEOUT > 0:
             result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT)
             if result.get("ok") and result.get("result"):
                 print(f"STALE_REQUEST_EXPIRED: channel={channel_path.stem}")
@@ -601,9 +621,9 @@ def close_unfinished_requests():
                     continue
             elif not result.get("ok"):
                 print(f"STALE_REQUEST_EXPIRE_FAILED: channel={channel_path.stem} error={result.get('error')}")
-        if "close_active" not in source:
+        if not _channel_has(channel_path, "close_active"):
             continue
-        if ITER_REQUEST_BINDING and "receive_request" in source:
+        if ITER_REQUEST_BINDING and _channel_has(channel_path, "receive_request"):
             # Close only the foreground's own request; branches close theirs when they finish.
             rid = _foreground_request_ids.pop(channel_path.stem, None)
             if rid is None:
