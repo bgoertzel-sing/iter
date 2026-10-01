@@ -24,6 +24,7 @@ def load(*names, **extra):
         node = next(n for n in TREE.body if isinstance(n, ast.FunctionDef) and n.name == name)
         segs.append(ast.get_source_segment(SRC, node))
     ns = {"os": os, "time": time, "threading": threading, "queue": queue,
+          "_tracked_llm_create": lambda c, **kw: c.chat.completions.create(**kw),  # model tag: plain create
           "LLM_TIMEOUT": 1, "BG_LLM_ATTEMPTS": 2, "BG_RETRY_BACKOFF_CAP": 0,
           "RETRY_BACKOFF_BASE": 0, "BG_INFLIGHT_LIMIT": 1260, "BACKGROUND_DEADLINE": 300,
           "_llm_call_semaphore": threading.BoundedSemaphore(4),

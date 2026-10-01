@@ -98,7 +98,9 @@ class MiniLoopProgressTest(unittest.TestCase):
               "BG_LLM_ATTEMPTS": 1, "RETRY_BACKOFF_BASE": 0, "BG_RETRY_BACKOFF_CAP": 0,
               "retryable_provider_error": lambda e: False,
               "provider_quota_exhausted": lambda e: False,
-              "record_branch_error": lambda e: str(e)}
+              "record_branch_error": lambda e: str(e),
+              "_tracked_llm_create": lambda c, **kw: c.chat.completions.create(**kw),  # model tag: plain create
+              "tag_send_arguments": lambda name, args, response: args}
         exec(seg("_capped_llm_create"), ns)
         exec(seg("_bg_llm_create"), ns)
         exec(seg("_bg_branch_mini_loop"), ns)

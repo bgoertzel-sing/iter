@@ -92,7 +92,7 @@ def _capped_llm_create(llm_client, **kwargs):
         raise Exception(f"LLM concurrency cap: no slot free within {LLM_TIMEOUT}s "
                         f"(ITER_MAX_CONCURRENT_LLM_CALLS={ITER_MAX_CONCURRENT_LLM_CALLS})")
     try:
-        return llm_client.chat.completions.create(**kwargs)
+        return _tracked_llm_create(llm_client, **kwargs)
     finally:
         _llm_call_semaphore.release()
 
@@ -240,6 +240,160 @@ def attach_turn_pdf_images(request_messages):
 MODEL = os.getenv("LLM_MODEL", "mlx-community/gemma-4-26b-a4b-it-4bit")
 BASE_URL = os.getenv("BASE_URL", "http://192.168.64.1:2277/v1")
 API_KEY = os.getenv("AI_API_KEY", "dummy")
+
+# BEGIN MODEL_TAG (2026-09-30, glicerico Protobots 7323)
+# Prefix every outgoing send with "[model]" naming the model that ACTUALLY answered
+# the LLM call that produced it (after any gateway-side fallback); "" when unknown,
+# so a message is never mislabelled.  The OpenClaw chat-completions response only
+# echoes the requested alias (openclaw/<agent>), so each call carries an explicit
+# x-openclaw-session-key of the same shape the gateway would generate itself
+# (agent:<id>:openai:<uuid>, one fresh session per call, as before) and the served
+# provider/model is read back from that session's /sessions/<key>/history: the last
+# non-error assistant message whose runId equals response.id.  A VM2-style
+# response.served_model field is honoured first when present.
+MODEL_TAG_ENABLED = os.getenv("ITER_MODEL_TAG", "1").strip().lower() not in ("0", "false", "no", "off")
+MODEL_TAG_LOOKUP_TIMEOUT = 5
+MODEL_TAG_LOOKUP_ATTEMPTS = 3
+_MODEL_TAG_SESSION_KEYS = {}  # response.id -> session key (bounded)
+_MODEL_TAG_CACHE = {}  # response.id -> tag
+_model_tag_lock = threading.Lock()
+_MODEL_TAG_MAX_ENTRIES = 512
+
+
+def _openclaw_agent_id(model=None):
+    model = MODEL if model is None else model
+    if not isinstance(model, str) or not model.startswith("openclaw/"):
+        return None
+    agent_id = model.split("/", 1)[1].strip()
+    return agent_id if re.fullmatch(r"[A-Za-z0-9_.-]+", agent_id or "") else None
+
+
+def _with_model_tag_session(kwargs):
+    """Return (kwargs, session_key) with an explicit per-call OpenClaw session key."""
+    agent_id = _openclaw_agent_id(kwargs.get("model"))
+    if not MODEL_TAG_ENABLED or agent_id is None:
+        return kwargs, None
+    session_key = f"agent:{agent_id}:openai:{uuid.uuid4()}"
+    headers = dict(kwargs.get("extra_headers") or {})
+    headers.setdefault("x-openclaw-session-key", session_key)
+    return {**kwargs, "extra_headers": headers}, headers["x-openclaw-session-key"]
+
+
+def _remember_model_tag_session(response, session_key):
+    response_id = getattr(response, "id", None)
+    if not session_key or not isinstance(response_id, str) or not response_id:
+        return
+    with _model_tag_lock:
+        _MODEL_TAG_SESSION_KEYS[response_id] = session_key
+        while len(_MODEL_TAG_SESSION_KEYS) > _MODEL_TAG_MAX_ENTRIES:
+            _MODEL_TAG_SESSION_KEYS.pop(next(iter(_MODEL_TAG_SESSION_KEYS)))
+
+
+def _tracked_llm_create(llm_client, **kwargs):
+    """chat.completions.create with a known per-call session key for the model tag."""
+    kwargs, session_key = _with_model_tag_session(kwargs)
+    response = llm_client.chat.completions.create(**kwargs)
+    _remember_model_tag_session(response, session_key)
+    return response
+
+
+def _gateway_root(base_url=None):
+    base = (BASE_URL if base_url is None else base_url).rstrip("/")
+    return base[:-3] if base.endswith("/v1") else base
+
+
+def _fetch_session_history(session_key):
+    import urllib.parse
+    import urllib.request
+    url = _gateway_root() + "/sessions/" + urllib.parse.quote(session_key, safe="") + "/history?limit=50"
+    request = urllib.request.Request(url, headers={"Authorization": "Bearer " + API_KEY})
+    with urllib.request.urlopen(request, timeout=MODEL_TAG_LOOKUP_TIMEOUT) as reply:
+        return json.loads(reply.read().decode("utf-8", errors="replace"))
+
+
+def served_model_from_history(history, run_id):
+    """Model of the last successful assistant message of run_id, or None."""
+    messages = history.get("messages") if isinstance(history, dict) else None
+    if not isinstance(messages, list) or not run_id:
+        return None
+    for entry in reversed(messages):
+        if not isinstance(entry, dict) or entry.get("role") != "assistant":
+            continue
+        meta = entry.get("__openclaw") if isinstance(entry.get("__openclaw"), dict) else {}
+        if meta.get("runId") != run_id:
+            continue
+        if entry.get("stopReason") in ("error", "aborted") or entry.get("errorMessage"):
+            continue
+        model = entry.get("model")
+        if isinstance(model, str) and model.strip():
+            return model.strip()
+    return None
+
+
+def format_model_tag(served):
+    if not isinstance(served, str) or not served.strip():
+        return ""
+    name = re.sub(r"-latest$", "", re.sub(r"-\d{8}$", "", served.strip().rsplit("/", 1)[-1]))
+    return f"[{name}]" if name else ""
+
+
+def served_model_tag(response, fetch_history=None):
+    """"[model]" for the model that actually answered response; "" when unknown."""
+    if not MODEL_TAG_ENABLED or response is None:
+        return ""
+    served = getattr(response, "served_model", None)
+    if isinstance(served, str) and served.strip():
+        return format_model_tag(served)
+    response_id = getattr(response, "id", None)
+    if not isinstance(response_id, str) or not response_id:
+        return ""
+    with _model_tag_lock:
+        if response_id in _MODEL_TAG_CACHE:
+            return _MODEL_TAG_CACHE[response_id]
+        session_key = _MODEL_TAG_SESSION_KEYS.get(response_id)
+    if not session_key:
+        return ""
+    fetch_history = fetch_history or _fetch_session_history
+    tag = ""
+    for attempt in range(MODEL_TAG_LOOKUP_ATTEMPTS):
+        try:
+            tag = format_model_tag(served_model_from_history(fetch_history(session_key), response_id))
+        except Exception as error:
+            print(f"MODEL_TAG_LOOKUP_ERROR: id={response_id} attempt={attempt + 1} {type(error).__name__}: {str(error)[:200]}")
+            tag = ""
+        if tag:
+            break
+        if attempt + 1 < MODEL_TAG_LOOKUP_ATTEMPTS:
+            time.sleep(0.5)
+    print(f"MODEL_TAG: id={response_id} tag={tag or '(none)'}")
+    with _model_tag_lock:
+        _MODEL_TAG_CACHE[response_id] = tag
+        while len(_MODEL_TAG_CACHE) > _MODEL_TAG_MAX_ENTRIES:
+            _MODEL_TAG_CACHE.pop(next(iter(_MODEL_TAG_CACHE)))
+    return tag
+
+
+def apply_model_tag(content, model_tag):
+    """Prefix content with model_tag + newline unless empty or already tagged."""
+    if not model_tag or not isinstance(content, str) or not content.strip():
+        return content
+    if content.startswith(model_tag):
+        return content
+    return model_tag + "\n" + content
+
+
+def tag_send_arguments(tool_name, tool_arguments, response):
+    """Return send tool arguments with the served-model tag on content."""
+    if tool_name != "send" or not isinstance(tool_arguments, dict):
+        return tool_arguments
+    content = tool_arguments.get("content")
+    if not isinstance(content, str) or not content.strip():
+        return tool_arguments
+    tag = served_model_tag(response)
+    if not tag:
+        return tool_arguments
+    return {**tool_arguments, "content": apply_model_tag(content, tag)}
+# END MODEL_TAG
 
 # --------------------------------------------------------------------
 # 1. Dynamic execution:
@@ -584,14 +738,14 @@ def format_checkpoint_message(checkpoint_data, checkpoint_path):
     lines.append(f"Session: {checkpoint_data.get('session_id', '?')}")
     return "\n".join(lines)
 
-def send_checkpoint_message(checkpoint_data, checkpoint_path):
+def send_checkpoint_message(checkpoint_data, checkpoint_path, model_tag=""):
     """Send a human-readable checkpoint summary via the normal send tool.
 
     Best-effort: never raises. Returns True on success, False on failure.
     Per v4 write-ordering this is called AFTER the file write.
     """
     try:
-        message = format_checkpoint_message(checkpoint_data, checkpoint_path)
+        message = apply_model_tag(format_checkpoint_message(checkpoint_data, checkpoint_path), model_tag)
         result = invoke_dynamic(Path("tools/send.py"), "run",
                                 channel=CHECKPOINT_CHANNEL, content=message)
         if not result["ok"]:
@@ -719,7 +873,7 @@ def send_provider_exhausted_notice(error):
 
 TEXT_ONLY_FALLBACK_MAX_CHARS = 3500
 
-def send_text_only_fallback(content):
+def send_text_only_fallback(content, model_tag=""):
     """Post a text-only reply that would otherwise be dropped. Best-effort; returns True on success."""
     text = (content or "").strip()
     if not text:
@@ -727,6 +881,7 @@ def send_text_only_fallback(content):
         return False
     if len(text) > TEXT_ONLY_FALLBACK_MAX_CHARS:
         text = text[:TEXT_ONLY_FALLBACK_MAX_CHARS] + " [...truncated]"
+    text = apply_model_tag(text, model_tag)
     try:
         result = invoke_dynamic(Path("tools/send.py"), "run", channel=CHECKPOINT_CHANNEL, content=text)
     except Exception as error:
@@ -921,7 +1076,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
                     elif not isinstance(tool_arguments, dict):
                         ret = "Tool arguments must be a JSON object"
                     else:
-                        result = invoke_dynamic(inops[tool_name][0], "run", **tool_arguments)
+                        result = invoke_dynamic(inops[tool_name][0], "run", **tag_send_arguments(tool_name, tool_arguments, response))
                         ret = result["result"] if result["ok"] else f"Tool execution failed: {result['error']}"
                 except Exception as error:
                     ret = f"Tool execution failed: {type(error).__name__}: {error}"
@@ -971,6 +1126,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
         checkpoint_data["branch"] = branch_id
         checkpoint_data["request_ids"] = result_container.get("request_ids")
         checkpoint_data["_checkpoint_payload"] = True
+        checkpoint_data["_model_tag"] = served_model_tag(response)
         _merge_queue.put(checkpoint_data)
         print(f"BRANCH_CHECKPOINT_QUEUED: branch_id={branch_id} steps={branch_steps}")
 
@@ -1104,13 +1260,13 @@ def drain_merge_queue():
 
     # R20: Main thread handles checkpoint file write + send (single-writer discipline)
     for cp in checkpoint_payloads:
-        cp_data = {k: v for k, v in cp.items() if k not in ("branch", "_checkpoint_payload", "request_ids")}
+        cp_data = {k: v for k, v in cp.items() if k not in ("branch", "_checkpoint_payload", "request_ids", "_model_tag")}
         cp_path = write_checkpoint_file(cp_data)
         if cp_path:
             print(f"BRANCH_CHECKPOINT_FILE_WRITTEN: {cp_path}")
         else:
             print("BRANCH_CHECKPOINT_FILE_WRITE_FAILED — will still attempt send")
-        _call_bound(cp.get("request_ids"), send_checkpoint_message, cp_data, cp_path)
+        _call_bound(cp.get("request_ids"), send_checkpoint_message, cp_data, cp_path, cp.get("_model_tag", ""))
         # Add a system marker to experience so the LLM sees the branch checkpoint
         experience.append({
             "role": "system",
@@ -1446,7 +1602,7 @@ while True:
                     _promoted = True
                     break
             else:
-                response = client.chat.completions.create(model=MODEL, messages=request_messages, tools=request_tools, tool_choice="auto", max_tokens=MAX_TOKENS, extra_body={ "enable_thinking": True})
+                response = _tracked_llm_create(client, model=MODEL, messages=request_messages, tools=request_tools, tool_choice="auto", max_tokens=MAX_TOKENS, extra_body={ "enable_thinking": True})
             print("AFTER LLM", response)
             message = response.choices[0].message
             last_text_only_content = message.content if not message.tool_calls else None
@@ -1478,7 +1634,7 @@ while True:
             if not post_task_mode and not send_since_checkpoint:
                 # A user request is still unanswered and the model kept replying with text only:
                 # deliver that text instead of silently dropping it.
-                if send_text_only_fallback(last_text_only_content):
+                if send_text_only_fallback(last_text_only_content, served_model_tag(response)):
                     send_since_checkpoint = True
             if not post_task_mode:
                 new_burst = True
@@ -1503,7 +1659,7 @@ while True:
                     elif not isinstance(tool_arguments, dict):
                         ret = "Tool arguments must be a JSON object"
                     else:
-                        result = invoke_dynamic(INOPS[tool_name][0], "run", **tool_arguments)
+                        result = invoke_dynamic(INOPS[tool_name][0], "run", **tag_send_arguments(tool_name, tool_arguments, response))
                         ret = result["result"] if result["ok"] else f"Tool execution failed: {result['error']}"
                 except Exception as error:
                     ret = f"Tool execution failed: {type(error).__name__}: {error}"
@@ -1548,7 +1704,7 @@ while True:
                 else:
                     print("CHECKPOINT_FILE_WRITE_FAILED — will still attempt send")
                 # M1 Step 1.3: human-readable send via normal tool path
-                send_checkpoint_message(_checkpoint_data, _checkpoint_path)
+                send_checkpoint_message(_checkpoint_data, _checkpoint_path, served_model_tag(response))
             else:
                 _checkpoint_data = None
                 _checkpoint_path = None

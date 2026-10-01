@@ -30,6 +30,7 @@ def seg(*names):
 
 def load(*names, **extra):
     ns = {"time": time, "threading": threading, "json": json, "os": os, "Path": Path,
+          "_tracked_llm_create": lambda c, **kw: c.chat.completions.create(**kw),  # model tag: plain create
           "queue": queue, "_branch_lock": threading.Lock(), "_active_branches": {},
           "_merge_queue": queue.Queue(), "_foreground_request_ids": {},
           "_tool_context": threading.local(), "ITER_REQUEST_BINDING": True,

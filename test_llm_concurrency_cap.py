@@ -21,6 +21,7 @@ def load(*names, **extra):
         node = next(n for n in TREE.body if isinstance(n, ast.FunctionDef) and n.name == name)
         segs.append(ast.get_source_segment(SRC, node))
     ns = {"os": os, "threading": threading, "ITER_MAX_BACKGROUND_BRANCHES": 3,
+          "_tracked_llm_create": lambda c, **kw: c.chat.completions.create(**kw),  # model tag: plain create
           "LLM_TIMEOUT": 1, "ITER_MAX_CONCURRENT_LLM_CALLS": 0, **extra}
     exec("\n\n".join(segs), ns)
     return ns
