@@ -4,7 +4,7 @@ so a missing module is skipped silently. This resolves every (library Omega ./x)
 import in a .metta file the way importer_helper does (.py as-is, else +.metta)
 and exits non-zero listing anything missing."""
 import re, sys, pathlib
-PAT = re.compile(r'\(import!\s+&self\s+\(library\s+Omega\s+(\./[^\s)]+)\)\)')
+PAT = re.compile(r'\(import!\s+&self\s+\(library\s+(?:Omega|OmegaClaw-Core)\s+(\./[^\s)]+)\)\)')
 def check(lib):
     lib = pathlib.Path(lib); root = lib.parent; missing = []
     for n, line in enumerate(lib.read_text(encoding='utf-8').splitlines(), 1):
