@@ -113,6 +113,39 @@ class UtilityTracker:
         """Clean up tracking record when an item is evicted."""
         self._records.pop(getattr(item_id, "id", item_id), None)
 
+    # -- F01b: serialization for persistence across subprocess boundaries --
+
+    def to_dict(self) -> dict:
+        """Serialize utility tracker state for persistence."""
+        return {
+            "records": {
+                rid: {
+                    "item_id": rec.item_id,
+                    "use_count": rec.use_count,
+                    "miss_count": rec.miss_count,
+                    "last_use_tick": rec.last_use_tick,
+                    "total_ticks_alive": rec.total_ticks_alive,
+                    "inferred_from_count": rec.inferred_from_count,
+                }
+                for rid, rec in self._records.items()
+            }
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "UtilityTracker":
+        """Restore utility tracker from serialized dict."""
+        tracker = cls()
+        for rid, rec_d in d.get("records", {}).items():
+            tracker._records[rid] = UtilityRecord(
+                item_id=rec_d["item_id"],
+                use_count=rec_d.get("use_count", 0),
+                miss_count=rec_d.get("miss_count", 0),
+                last_use_tick=rec_d.get("last_use_tick", 0),
+                total_ticks_alive=rec_d.get("total_ticks_alive", 0),
+                inferred_from_count=rec_d.get("inferred_from_count", 0),
+            )
+        return tracker
+
     def promote_to_ltm_candidates(
         self,
         store: WMTMStore,

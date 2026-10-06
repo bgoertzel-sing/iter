@@ -1,10 +1,15 @@
 """WMTMItem: a single item in the working medium-term memory."""
 from __future__ import annotations
 
+import time as _time
 from dataclasses import dataclass, field
 from typing import Optional
 
 from .attention import AttentionValue
+
+
+def _now() -> float:
+    return _time.time()
 
 
 @dataclass
@@ -17,6 +22,7 @@ class WMTMItem:
     age: number of ticks since admission
     utility: composite usefulness score (higher = more useful)
     last_used: tick number of last access
+    created_at: wall-clock unix timestamp when this item was first admitted
     """
     id: str
     content: str
@@ -27,6 +33,26 @@ class WMTMItem:
     age: int = 0
     utility: float = 0.0
     last_used: int = 0
+    created_at: float = field(default_factory=_now)
+    origin_timestamp: float = 0.0  # F25: original journal entry timestamp (0 = unknown)
+
+    @property
+    def effective_age_seconds(self) -> float:
+        """Wall-clock age using the OLDEST known timestamp.
+
+        F25: When a recalled item is re-admitted, created_at resets to now,
+        making a 23-day-old entry appear 41 minutes old. origin_timestamp
+        preserves the journal entry's actual date, so staleness checks use
+        the real age, not the re-admission age.
+
+        Returns seconds since the oldest available timestamp, or since
+        created_at if no origin_timestamp is set.
+        """
+        import time as _t
+        now = _t.time()
+        if self.origin_timestamp > 0:
+            return now - min(self.origin_timestamp, self.created_at)
+        return now - self.created_at
 
     def touch(self, tick: int) -> None:
         """Record access at the given tick."""
@@ -53,6 +79,8 @@ class WMTMItem:
             "age": self.age,
             "utility": self.utility,
             "last_used": self.last_used,
+            "created_at": self.created_at,
+            "origin_timestamp": self.origin_timestamp,
         }
 
     @classmethod
@@ -69,4 +97,6 @@ class WMTMItem:
             age=d.get("age", 0),
             utility=d.get("utility", 0.0),
             last_used=d.get("last_used", 0),
+            created_at=d.get("created_at", 0.0),
+            origin_timestamp=d.get("origin_timestamp", 0.0),
         )

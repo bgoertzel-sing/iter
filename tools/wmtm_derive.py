@@ -7,7 +7,7 @@ when useful, and promote it to LTM if it proves durable.
 Uses file-based IPC: writes to memory/_wmtm_pending_derives.jsonl
 which the wmtm_context transformation picks up on the next cycle.
 """
-import json, hashlib
+import fcntl, json, hashlib
 from pathlib import Path
 
 DESCRIPTION = "Register a new derived belief in Working Memory. Arg: note (string) describing the conclusion. Optional: source_ids (list of str, the memory IDs this was derived from)."
@@ -23,8 +23,15 @@ def run(note, source_ids=None):
         pending_path = Path(__file__).resolve().parent.parent / 'memory' / '_wmtm_pending_derives.jsonl'
         entry = json.dumps({'note': note, 'source_ids': source_ids})
         
+        # Multi-branch: tools may run in separate processes; flock serialises
+        # appends against each other and against the reader's read+truncate.
         with open(pending_path, 'a') as f:
-            f.write(entry + chr(10))
+            fcntl.flock(f, fcntl.LOCK_EX)
+            try:
+                f.write(entry + chr(10))
+                f.flush()
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
         
         item_id = 'derived-' + hashlib.md5(note.encode()).hexdigest()[:12]
         return 'Registered derived belief ' + item_id + ' in WMTM (pending): ' + note[:100]

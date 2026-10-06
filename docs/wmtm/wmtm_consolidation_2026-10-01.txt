@@ -1,0 +1,32 @@
+2026-10-01 00:0x idle consolidation (cycle 1275)
+SUPPORTS "LINK-INTEGRITY FIX 11:29": journal.metta has cluster-level links (Supersedes fact-phase2-drafts-v2 fact-phase2-drafts) and (Supersedes fact-roadmap-v2 fact-roadmap), alongside the older event-level ones (-> ev-fp2d, ev-f3). Fix is present in the journal.
+CONSISTENT WITH Sep28 H2 note: in the first ~11.7k journal lines there are 22 distinct Supersedes atoms, none targeting the hive-appliance notes ep-note-20260928T045411Z / T173118Z, and no 14187a2 / 5de0d53 mentions. Old hive notes stay "live" because no structural supersede exists (only the word in text). Scan incomplete (journal > 12.4k lines, 9 s budget).
+Proposed action (not done, needs approval): add (Supersedes <sep30-note> ep-note-20260928T173118Z) + (Supersedes ep-note-20260928T173118Z ep-note-20260928T045411Z) once the Sep 30 note is journaled.
+
+
+== 00:0x Oct 1: FULL journal.metta scan (135,934 lines; corrects partial 12.4k-line scan) ==
+- Distinct (Supersedes ...) atoms: 549, not 22 (22 was a partial-scan artifact).
+- ep-note-20260928T045411Z (Sep27 hive note) DOES supersede older notes: ep-note-20260927T041953Z, ep-note-20260927T184045Z (+ a -2 variant).
+- NO Supersedes atom targets ep-note-20260928T045411Z or ep-note-20260928T173118Z (Sep28 note). So neither is ever marked stale.
+- 14187a2: 0 mentions. 5de0d53: 1 mention (inside the Sep28 note). Sep30 hive entry never journaled.
+- Conclusion unchanged: missing Sep30 episode + missing Supersedes chain (Sep30 -> 173118Z -> 045411Z) keeps stale notes recalled. Fix still needs approval (journal write).
+
+== 06:55-07:25 Oct 1 re-check (cycle ~1325) ==
+- 14187a2 in journal.metta: still 0. Sep30 hive entry still not journaled.
+- grep 'Supersedes ep-note-20260928T(173118|045411)Z' = 3 hits (lines 135907, 135908, 135921), ALL with 045411Z as the NEWER side (it supersedes Sep27 041953Z/184045Z). 173118Z appears as newer side 0 times; neither note appears as a superseded target.
+- So the Sep28 note's own text says "supersedes Sep 27 e6afe16 entry" but the structural link (Supersedes ep-note-20260928T173118Z ep-note-20260928T045411Z) is missing. Earlier finding re-confirmed; no journal write done (still needs approval).
+
+[Oct1 14:35] Verified WMTM item "append_cluster atomic / query_about exact / query_cluster exact / query_id mention" against source: scratch/license-updates-20260704/petta-memory/src/petta_memory/store.py.
+- SUPPORTED append_cluster: validate -> flock .lock -> reject dup ids -> tmp+fsync+os.replace. Caveats: re-validates EVERY existing cluster on each append (one bad chunk blocks all appends); full-file rewrite per append (O(n)).
+- SUPPORTED query_about: regex ^(About <x> ENTITY) per line, re.escape, so exact whole-token.
+- SUPPORTED query_cluster: exact cluster_id, first match.
+- REFINE query_id: identifier in atom.split() (whitespace split), so an id that is the LAST token keeps its ")" ("petta)") and is MISSED. Only ids in the middle of an atom are found.
+- All list queries: _bounded = clusters[:limit], default 20, silent truncation (petta_recall.py passes limit=10**6 for this reason).
+- LINK to hive-appliance issue: Supersedes is only consumed by query_status/current_status (StatusEvent ids); plain recall ignores it. So adding Supersedes links fixes status queries, not raw recall, unless recall also filters superseded ids.
+
+[14:35 re-verify, store.py source] query_id -> _cluster_mentions_id: `identifier in atom.split()`; _clean_atom_lines only strips whitespace/';' comments, so atoms keep parens. Result: first token '(Pred' and last token 'x)' never match; only interior ids match. e.g. (About c1 petta): query_id('c1') hits, query_id('petta') misses. Same split used by _atom_mentions_any. CONFIRMS earlier correction; WMTM item 'query_id is mention-search' is incomplete. Fix idea (needs approval): tokenize with re.findall(r'[^\s()]+', atom).
+
+
+14:36 check of WMTM tail "atom ids are g..." vs petta_memory/store.py: SUPPORTED (if it means globally unique). append_cluster -> _reject_duplicate_ids compares the new cluster's declared ids against ALL existing clusters (store.py:148-152); within-cluster duplicates rejected too (142-144). Scope caveat: only first args of 13 ID-declaring predicates (MemoryCluster, ObservedEvent, SpeechEvent, QuotedClaim, DerivedBelief, Decision, Hypothesis, OpenQuestion, Commitment, Boundary, Artifact, StatusEvent, ...; store.py:37) count; other atoms' ids are not checked. Only the cluster id is checked against _ID_RE ^[A-Za-z][A-Za-z0-9_.:-]*$. No code change.
+
+Oct2 21:30 re-verify (LTM petta query_id line SUPPORTED, WM item CONTRADICTED): scratch/license-updates-20260704/petta-memory/src/petta_memory/store.py:393 _cluster_mentions_id = identifier in atom.split(). Live test atoms [(About c1 petta),(Edge e1 e2 e3)]: c1,e1,e2 True; About,petta,Edge,e3 False. Note: head token (About/Edge) also misses (paren prefix). WM "query_id is mention-search" should be superseded.
