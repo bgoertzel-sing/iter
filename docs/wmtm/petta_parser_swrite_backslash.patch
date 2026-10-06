@@ -1,4 +1,5 @@
 # Backport of trueagi-io/PeTTa 21be21f (2026-07-20) "Fix swrite dropping backslashes in string literals".
+# OBSOLETE since Oct 6 2026: I1 uses PeTTa v1.0.5 (contains 21be21f). See PETTA_PIN.md.
 # Needed on PeTTa v1.0.4 (pinned by Omega c6dc842 Dockerfile) and local repos/PeTTa 4ce1d0e.
 --- a/src/parser.pl
 +++ b/src/parser.pl
