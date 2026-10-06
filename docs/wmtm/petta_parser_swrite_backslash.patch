@@ -1,0 +1,9 @@
+# Backport of trueagi-io/PeTTa 21be21f (2026-07-20) "Fix swrite dropping backslashes in string literals".
+# Needed on PeTTa v1.0.4 (pinned by Omega c6dc842 Dockerfile) and local repos/PeTTa 4ce1d0e.
+--- a/src/parser.pl
++++ b/src/parser.pl
+@@ escape_quotes
+ escape_quotes([], []).
++escape_quotes([0'\\|T], [0'\\,0'\\|R]) :- !, escape_quotes(T, R).
+ escape_quotes([0'"|T], [0'\\,0'"|R]) :- !, escape_quotes(T, R).
+ escape_quotes([H|T], [H|R]) :- escape_quotes(T, R).
