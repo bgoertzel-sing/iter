@@ -22,10 +22,10 @@ def test_fallback_posts_text():
     assert _load(calls)("hello glicerico") is True
     assert calls == [{"channel": "protocosmo2", "content": "hello glicerico"}]
 
-def test_fallback_model_tag():
+def test_fallback_has_no_model_tag_parameter():  # REFERENCE BRANCH: model tag excluded (live: test_fallback_model_tag)
     calls = []
-    assert _load(calls)("hello", "[claude-opus-4-6]") is True
-    assert calls[0]["content"] == "[claude-opus-4-6]\nhello"
+    assert _load(calls)("hello") is True
+    assert calls[0]["content"] == "hello"
 
 def test_fallback_skips_empty():
     calls = []
@@ -43,15 +43,15 @@ def test_fallback_reports_channel_failure():
 def test_main_loop_wires_fallback_only_for_unanswered_user_requests():
     src = SOURCE.read_text(encoding="utf-8")
     assert "if not post_task_mode and not send_since_checkpoint:" in src
-    assert "send_text_only_fallback(last_text_only_content, served_model_tag(response))" in src
+    assert "send_text_only_fallback(last_text_only_content)" in src  # REFERENCE BRANCH: model tag excluded
     assert "last_text_only_content = message.content if not message.tool_calls else None" in src
 
 
 def test_fallback_unwraps_send_written_as_text():
     calls = []
     text = 'tool_call id=c7e41a2b9 name=send arguments={"channel":"protocosmo2","final":"true","content":"line one\\nline two"}'
-    assert _load(calls)(text, "[claude-opus-5-5]") is True
-    assert calls[0]["content"] == "[claude-opus-5-5]\nline one\nline two"
+    assert _load(calls)(text) is True  # REFERENCE BRANCH: model tag excluded
+    assert calls[0]["content"] == "line one\nline two"
 
 def test_fallback_keeps_text_when_pseudo_send_is_malformed():
     calls = []
@@ -63,5 +63,5 @@ def test_branch_loop_delivers_unanswered_text_only_ending():
     src = SOURCE.read_text(encoding="utf-8")
     loop = src[src.index("def _bg_branch_mini_loop"):src.index("def threaded_llm_call")]
     assert "if not branch_sent and not result_container.get(\"abandoned\"):" in loop
-    assert "send_text_only_fallback(message.content, served_model_tag(response))" in loop
+    assert "send_text_only_fallback(message.content)" in loop  # REFERENCE BRANCH: model tag excluded
     assert "branch_sent = True" in loop

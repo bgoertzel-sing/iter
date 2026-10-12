@@ -134,20 +134,20 @@ class StepGuardTest(unittest.TestCase):
 
 
 class SendProgressNoteTest(unittest.TestCase):
-    def test_non_closing_send_with_model_tag(self):
+    def test_non_closing_send(self):  # REFERENCE BRANCH: model tag excluded (live: test_non_closing_send_with_model_tag)
         calls = []
         ns = {"Path": Path, "CHECKPOINT_CHANNEL": "protocosmo2",
               "invoke_dynamic": lambda path, fn, **kw: calls.append((str(path), fn, kw)) or
               {"ok": True, "result": "SUCCESS (progress; request still open)"}}
-        exec(seg("apply_model_tag", "send_progress_note"), ns)
-        self.assertTrue(ns["send_progress_note"]("Still working on this (step 32)", "[claude-opus-4-6]"))
+        exec(seg("send_progress_note"), ns)
+        self.assertTrue(ns["send_progress_note"]("Still working on this (step 32)"))
         self.assertEqual(calls, [("tools/send.py", "run", {"channel": "protocosmo2", "final": False,
-                                  "content": "[claude-opus-4-6]\nStill working on this (step 32)"})])
+                                  "content": "Still working on this (step 32)"})])
 
     def test_refused_note_reported(self):
         ns = {"Path": Path, "CHECKPOINT_CHANNEL": "protocosmo2",
               "invoke_dynamic": lambda *a, **k: {"ok": True, "result": "No open protocosmo2 request is bound"}}
-        exec(seg("apply_model_tag", "send_progress_note"), ns)
+        exec(seg("send_progress_note"), ns)  # REFERENCE BRANCH: model tag excluded
         self.assertFalse(ns["send_progress_note"]("x"))
 
     def test_stop_message_states_reason(self):
@@ -215,7 +215,7 @@ class BranchMiniLoopTest(unittest.TestCase):
     def test_branch_runs_past_old_budget_with_interim_notes(self):
         notes, payloads, sent, _ = self.run_branch(60, final_at=61)
         self.assertEqual([n[1].split(")")[0] for n in notes], ["Still working on this (step 32"])
-        self.assertEqual(notes[0][0], "[claude-opus-4-6]")
+        self.assertEqual(notes[0][0], "")  # REFERENCE BRANCH: model tag excluded (live: "[claude-opus-4-6]")
         self.assertEqual(payloads, [])  # no checkpoint/stop at 25
         self.assertEqual([s["content"] for s in sent], ["done"])
 
