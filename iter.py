@@ -28,8 +28,33 @@ MAX_TOOL_CALLS = 10
 MAX_TOOL_OUTPUT_CHARS = 5000
 MAX_EXPERIENCE_SIZE = 100   #20 percent
 RETAIN_EXPERIENCE_SIZE = 80 #jumps
-MAX_FAST_STEPS = 50
-TURN_WATCHDOG_THRESHOLD = MAX_FAST_STEPS - 5  # emit checkpoint reminder at this step
+# BEGIN PROGRESS_NOT_PAUSE (2026-10-04; port of the VM2 change 20261003T1600Z,
+# Ben Telegram 7445/7462, glicerico 7473).  The old foreground stop at
+# MAX_FAST_STEPS=50 and the background-branch stop at ITER_BRANCH_STEP_BUDGET=25
+# ended long work with a checkpoint message.  Now every ITER_PROGRESS_EVERY steps
+# of a request (or after ITER_PROGRESS_MAX_SILENT_SECONDS without an update) the
+# agent posts a NON-closing interim note (send final=false) and keeps working;
+# if the model does not post one within ITER_PROGRESS_FALLBACK_STEPS steps, Iter
+# posts a mechanical note itself (no model call).  Only runaway backstops stop
+# a request, each with its reason: the hard ceiling, repeated identical steps,
+# and steps that produce no new results.  Foreground and every background
+# branch keep their own StepGuard.  Idle stays provider-silent (unchanged).
+def _env_int(name, default, minimum):
+    try:
+        value = int(os.getenv(name, str(default)))
+    except ValueError:
+        value = default
+    return max(minimum, value)
+
+PROGRESS_EVERY = _env_int("ITER_PROGRESS_EVERY", 30, 3)  # interim update cadence (steps)
+PROGRESS_FALLBACK_STEPS = _env_int("ITER_PROGRESS_FALLBACK_STEPS", 2, 1)  # mechanical note if the model has not posted within this many steps of the nudge
+PROGRESS_MAX_SILENT_SECONDS = _env_int("ITER_PROGRESS_MAX_SILENT_SECONDS", 420, 60)  # also nudge after this long without an update (the receiver waits --iter-timeout=900 s per update)
+HARD_STEP_CEILING = _env_int("ITER_HARD_STEP_CEILING", 300, 3)  # runaway backstop per request
+REPEAT_STEPS = _env_int("ITER_REPEAT_STEPS", 8, 2)  # backstop: consecutive steps with identical tool calls + arguments
+STALL_STEPS = _env_int("ITER_STALL_STEPS", 12, 2)  # backstop: consecutive steps whose tool calls/results were all seen before in this request
+MAX_FAST_STEPS = HARD_STEP_CEILING  # legacy name
+TURN_WATCHDOG_THRESHOLD = HARD_STEP_CEILING - 2  # legacy name: the step-ceiling warning step
+# END PROGRESS_NOT_PAUSE
 
 # --- M1 Step 1.1: Tier-1 mechanical checkpoint (flag-guarded, default ON) ---
 ITER_CHECKPOINT_ENABLED = os.getenv("ITER_CHECKPOINT_ENABLED", "1") == "1"
@@ -44,7 +69,9 @@ ITER_PROMOTE_SECONDS = int(os.getenv("ITER_PROMOTE_SECONDS", "30"))
 # --- M3 Step 3.1: BACKGROUND_DEADLINE (R13: bounded background lifetime) ---
 BACKGROUND_DEADLINE = max(2 * ITER_PROMOTE_SECONDS, 300)
 # --- M3 Step 3.5: Branch step budget + branch checkpoint queuing (R20) ---
-BRANCH_STEP_BUDGET = int(os.getenv("ITER_BRANCH_STEP_BUDGET", "25"))
+# PROGRESS_NOT_PAUSE: was ITER_BRANCH_STEP_BUDGET=25 (a stop); a branch now runs under the
+# same per-request StepGuard backstops as the foreground, bounded by the hard ceiling.
+BRANCH_STEP_BUDGET = HARD_STEP_CEILING
 # Multi-branch: up to ITER_MAX_BACKGROUND_BRANCHES promoted branches run at once
 # (default 3, clamped to 1..MAX_BACKGROUND_BRANCHES_LIMIT). 1 = the old single slot.
 MAX_BACKGROUND_BRANCHES_LIMIT = 8
@@ -161,6 +188,12 @@ API_KEY = os.getenv("AI_API_KEY", "dummy")
 # --------------------------------------------------------------------
 # 1. Dynamic execution:
 # --------------------------------------------------------------------
+# Channel-contract hooks return JSON-native values (dict/list/bool) that the
+# caller indexes (receive_request()["request_id"], resume_all()[0], ...);
+# stringifying them broke multi-request binding (2026-10-01 staging e2e).
+_STRUCTURED_RESULT_FUNCTIONS = frozenset({
+    "receive_request", "resume_all", "active_request_ids", "close_active", "expire_stale"})
+
 def dynamic_worker():
     path = Path(sys.argv[2])
     function = sys.argv[3]
@@ -181,7 +214,8 @@ def dynamic_worker():
             result = {"description": description, "parameters": [parameter.name for parameter in parameters]}
         else:
             result = getattr(module, function)(*payload.get("args", []), **payload.get("kwargs", {}))
-            if function != "transform" and result is not None:
+            if (function != "transform" and function not in _STRUCTURED_RESULT_FUNCTIONS
+                    and result is not None):
                 result = str(result)
         output = {"ok": True, "result": result}
     except BaseException as error:
@@ -476,9 +510,16 @@ def format_checkpoint_message(checkpoint_data, checkpoint_path):
 
     Returns a concise string suitable for sending through the channel.
     """
-    lines = [
-        f"[CHECKPOINT] Turn budget exhausted after {checkpoint_data.get('step_count', '?')} autonomous steps without a send.",
-    ]
+    if checkpoint_data.get("stop_reason"):
+        lines = [
+            f"[PAUSED] I stopped working on this at step {checkpoint_data.get('step_count', '?')} because "
+            f"{checkpoint_data['stop_reason']}, to avoid runaway usage. My state is saved; reply "
+            "'continue' (or add instructions) and I will resume.",
+        ]
+    else:
+        lines = [
+            f"[CHECKPOINT] Turn budget exhausted after {checkpoint_data.get('step_count', '?')} autonomous steps without a send.",
+        ]
     snapshot = checkpoint_data.get("tool_snapshot", [])
     if snapshot:
         lines.append(f"Last {len(snapshot)} tool calls:")
@@ -590,10 +631,23 @@ def send_provider_exhausted_notice(error):
     print(f"PROVIDER_EXHAUSTED_NOTICE_SENT: {type(error).__name__}")
 
 TEXT_ONLY_FALLBACK_MAX_CHARS = 3500
+_PSEUDO_SEND_RE = re.compile(r"name=send\s+arguments=(?=\{)")
+
+def unwrap_pseudo_send(text):
+    """If *text* is a send tool call written out as plain text, return its content; else *text*."""
+    match = _PSEUDO_SEND_RE.search(text or "")
+    if not match:
+        return text
+    try:
+        arguments, _end = json.JSONDecoder().raw_decode(text, match.end())
+    except ValueError:
+        return text
+    content = arguments.get("content") if isinstance(arguments, dict) else None
+    return content if isinstance(content, str) and content.strip() else text
 
 def send_text_only_fallback(content):
     """Post a text-only reply that would otherwise be dropped. Best-effort; returns True on success."""
-    text = (content or "").strip()
+    text = unwrap_pseudo_send((content or "").strip()).strip()
     if not text:
         print("TEXT_ONLY_FALLBACK_SKIPPED: empty")
         return False
@@ -609,6 +663,208 @@ def send_text_only_fallback(content):
         return False
     print(f"TEXT_ONLY_FALLBACK_SENT: chars={len(text)}")
     return True
+
+# BEGIN PROGRESS_NOT_PAUSE helpers
+def step_signature(tool_calls):
+    """Order-insensitive fingerprint of one step's tool names + arguments."""
+    calls = []
+    for call in tool_calls or []:
+        try:
+            arguments = json.dumps(json.loads(call.function.arguments), sort_keys=True, ensure_ascii=False)
+        except Exception:
+            arguments = str(call.function.arguments)
+        calls.append(call.function.name + "\x00" + arguments)
+    return hashlib.sha256("\x01".join(sorted(calls)).encode("utf-8", errors="replace")).hexdigest()
+
+def _tally_text(tally):
+    """Mechanical tool-name counts only (no arguments/outputs, so nothing sensitive leaks)."""
+    if not tally:
+        return "no tool calls yet"
+    return ", ".join(f"{name} x{count}" for name, count in sorted(tally.items(), key=lambda item: (-item[1], item[0])))
+
+class StepGuard:
+    """Per-request step accounting for the foreground turn or one background branch.
+
+    record_step() is called once per model step (after its tool calls ran) and
+    returns (action, text): ("stop", reason) for a runaway backstop, ("nudge", note)
+    or ("warn", note) to show the model on its next step, ("fallback", content) for
+    Iter to post itself as a non-closing progress note, or (None, None).
+    """
+    paused_by_backstop = False  # class-wide: the next inbound event gets a resume NOTE
+
+    def __init__(self, has_request=True, steps=0):
+        self.has_request = has_request  # an open user request this work answers
+        self.steps = steps
+        self.since_note = 0
+        self.last_note_at = time.time()
+        self.nudge_step = None
+        self.signatures = []
+        self.seen = set()
+        self.stale = 0
+        self.tally = {}
+        self.answered = False  # a final send succeeded: no more interim notes
+
+    def fork(self):
+        return copy.deepcopy(self)
+
+    def record_step(self, tool_calls, results):
+        """results: [(tool_name, raw_arguments, return_text)] for this step."""
+        self.steps += 1
+        noted = False
+        digests = []
+        for name, raw_arguments, ret in results:
+            self.tally[name] = self.tally.get(name, 0) + 1
+            ret = str(ret)
+            if name == "send" and ret.startswith("SUCCESS"):
+                noted = True
+                if not ret.startswith("SUCCESS (progress"):
+                    self.answered = True
+            digests.append(hashlib.sha256((str(name) + "\x00" + str(raw_arguments) + "\x00" + ret)
+                                          .encode("utf-8", errors="replace")).hexdigest())
+        if noted:
+            self.since_note, self.last_note_at, self.nudge_step = 0, time.time(), None
+        else:
+            self.since_note += 1
+        self.signatures = (self.signatures + [step_signature(tool_calls)])[-REPEAT_STEPS:]
+        new_results = [digest for digest in digests if digest not in self.seen]
+        self.seen.update(digests)
+        self.stale = 0 if (new_results or not digests) else self.stale + 1
+        if self.steps >= HARD_STEP_CEILING:
+            return "stop", f"it reached the per-request step ceiling ({HARD_STEP_CEILING} steps)"
+        if len(self.signatures) >= REPEAT_STEPS and len(set(self.signatures)) == 1:
+            return "stop", (f"its last {REPEAT_STEPS} steps repeated the same tool call with the same "
+                            "arguments (possible loop)")
+        if self.stale >= STALL_STEPS:
+            return "stop", f"its last {STALL_STEPS} steps produced no new results (possible loop)"
+        if not self.has_request or self.answered:
+            return None, None
+        if self.nudge_step is not None:
+            if self.steps - self.nudge_step >= PROGRESS_FALLBACK_STEPS:
+                self.nudge_step = None
+                self.since_note, self.last_note_at = 0, time.time()
+                return "fallback", (f"Still working on this (step {self.steps}), not paused; I will keep going. "
+                                    f"Actions so far: {_tally_text(self.tally)}.")
+            return None, None
+        if ((self.steps % PROGRESS_EVERY == 0 and self.since_note >= 3)
+                or time.time() - self.last_note_at >= PROGRESS_MAX_SILENT_SECONDS):
+            self.nudge_step = self.steps
+            return "nudge", (
+                f"[PROGRESS CHECKPOINT: you are at step {self.steps} of this request (runaway ceiling "
+                f"{HARD_STEP_CEILING}) and have not updated the user recently. In your next step, call send with "
+                "final=false and a concise interim note (done / doing next / blockers; no secrets), then KEEP "
+                "WORKING on the task. Do not stop, do not ask the user to type 'continue', and use final=true "
+                "only for your final answer.]")
+        if self.steps == HARD_STEP_CEILING - 2 and self.since_note >= 3:
+            return "warn", (
+                f"[STEP CEILING WARNING: you are at step {self.steps} of the {HARD_STEP_CEILING}-step runaway "
+                "ceiling for this request. Within your next step, call send (final=true) with a concise summary "
+                "(done / remaining / current state; no secrets) and pin the key state so you can resume. The "
+                "user can reply 'continue' to resume.]")
+        return None, None
+
+def send_progress_note(content):
+    """Post Iter's own interim note as a NON-closing progress message (send final=false).
+
+    No model call.  Bound to the calling thread's request (ITER_REQUEST_IDS).
+    Returns True when the channel accepted it.
+    """
+    try:
+        result = invoke_dynamic(Path("tools/send.py"), "run", channel=CHECKPOINT_CHANNEL, content=content, final=False)
+    except Exception as error:
+        print(f"PROGRESS_NOTE_EXCEPTION: {type(error).__name__}: {error}")
+        return False
+    if not result.get("ok") or not str(result.get("result")).startswith("SUCCESS"):
+        print(f"PROGRESS_NOTE_SEND_FAILED: {result}")
+        return False
+    return True
+
+_foreground_step_guard = None  # main loop's current StepGuard; a promoted branch forks it
+# END PROGRESS_NOT_PAUSE helpers
+
+# --- Thread visibility: each branch (and the foreground) sees what the others are doing ---
+# Background branches used to be blind to each other: two threads could answer the same
+# topic twice, and a follow-up message could not reach the thread it belonged to.
+SIBLING_SEND_WINDOW = int(os.getenv("ITER_SIBLING_SEND_WINDOW", "1800"))  # seconds of recent sends to show
+SIBLING_SNIPPET_CHARS = 300
+_sibling_lock = threading.Lock()
+_branch_activity = {}   # branch_id -> {"request", "started", "done_at", "inbox"}
+_recent_sends = []      # [(time, origin, snippet)], newest last, bounded
+_last_inbound = None    # (time, snippet) of the newest user message
+
+def _snippet(text, limit=SIBLING_SNIPPET_CHARS):
+    """Collapse whitespace and keep the tail (where the actual user words are) or head of sends."""
+    text = " ".join(str(text or "").split())
+    return text if len(text) <= limit else text[:limit] + "…"
+
+def _inbound_snippet(text, limit=SIBLING_SNIPPET_CHARS):
+    """Keep the end of an inbound event: channel context comes first, the new message last."""
+    text = " ".join(str(text or "").split())
+    return text if len(text) <= limit else "…" + text[-limit:]
+
+def _note_send(origin, content):
+    """Record a successful send so other threads can see it."""
+    with _sibling_lock:
+        _recent_sends.append((time.time(), origin, _snippet(content)))
+        del _recent_sends[:-20]
+
+def _note_inbound(event_text):
+    """Main thread: a new user message arrived; queue it for every running branch."""
+    global _last_inbound
+    snippet = _inbound_snippet(event_text)
+    with _sibling_lock:
+        _last_inbound = (time.time(), snippet)
+        for activity in _branch_activity.values():
+            if activity["done_at"] is None:
+                activity["inbox"].append((time.time(), snippet))
+
+def _register_branch_activity(branch_id):
+    """Record what a newly promoted branch is working on (the newest user message)."""
+    with _sibling_lock:
+        request = _last_inbound[1] if _last_inbound else "(autonomous work, no user message)"
+        _branch_activity[branch_id] = {"request": request, "started": time.time(),
+                                       "done_at": None, "inbox": []}
+        for stale in [b for b, a in _branch_activity.items()
+                      if a["done_at"] and time.time() - a["done_at"] > SIBLING_SEND_WINDOW]:
+            del _branch_activity[stale]
+
+def _mark_branch_activity_done(branch_id):
+    with _sibling_lock:
+        if branch_id in _branch_activity and _branch_activity[branch_id]["done_at"] is None:
+            _branch_activity[branch_id]["done_at"] = time.time()
+
+def take_branch_inbox(branch_id):
+    """Branch thread: new user messages that arrived while it was running (drained), or ''."""
+    with _sibling_lock:
+        activity = _branch_activity.get(branch_id)
+        items = activity["inbox"] if activity else []
+        if activity:
+            activity["inbox"] = []
+    if not items:
+        return ""
+    lines = [f"- {time.strftime('%H:%M:%S', time.localtime(t))}: {s}" for t, s in items]
+    return ("[NEW USER MESSAGE(S) ARRIVED WHILE YOU WORKED. Another thread opens a request for each one "
+            "and answers it, but if one is a follow-up to YOUR task (adds detail, corrects or redirects it), "
+            "take it into account in your answer:]\n" + "\n".join(lines))
+
+def sibling_view(self_id):
+    """Text describing other threads' tasks and recent sends, or '' when there is nothing to show.
+
+    self_id is a branch id, or None for the foreground turn.
+    """
+    now = time.time()
+    with _sibling_lock:
+        others = [(b, dict(a)) for b, a in _branch_activity.items() if b != self_id and a["done_at"] is None]
+        sends = [(t, o, s) for t, o, s in _recent_sends if o != (self_id or "foreground")
+                 and now - t <= SIBLING_SEND_WINDOW]
+    if not others and not sends:
+        return ""
+    lines = ["[OTHER THREADS (visibility only; you cannot message them). Do not repeat an answer another "
+             "thread already sent; if your task is a follow-up to one of theirs, build on it."]
+    for branch_id, activity in others:
+        lines.append(f"- running {branch_id} ({int(now - activity['started'])}s): {activity['request']}")
+    for t, origin, snippet in sends[-8:]:
+        lines.append(f"- sent by {origin} at {time.strftime('%H:%M:%S', time.localtime(t))}: {snippet}")
+    return "\n".join(lines)
 
 def background_branch_active():
     """True while a promoted background branch still owns the current task."""
@@ -656,6 +912,7 @@ class BranchState:
 def _release_branch(branch_id, result_container, reason):
     """Free a branch's slot and ask the main thread to close any request it left open."""
     result_container["finished"] = True
+    _mark_branch_activity_done(branch_id)
     with _branch_lock:
         branch = _active_branches.pop(branch_id, None)
     if branch is None:
@@ -757,6 +1014,9 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
         _tool_context.request_ids = dict(result_container["request_ids"])  # sends answer this branch's request
     response = initial_response
     branch_steps = 0
+    branch_sent = False  # a final send succeeded, so the branch's request already has an answer
+    guard = result_container.get("step_guard") or StepGuard()  # PROGRESS_NOT_PAUSE
+    stop_reason, branch_note = None, None
 
     # Load tools once at the start (stateless subprocesses; coherence model: snapshot)
     inops, _omitted, _tool_errors = load_tools()
@@ -776,9 +1036,15 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
         branch_messages.append(assistant_entry)
 
         if not message.tool_calls:
-            break  # No more tool calls — branch is done
+            # Branch is done. A text-only ending with no send would leave the request
+            # unanswered (the safety net then posts the "stopped working" note): deliver it.
+            if not branch_sent and not result_container.get("abandoned"):
+                if send_text_only_fallback(message.content):
+                    print(f"BRANCH_TEXT_ONLY_FALLBACK_SENT: branch_id={branch_id}")
+            break
 
         # Execute tool calls (stateless subprocesses)
+        step_results = []
         for tool_call in message.tool_calls[:MAX_TOOL_CALLS]:
             tool_name = tool_call.function.name
             try:
@@ -795,9 +1061,14 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
                     else:
                         result = invoke_dynamic(inops[tool_name][0], "run", **tool_arguments)
                         ret = result["result"] if result["ok"] else f"Tool execution failed: {result['error']}"
+                        if tool_name == "send" and result["ok"] and str(result["result"]).startswith("SUCCESS"):
+                            if not str(result["result"]).startswith("SUCCESS (progress"):
+                                branch_sent = True  # a progress note does not answer the request
+                            _note_send(branch_id, tool_arguments.get("content"))
                 except Exception as error:
                     ret = f"Tool execution failed: {type(error).__name__}: {error}"
             ret = str(ret)
+            step_results.append((tool_name, tool_call.function.arguments, ret))
             if len(ret) > MAX_TOOL_OUTPUT_CHARS:
                 ret = ret[:MAX_TOOL_OUTPUT_CHARS] + " [TRUNCATED]"
             tool_content = "Step " + get_current_time() + ": " + ret
@@ -806,13 +1077,37 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
             result_container["last_progress_at"] = time.time()  # R13: tool result = progress
 
         branch_steps += 1
+        # PROGRESS_NOT_PAUSE: interim notes, not a pause; only runaway backstops stop the branch.
+        guard_action, guard_text = guard.record_step(message.tool_calls[:MAX_TOOL_CALLS], step_results)
+        if guard_action == "stop":
+            stop_reason = guard_text
+            print(f"BRANCH_BACKSTOP: branch_id={branch_id} steps={guard.steps} reason={guard_text}")
+            break
+        if guard_action in ("nudge", "warn"):
+            branch_note = guard_text
+            print(f"BRANCH_PROGRESS_{guard_action.upper()}: branch_id={branch_id} step={guard.steps}")
+        elif guard_action == "fallback":
+            delivered = send_progress_note(guard_text)
+            print(f"BRANCH_PROGRESS_FALLBACK: branch_id={branch_id} step={guard.steps} delivered={delivered}")
         if branch_steps >= BRANCH_STEP_BUDGET:
             break
+
+        # Thread visibility: follow-ups that arrived meanwhile persist in the branch; the
+        # sibling summary is rebuilt fresh for every call.
+        inbox = take_branch_inbox(branch_id)
+        if inbox:
+            branch_messages.append({"role": "user", "content": inbox})
+            print(f"BRANCH_INBOX_DELIVERED: branch_id={branch_id}")
+        if branch_note:
+            branch_messages.append({"role": "user", "content": "Step " + get_current_time() + ": " + branch_note})
+            branch_note = None
+        view = sibling_view(branch_id)
+        call_messages = branch_messages + ([{"role": "user", "content": view}] if view else [])
 
         # Make follow-up LLM call with branch_client (R12: separate client)
         try:
             response = _bg_llm_create(
-                branch_client, result_container, model=MODEL, messages=branch_messages, tools=tools,
+                branch_client, result_container, model=MODEL, messages=call_messages, tools=tools,
                 tool_choice="required", max_tokens=MAX_TOKENS,
                 extra_body={"enable_thinking": True},
             )
@@ -836,10 +1131,16 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
             print(f"BACKGROUND_ERROR: branch_id={branch_id} error={type(e).__name__}: {e}")
             return
 
-    # Check if we exited due to step budget exhaustion
-    if branch_steps >= BRANCH_STEP_BUDGET:
+    # Check if we exited due to a runaway backstop (or the branch step ceiling)
+    if stop_reason is None and branch_steps >= BRANCH_STEP_BUDGET:
+        stop_reason = f"it reached the branch step ceiling ({BRANCH_STEP_BUDGET} steps)"
+    if stop_reason is not None and branch_sent:
+        print(f"BRANCH_BACKSTOP_AFTER_ANSWER: branch_id={branch_id} steps={guard.steps}")
+    elif stop_reason is not None:
+        StepGuard.paused_by_backstop = True
         # R20: Queue Tier-1 checkpoint data to main thread (never write files directly)
-        checkpoint_data = extract_tier1_checkpoint(branch_messages, branch_steps)
+        checkpoint_data = extract_tier1_checkpoint(branch_messages, guard.steps)
+        checkpoint_data["stop_reason"] = stop_reason
         checkpoint_data["branch"] = branch_id
         checkpoint_data["request_ids"] = result_container.get("request_ids")
         checkpoint_data["_checkpoint_payload"] = True
@@ -887,6 +1188,9 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
         branch_id = f"bg-{uuid.uuid4().hex[:8]}"
         request_ids = dict(_foreground_request_ids) if ITER_REQUEST_BINDING else {}
         result_container["request_ids"] = request_ids if ITER_REQUEST_BINDING else None
+        fg_guard = globals().get("_foreground_step_guard")  # PROGRESS_NOT_PAUSE: set before branch_id (read by the thread)
+        if fg_guard is not None and hasattr(fg_guard, "fork"):
+            result_container["step_guard"] = fg_guard.fork()
         result_container["branch_id"] = branch_id  # R14: thread reads this on error to push marker
         bg_messages = copy.deepcopy(messages)
         bg_client = openai.OpenAI(
@@ -905,6 +1209,7 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
             result_container=result_container,
             request_ids=request_ids,
         )
+        _register_branch_activity(branch_id)
         with _branch_lock:
             _active_branches[branch_id] = branch
             active_count = len(_active_branches)
@@ -1204,6 +1509,7 @@ post_task_mode, autonomous_steps, new_burst = False, 0, True
 _last_autonomous_ts = 0.0
 retryable_failures, capped_waits, provider_idle = 0, 0, False
 send_since_checkpoint = False
+step_guard = _foreground_step_guard = StepGuard(has_request=False)  # PROGRESS_NOT_PAUSE
 _tool_context.request_ids = _foreground_request_ids if ITER_REQUEST_BINDING else None
 pending_event_append = resume_claimed()
 cleanup_interval = MAX_EXPERIENCE_SIZE - RETAIN_EXPERIENCE_SIZE
@@ -1254,9 +1560,19 @@ while True:
         if event_append:
             autonomous_steps, new_burst, post_task_mode = 0, False, False
             send_since_checkpoint = False
+            step_guard = _foreground_step_guard = StepGuard(has_request=True)
             print("IN FROM CHANNEL " + event_append)
-            experience += [{"role": "user", "content": "Step " + get_current_time() + ": " + event_append}]
+            resume_note = ""
+            if StepGuard.paused_by_backstop:
+                StepGuard.paused_by_backstop = False
+                resume_note = ("[NOTE: an earlier request was stopped by a runaway backstop (step ceiling, "
+                               "repeated identical steps, or no new results) and the user was told why. If the "
+                               "message below asks you to continue, resume that task from your recent actions "
+                               "and notes instead of restarting it, and do not repeat work already done.]\n")
+            experience += [{"role": "user", "content": "Step " + get_current_time() + ": " + resume_note + event_append}]
             save_experience(experience)
+            if ITER_CONCURRENCY_ENABLED:
+                _note_inbound(event_append)
             pending_event_append = ""
             base_temporary_message = []
         elif new_burst:
@@ -1301,6 +1617,9 @@ while True:
             # M2 Step 2.2: double drain — (b) immediately before building messages (R15)
             if ITER_CONCURRENCY_ENABLED:
                 drain_merge_queue()
+                foreground_view = sibling_view(None)
+                if foreground_view:
+                    temporary_message += [{"role": "user", "content": foreground_view}]
             request_messages = [{"role": "system", "content": "prompt.txt:\n" + open("prompt.txt", encoding="utf-8", errors="replace").read().strip() + "\n\n./transformations/:\n" + TRANSFORMATIONS + "\n\n" + MEMORY}] + experience + temporary_message
             request_messages, request_tools, transformation_error = apply_transformation(request_messages, TOOLS)
             if transformation_error:
@@ -1338,6 +1657,7 @@ while True:
         if _promoted:
             if ITER_REQUEST_BINDING:
                 new_burst = True  # the branch owns this task now; the foreground is free
+            step_guard = _foreground_step_guard = StepGuard(has_request=False)  # the branch forked the count
             continue
         if text_only_idle:
             retryable_failures, capped_waits = 0, 0
@@ -1349,12 +1669,14 @@ while True:
             if not post_task_mode:
                 new_burst = True
             autonomous_steps = 0
+            step_guard = _foreground_step_guard = StepGuard(has_request=False)
             pending_event_append = slow_wait_for_input()
             continue
         retryable_failures, capped_waits = 0, 0
         print(f"RESPONSE {response}\nFINISH_REASON {response.choices[0].finish_reason}\nUSAGE {response.usage}")
         experience += [{key: value for key, value in message.model_dump(exclude_none=True).items() if KEEP_REASONING_IN_EPISODE or key not in ("reasoning", "reasoning_details", "reasoning_content")}]
         tool_outputs = []
+        step_results = []
         for tool_call in message.tool_calls:
             tool_name = tool_call.function.name
             try:
@@ -1371,9 +1693,12 @@ while True:
                     else:
                         result = invoke_dynamic(INOPS[tool_name][0], "run", **tool_arguments)
                         ret = result["result"] if result["ok"] else f"Tool execution failed: {result['error']}"
+                        if tool_name == "send" and result["ok"] and str(result["result"]).startswith("SUCCESS"):
+                            _note_send("foreground", tool_arguments.get("content"))
                 except Exception as error:
                     ret = f"Tool execution failed: {type(error).__name__}: {error}"
             ret = str(ret)
+            step_results.append((tool_name, tool_call.function.arguments, ret))
             if len(ret) > MAX_TOOL_OUTPUT_CHARS:
                 ret = ret[:MAX_TOOL_OUTPUT_CHARS] + " [TRUNCATED]"
             experience += [{"role": "tool", "tool_call_id": tool_call.id, "content": "Step " + get_current_time() + ": " + ret}]
@@ -1384,43 +1709,46 @@ while True:
         autonomous_steps = 0 if event_append else autonomous_steps + 1
         called_send = any(call.function.name == "send" for call in message.tool_calls)
         called_nop = any(call.function.name == "nop" for call in message.tool_calls)
-        if called_send:
-            send_since_checkpoint = True
-        if (not called_send
-                and autonomous_steps == TURN_WATCHDOG_THRESHOLD
-                and not event_append):
-            # Turn-budget watchdog: the agent is close to exhausting its step
-            # budget without having sent a reply. Inject a checkpoint reminder
-            # so it emits a progress summary via send before the limit.
-            experience += [{"role": "user", "content": (
-                f"[TURN BUDGET WARNING: You are at step {autonomous_steps} of {MAX_FAST_STEPS} "
-                f"without calling send. Call send NOW with a concise progress summary: "
-                f"what you accomplished, what remains, and the current state. "
-                f"Do not wait until the task is fully complete.")}]
-            save_experience(experience)
+        # PROGRESS_NOT_PAUSE: interim notes every PROGRESS_EVERY steps instead of a stop;
+        # only runaway backstops (ceiling / repeated / no new results) stop the request.
+        guard_action, guard_text = step_guard.record_step(message.tool_calls, step_results)
+        if step_guard.answered:
+            send_since_checkpoint = True  # a final send answered the request (progress notes do not)
         if called_nop:
             if not post_task_mode:
                 new_burst = True  # a nop during autonomous work must not re-arm the post-task prompt (bypassed the throttle)
             autonomous_steps = 0
+            step_guard = _foreground_step_guard = StepGuard(has_request=False)
             close_unfinished_requests()
             pending_event_append = slow_wait_for_input()
-        elif autonomous_steps >= MAX_FAST_STEPS:
-            # M1 Step 1.1: Tier-1 mechanical checkpoint extraction (flag-guarded)
-            if ITER_CHECKPOINT_ENABLED and not send_since_checkpoint:
-                _checkpoint_data = extract_tier1_checkpoint(experience, autonomous_steps)
-                _checkpoint_path = write_checkpoint_file(_checkpoint_data)
+        elif guard_action == "stop":
+            print(f"STEP BACKSTOP: steps={step_guard.steps} reason={guard_text}")
+            if step_guard.has_request and not step_guard.answered:
+                StepGuard.paused_by_backstop = True
+                # M1 Step 1.1: Tier-1 mechanical checkpoint (file is flag-guarded); the stop note states why
+                _checkpoint_data = extract_tier1_checkpoint(experience, step_guard.steps)
+                _checkpoint_data["stop_reason"] = guard_text
+                _checkpoint_path = write_checkpoint_file(_checkpoint_data) if ITER_CHECKPOINT_ENABLED else None
                 if _checkpoint_path:
                     print(f"CHECKPOINT_FILE_WRITTEN: {_checkpoint_path}")
-                else:
-                    print("CHECKPOINT_FILE_WRITE_FAILED — will still attempt send")
                 # M1 Step 1.3: human-readable send via normal tool path
                 send_checkpoint_message(_checkpoint_data, _checkpoint_path)
-            else:
-                _checkpoint_data = None
-                _checkpoint_path = None
             autonomous_steps = 0
+            # Really stop: the old stop fell through to "CONTINUE THE CURRENT USER TASK" on the next
+            # loop.  Go to throttled post-task mode instead (provider-silent until new input or the
+            # AUTONOMOUS_CHECKIN_INTERVAL check-in).
+            post_task_mode, new_burst = True, False
+            _last_autonomous_ts = time.time()
+            step_guard = _foreground_step_guard = StepGuard(has_request=False)
             close_unfinished_requests()
             pending_event_append = slow_wait_for_input()
+        elif guard_action in ("nudge", "warn"):
+            print(f"PROGRESS {guard_action.upper()} step={step_guard.steps}")
+            experience += [{"role": "user", "content": "Step " + get_current_time() + ": " + guard_text}]
+            save_experience(experience)
+        elif guard_action == "fallback":
+            delivered = send_progress_note(guard_text)
+            print(f"PROGRESS FALLBACK step={step_guard.steps} delivered={delivered}")
     except Exception as error:
         print(f"Output> {type(error).__name__}: {error}")
         experience = experience[:history_checkpoint]
