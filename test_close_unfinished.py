@@ -29,7 +29,10 @@ def load(timeout=3600.0, concurrency=False, branch=None, results=None):
           "_branch_lock": threading.Lock(), "_active_branch": branch,
           # multi-branch (3c86713) API: legacy single-request semantics
           "ITER_REQUEST_BINDING": False, "_foreground_request_ids": {},
-          "background_branch_active": lambda: branch is not None}
+          "background_branch_active": lambda: branch is not None,
+          # 2026-10-12: iter.py probes hooks with _channel_has (6ea3dd6); the fake channels
+          # here are plain source, so answer the probe from their definitions.
+          "_channel_has": lambda path, name: f"def {name}(" in Path(path).read_text()}
     exec(FUNC_SRC, ns)
     return ns["close_unfinished_requests"], calls
 

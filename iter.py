@@ -87,9 +87,11 @@ def _max_background_branches(raw=None):
     return max(1, min(MAX_BACKGROUND_BRANCHES_LIMIT, value))
 
 ITER_MAX_BACKGROUND_BRANCHES = _max_background_branches()
-# Request binding: with more than one branch, every turn/branch answers only the
-# request it was started from (tools/send.py reads ITER_REQUEST_IDS).
-ITER_REQUEST_BINDING = ITER_CONCURRENCY_ENABLED and ITER_MAX_BACKGROUND_BRANCHES > 1
+# Request binding: with concurrency on, every turn/branch answers only the request it
+# was started from (tools/send.py reads ITER_REQUEST_IDS). Was "> 1 branch" until
+# 2026-10-12: with 1 branch and no binding the channel holds one request, so a chat
+# message could not be claimed while a promoted branch still owned the open request.
+ITER_REQUEST_BINDING = ITER_CONCURRENCY_ENABLED
 if ITER_REQUEST_BINDING:
     # one foreground request + one per background branch may be open at once
     os.environ.setdefault("ITER_MAX_OPEN_REQUESTS", str(ITER_MAX_BACKGROUND_BRANCHES + 1))
@@ -206,6 +208,8 @@ def dynamic_worker():
         spec.loader.exec_module(module)
         if function == "__description__":
             result = str(module.DESCRIPTION)
+        elif function == "__has_attrs__":
+            result = {name: callable(getattr(module, name, None)) for name in payload.get("args", [])}
         elif function == "__tool_metadata__":
             parameters = inspect.signature(module.run).parameters.values()
             description = str(module.DESCRIPTION)
@@ -286,12 +290,32 @@ if len(sys.argv) > 1 and sys.argv[1] == "--invoke":
 def get_current_time():
     return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+_CHANNEL_PROBE_NAMES = ("receive_request", "resume_all", "active_request_ids", "close_active", "expire_stale")
+_channel_probe_cache = {}  # resolved path -> (mtime_ns, size, {name: bool})
+
 def _channel_has(path, name):
-    """True if the channel module source mentions *name* (feature probe, like close_active)."""
+    """True if the channel module actually exposes callable *name* once imported.
+
+    A text search is not enough: a channel can mention a hook in a guarded
+    `try: from ... import hook / except ImportError: pass` block while the
+    backing library lacks it (19:01 Sep 30 deploy outage). Probe with hasattr
+    in a subprocess, cached per file mtime/size; probe failure -> False."""
     try:
-        return name in Path(path).read_text(encoding="utf-8", errors="replace")
+        stat = Path(path).stat()
     except OSError:
         return False
+    key = str(Path(path).resolve())
+    cached = _channel_probe_cache.get(key)
+    if cached is None or cached[:2] != (stat.st_mtime_ns, stat.st_size):
+        names = tuple(dict.fromkeys(_CHANNEL_PROBE_NAMES + (name,)))
+        result = invoke_dynamic(path, "__has_attrs__", *names)
+        found = result.get("result") if result.get("ok") and isinstance(result.get("result"), dict) else {}
+        cached = (stat.st_mtime_ns, stat.st_size, {n: bool(found.get(n)) for n in names})
+        _channel_probe_cache[key] = cached
+    if name not in cached[2]:
+        _channel_probe_cache.pop(key, None)
+        return _channel_has(path, name)
+    return cached[2][name]
 
 def _foreground_busy(path):
     """True while the foreground's bound request on this channel is still open."""
@@ -382,11 +406,9 @@ def close_unfinished_requests():
        Skipped while a background branch is active, since the branch may own it."""
     branch_active = ITER_CONCURRENCY_ENABLED and background_branch_active()
     for channel_path in sorted(Path("channels").glob("*.py")):
-        try:
-            source = channel_path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+        if not channel_path.is_file():
             continue
-        if "expire_stale" in source and ITER_REQUEST_TIMEOUT > 0:
+        if _channel_has(channel_path, "expire_stale") and ITER_REQUEST_TIMEOUT > 0:
             result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT)
             if result.get("ok") and result.get("result"):
                 print(f"STALE_REQUEST_EXPIRED: channel={channel_path.stem}")
@@ -394,9 +416,9 @@ def close_unfinished_requests():
                     continue
             elif not result.get("ok"):
                 print(f"STALE_REQUEST_EXPIRE_FAILED: channel={channel_path.stem} error={result.get('error')}")
-        if "close_active" not in source:
+        if not _channel_has(channel_path, "close_active"):
             continue
-        if ITER_REQUEST_BINDING and "receive_request" in source:
+        if ITER_REQUEST_BINDING and _channel_has(channel_path, "receive_request"):
             # Close only the foreground's own request; branches close theirs when they finish.
             rid = _foreground_request_ids.pop(channel_path.stem, None)
             if rid is None:
@@ -945,6 +967,10 @@ def _close_branch_requests(done):
         elif not result.get("ok"):
             print(f"BRANCH_REQUEST_CLOSE_FAILED: branch_id={done.get('branch')} request={rid[:12]} error={result.get('error')}")
 
+def _promotion_lock(result_container):
+    """The per-call lock that orders "call finished" against "call promoted" (dict.setdefault is atomic)."""
+    return result_container.setdefault("promotion_lock", threading.Lock())
+
 def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_tokens, extra_body, result_container):
     """Thread target for background LLM call; stores result in result_container.
 
@@ -960,11 +986,15 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
             llm_client, result_container, model=model, messages=messages, tools=tools,
             tool_choice=tool_choice, max_tokens=max_tokens, extra_body=extra_body,
         )
-        result_container["ok"] = True
-        result_container["response"] = response
-        result_container["last_progress_at"] = time.time()  # R13: progress resets idle deadline
-        # M3 Step 3.5: if promoted, run the branch mini-loop (R20: step budget + checkpoint queuing)
-        branch_id = result_container.get("branch_id")
+        # Promotion race (2026-10-12): the outcome and branch_id are read/written under
+        # promotion_lock, so the call either finished before promotion (foreground keeps it)
+        # or the branch is fully set up (client + messages) before this thread sees branch_id.
+        with _promotion_lock(result_container):
+            result_container["ok"] = True
+            result_container["response"] = response
+            result_container["last_progress_at"] = time.time()  # R13: progress resets idle deadline
+            # M3 Step 3.5: if promoted, run the branch mini-loop (R20: step budget + checkpoint queuing)
+            branch_id = result_container.get("branch_id")
         if branch_id and result_container.get("abandoned"):
             print(f"BACKGROUND_ABANDONED_RESULT_DROPPED: branch_id={branch_id}")
             return
@@ -974,10 +1004,12 @@ def _bg_llm_thread_target(llm_client, model, messages, tools, tool_choice, max_t
             if branch_client is not None and branch_messages is not None:
                 _bg_branch_mini_loop(branch_id, branch_client, branch_messages, response, result_container)
     except Exception as e:
-        result_container["ok"] = False
-        result_container["error"] = f"{type(e).__name__}: {e}"
-        # R14: push error marker to merge queue and free branch slot
-        branch_id = result_container.get("branch_id")
+        with _promotion_lock(result_container):
+            result_container["ok"] = False
+            result_container["error"] = f"{type(e).__name__}: {e}"
+            result_container["exception"] = e  # K9: the caller re-raises the original (status_code, response headers)
+            # R14: push error marker to merge queue and free branch slot
+            branch_id = result_container.get("branch_id")
         if branch_id:
             error_marker = {
                 "role": "system",
@@ -1167,6 +1199,7 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
     Flag-off: not called; the existing direct client.chat.completions.create path is used.
     """
     result_container = {}
+    _promotion_lock(result_container)
     thread = threading.Thread(
         target=_bg_llm_thread_target,
         args=(llm_client, model, messages, tools, tool_choice, max_tokens, extra_body, result_container),
@@ -1183,24 +1216,31 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
         if thread.is_alive():
             raise Exception("Background LLM call failed: APITimeoutError: foreground call exceeded BG_INFLIGHT_LIMIT")
 
+    promoted = False
     if thread.is_alive():
         # Deadline expired — promote to background branch
         branch_id = f"bg-{uuid.uuid4().hex[:8]}"
         request_ids = dict(_foreground_request_ids) if ITER_REQUEST_BINDING else {}
-        result_container["request_ids"] = request_ids if ITER_REQUEST_BINDING else None
-        fg_guard = globals().get("_foreground_step_guard")  # PROGRESS_NOT_PAUSE: set before branch_id (read by the thread)
-        if fg_guard is not None and hasattr(fg_guard, "fork"):
-            result_container["step_guard"] = fg_guard.fork()
-        result_container["branch_id"] = branch_id  # R14: thread reads this on error to push marker
-        bg_messages = copy.deepcopy(messages)
-        bg_client = openai.OpenAI(
-            api_key=API_KEY, base_url=BASE_URL,
-            timeout=LLM_TIMEOUT, max_retries=0,
-            default_headers={"X-APC-Tenant": "iter-bg", "x-session-id": SESSION_ID, "x-branch-id": branch_id},
-        )
-        # M3 Step 3.5: store branch client + messages for mini-loop access (R20)
-        result_container["branch_client"] = bg_client
-        result_container["branch_messages"] = bg_messages
+        with _promotion_lock(result_container):
+            if "ok" not in result_container:  # else the call finished meanwhile: keep it in the foreground
+                promoted = True
+                result_container["request_ids"] = request_ids if ITER_REQUEST_BINDING else None
+                fg_guard = globals().get("_foreground_step_guard")  # PROGRESS_NOT_PAUSE: read by the thread
+                if fg_guard is not None and hasattr(fg_guard, "fork"):
+                    result_container["step_guard"] = fg_guard.fork()
+                bg_messages = copy.deepcopy(messages)
+                bg_client = openai.OpenAI(
+                    api_key=API_KEY, base_url=BASE_URL,
+                    timeout=LLM_TIMEOUT, max_retries=0,
+                    default_headers={"X-APC-Tenant": "iter-bg", "x-session-id": SESSION_ID, "x-branch-id": branch_id},
+                )
+                # M3 Step 3.5: store branch client + messages for mini-loop access (R20)
+                result_container["branch_client"] = bg_client
+                result_container["branch_messages"] = bg_messages
+                result_container["branch_id"] = branch_id  # R14: set last; the thread reads it under the lock
+        if not promoted:
+            print(f"LLM_PROMOTION_RACE_AVOIDED: call finished at the deadline; answered in the foreground")
+    if promoted:
         branch = BranchState(
             branch_id=branch_id,
             branch_client=bg_client,
@@ -1225,8 +1265,10 @@ def threaded_llm_call(llm_client, model, messages, tools, tool_choice, max_token
     # Call completed within deadline
     if result_container.get("ok"):
         return result_container["response"], None
-    else:
-        raise Exception(f"Background LLM call failed: {result_container.get('error', 'unknown')}")
+    original = result_container.get("exception")
+    if original is not None:
+        raise original  # K9: keep type, status_code and response (Retry-After) for the classifiers
+    raise Exception(f"Background LLM call failed: {result_container.get('error', 'unknown')}")
 
 # --- M2 Step 2.2: Merge queue + double drain (R15) + single-writer + tagged entries (R16) ---
 _merge_queue = queue.Queue()  # background→main merge queue (R15)

@@ -18,8 +18,26 @@ to `git show fd065a3:iter.py` (checked with `cmp`), and fd065a3 is on branch
 Mon 2026-10-05 14:02:19 PDT. The file's mtime is 2026-10-05 11:04 PDT, so the process
 runs the current file.
 
-Companion: a separate agent is preparing branch `agent/protocosmo2-concurrency-port-reference`
-with the isolated diff. This document does not depend on it.
+Companion: branch `agent/protocosmo2-concurrency-port-reference` (this branch) holds the
+isolated diff; see `docs/concurrency-port/REFERENCE_BRANCH_REPORT.md`.
+
+> **Update 2026-10-12 (after VM2 gate 1). Read this before the rest.**
+> Five fixes were made on the laptop and applied to this branch. The sections below describe
+> fd065a3 and are marked where a fix changes them. Line numbers below are fd065a3's; the
+> fixed `iter.py` is shifted by about +30 lines after line 430.
+>
+> | Fix | What changed | Where described |
+> |---|---|---|
+> | F1 | `_channel_has` probes real callables (`__has_attrs__` in the dynamic worker, cached by mtime/size), as in 6ea3dd6. `close_unfinished_requests` uses it too. | §5.1, B5 |
+> | F2 | **Promotion race fixed.** The call's outcome and `branch_id` are read and written under a per-call `promotion_lock`. `branch_id` is published last, after the branch client and messages. A call that finishes at the deadline is answered in the foreground (`LLM_PROMOTION_RACE_AVOIDED`). | §9.5 item 1 |
+> | F3 | **Original errors kept (VM2 K9).** A call that fails within the deadline re-raises the original exception (type, `status_code`, `response` headers such as Retry-After), not `Exception("Background LLM call failed: …")`. | §2.2 |
+> | F4 | **Binding whenever concurrency is on (VM2 D7).** `ITER_REQUEST_BINDING = ITER_CONCURRENCY_ENABLED`, so 1 branch means 2 open requests. | §2.3, §9.3 step 7 |
+> | F5 | `tools/send_document.py` (laptop only) uses the request bound via `ITER_REQUEST_IDS`. | §9.5 item 2 |
+>
+> Tests: `test_channel_has_probe.py` and `test_concurrency_fixes_20261012.py` (8 tests; 7 fail on
+> fd065a3). On this branch: 114 passed, 5 skipped in the ProtoCosmo2 layout.
+> Laptop deploy: branch `agent/protocosmo2-concurrency-fixes-20261012` (on top of fd065a3).
+> New: **§10 Routing under concurrency (hive-route)**.
 
 ---
 
@@ -146,6 +164,9 @@ main thread, later:
   (468-475), and `tools/send.py:26-39,61-66` routes `send` to exactly that request.
   With binding on, a turn that owns no request is refused with "No open … request is
   bound to this turn".
+- **F4:** binding is on whenever `ITER_CONCURRENCY_ENABLED` is on (was: only with more than one
+  branch). With 1 branch and no binding the channel held one request, so a chat message could
+  not be claimed while a promoted branch owned the open request.
 - On promotion, the branch takes a copy of the ids and the foreground dict is cleared
   (`iter.py:1474,1503-1504`), so from then on only the branch can answer that request.
 - Main-thread sends on behalf of a branch (checkpoint messages) temporarily rebind with
@@ -291,9 +312,11 @@ raises `TypeError: string indices must be integers`, and the request is stranded
 `processing/` (§6 B6).
 
 **The shim must export the hooks.** `REPO/channels/protocosmo2.py` re-exports them.
-Iter detects them with `_channel_has()`. The live version does a **text grep** of the
+Iter detects them with `_channel_has()`. fd065a3 does a **text grep** of the
 shim, so a shim that *mentions* a hook in a guarded import is treated as having it,
-even when the backing module lacks it (§6 B5).
+even when the backing module lacks it (§6 B5). **F1** replaces the grep with a real
+probe: the dynamic worker imports the channel and answers `__has_attrs__` with
+`callable(getattr(module, name))` for each hook; results are cached per file mtime/size.
 
 ### 5.2 `tools/send.py` (`REPO/tools/send.py`)
 
@@ -538,9 +561,8 @@ or degrade if it is missing **[UNVERIFIED which]**.
    - fix the 90 s `experience.json` liveness check so it also counts branch activity
      (or the iter process plus the request in `processing/`).
 7. **Enable in stages:**
-   - flag on with branches=1 (no binding);
-   - then branches=2 and `ITER_MAX_OPEN_REQUESTS=2`;
-   - then 3.
+   - flag on with branches=1 (binding on, per F4, so `ITER_MAX_OPEN_REQUESTS`=2);
+   - then branches=3 (`ITER_MAX_OPEN_REQUESTS`=4 by default).
 
    Keep `ITER_MAX_CONCURRENT_LLM_CALLS` low on the shared Anthropic account (VM2's
    history includes account exhaustion).
@@ -574,7 +596,7 @@ or degrade if it is missing **[UNVERIFIED which]**.
 
 ### 9.5 Open questions and risks
 
-1. **[CODE-READING] Promotion race.** In `threaded_llm_call`, `branch_id` is set
+1. **FIXED by F2 (2026-10-12). [CODE-READING] Promotion race.** In `threaded_llm_call`, `branch_id` is set
    (1479) *before* `branch_client`/`branch_messages` (1487-1488), with a `deepcopy` in
    between. If the call returns inside that window, `_bg_llm_thread_target` (1251-1259)
    skips the mini-loop without marking `finished`. The branch then sits until the
@@ -582,7 +604,7 @@ or degrade if it is missing **[UNVERIFIED which]**.
    working" note. The answer is lost. The window is small and this has not been
    observed or tested. For the port, set client and messages before `branch_id`, or
    have the thread mark `finished` when it cannot start the mini-loop.
-2. **[CODE-READING] `tools/send_document.py` (`_source`) is not binding-aware.** It
+2. **FIXED on the laptop by F5. [CODE-READING] `tools/send_document.py` (`_source`) is not binding-aware.** It
    requires exactly one file in `processing/`, so it fails while 2 or more requests
    are open. Any VM2 tool that finds "the active request" by scanning `processing/`
    has the same problem; it must use `ITER_REQUEST_IDS`.
@@ -601,7 +623,46 @@ or degrade if it is missing **[UNVERIFIED which]**.
 
 ---
 
-## 10. References
+## 10. Routing under concurrency (hive-route)
+
+Hive-route (github.com/1-hive/hive-route; ADOPTING.md §10) routes an Iter agent **per
+episode**: at each episode start the agent asks `POST /route` for a model, keeps that model
+through every call and tool round trip of the episode, and reports `POST /episodes/end` with
+the models that served it (plus a failure `class` when it didn't simply succeed). Protomega2
+runs a hook for this (`HIVE_ROUTE` block in its `iter.py`, rev 13). All hive agents are meant
+to use the router eventually, so this is the design every concurrent Iter should follow.
+
+**The problem.** The current hook keeps **one global episode** (`_route = {"task", "episode",
+"model", "served", ...}`). That assumes one request at a time. With concurrency, a promoted
+branch and a new foreground request run at once and would overwrite each other's episode,
+model and served-model set.
+
+**Rules for a concurrency-aware hook.**
+1. **Episode state is per request**, keyed by `request_id`, the same key request binding uses
+   (`_foreground_request_ids` in the foreground, `BranchState.request_ids` in a branch).
+   Keep it in a dict guarded by a lock; never in a module global.
+2. **A new request starts a new episode** (`/route` once, at the turn that claims it).
+3. **A promoted branch continues its request's episode**: same episode id, same routed model.
+   The branch client must send the same routing header (`x-openclaw-model`) as the
+   foreground did. Hive-route requires the model to stay fixed for the whole episode.
+4. **The episode ends when its request closes**: final send, `close_active`, `expire_stale`,
+   branch error, or restart release. Whoever closes the request calls `/episodes/end` once,
+   with the models that actually served the episode's calls (foreground and branch).
+5. **Failure class from the original exception** (F3): rate limit → `capacity` (with
+   `limited_until` from Retry-After), outage → `outage`. After such a failure, end the episode
+   and route a new one for the same task; don't retry the routed model.
+6. **The fail-open breaker stays per agent** (it describes the route service, not a request),
+   but its counter must be updated under a lock.
+7. **Autonomous (unbound) turns** have no request: give them their own task/episode ids, and
+   end the episode when the turn ends.
+
+**Order.** On VM2, Protomega2's hook keeps its current form until the reader-shadow report
+has been sent, so that the shadow's numbers come from one behaviour; then it is converted
+together with the concurrency port. ProtoCosmo2 (laptop) routes through OpenClaw's
+intent-model-router today and cannot reach the VM2 route service; moving it to hive-route
+is a separate project that should reuse this design.
+
+## 11. References
 
 - Code:
   - `REPO/iter.py` (= fd065a3);
