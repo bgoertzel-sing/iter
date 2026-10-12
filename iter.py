@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 import inspect
 import json
 import os
@@ -24,6 +25,14 @@ MAX_TOOL_OUTPUT_CHARS = 5000
 MAX_EXPERIENCE_SIZE = 100   #20 percent
 RETAIN_EXPERIENCE_SIZE = 80 #jumps
 MAX_FAST_STEPS = 50
+TURN_WATCHDOG_THRESHOLD = MAX_FAST_STEPS - 5  # emit checkpoint reminder at this step
+
+# --- M1 Step 1.1: Tier-1 mechanical checkpoint (flag-guarded, default ON) ---
+ITER_CHECKPOINT_ENABLED = os.getenv("ITER_CHECKPOINT_ENABLED", "1") == "1"
+CHECKPOINT_TOOL_SNAPSHOT = 5       # number of recent tool calls to include
+CHECKPOINT_OUTPUT_CHARS = 200     # truncate each tool output to this many chars
+CHECKPOINT_DIR = Path("checkpoints")  # root dir for checkpoint files
+CHECKPOINT_CHANNEL = os.getenv("ITER_CHECKPOINT_CHANNEL", "protocosmo2")
 SLOW_STEP_DELAY = 10
 ERROR_RECOVERY_TIME = 1 #after how long to retry when exception occurs
 RETURN_VALUE_PRESERVE = 0
@@ -135,6 +144,29 @@ def receive():
             events.append(f"[CHANNEL ERROR in {path}: {type(error).__name__}: {error}. Repair {path} if needed.]")
     return "\n".join(events)
 
+def resume_claimed():
+    """Resume channel claims once at process startup.
+
+    Channels without a recovery hook are ignored. A channel that implements
+    ``resume`` remains responsible for validating that exactly one durable
+    claim exists and for failing closed on ambiguous state.
+    """
+    events = []
+    paths = [path for path in sorted(Path("channels").glob("*.py")) if not path.name.startswith("_")]
+    for path in paths:
+        result = invoke_dynamic(path, "resume")
+        if not result["ok"]:
+            if "AttributeError" in result["error"] and "resume" in result["error"]:
+                continue
+            if "exactly one active request is required for resume" in result["error"]:
+                continue
+            events.append(f"[CHANNEL RECOVERY ERROR in {path}: {result['error']}. Repair {path} if needed.]")
+            continue
+        event = result["result"]
+        if event:
+            events.append("[" + path.stem + "] " + str(event))
+    return "\n".join(events)
+
 def slow_wait_for_input():
     for second in range(SLOW_STEP_DELAY):
         time.sleep(1)
@@ -147,6 +179,134 @@ def save_experience(experience):
     with open("experience.tmp", "w", encoding="utf-8") as file:
         json.dump(experience, file, ensure_ascii=False, indent=2)
     os.replace("experience.tmp", "experience.json")
+
+# --- M1 Step 1.1: Tier-1 mechanical checkpoint extraction ---
+def extract_tier1_checkpoint(experience, autonomous_steps):
+    """Purely mechanical extraction of checkpoint data from the experience list.
+
+    No LLM calls. Returns a dict with: checkpoint_type, session_id, step_count,
+    timestamps, prompt_hash, and a snapshot of the last N tool calls (name +
+    200-char truncated output).
+    """
+    # Map tool_call_id -> tool name from assistant messages
+    tool_call_names = {}
+    for entry in experience:
+        if entry.get("role") == "assistant" and entry.get("tool_calls"):
+            for tc in entry["tool_calls"]:
+                if isinstance(tc, dict):
+                    tool_call_names[tc.get("id")] = tc.get("function", {}).get("name", "?")
+
+    # Collect last N tool-output entries
+    tool_entries = [e for e in experience if e.get("role") == "tool"]
+    recent_tools = tool_entries[-CHECKPOINT_TOOL_SNAPSHOT:]
+
+    snapshot = []
+    for entry in recent_tools:
+        tc_id = entry.get("tool_call_id", "?")
+        name = tool_call_names.get(tc_id, "?")
+        content = entry.get("content", "")
+        truncated = content[:CHECKPOINT_OUTPUT_CHARS]
+        snapshot.append({
+            "tool_call_id": tc_id,
+            "tool_name": name,
+            "output_truncated": truncated,
+        })
+
+    # Prompt hash for provenance
+    try:
+        prompt_text = Path("prompt.txt").read_text(encoding="utf-8", errors="replace")
+        prompt_hash = hashlib.sha256(prompt_text.encode("utf-8")).hexdigest()[:16]
+    except Exception:
+        prompt_hash = "unknown"
+
+    return {
+        "checkpoint_type": "tier1_mechanical",
+        "session_id": SESSION_ID,
+        "step_count": autonomous_steps,
+        "timestamp": get_current_time(),
+        "timestamp_iso": datetime.datetime.now().isoformat(),
+        "prompt_hash": prompt_hash,
+        "tool_snapshot": snapshot,
+    }
+
+# --- M1 Step 1.2: Atomic checkpoint file write (temp+rename) ---
+def write_checkpoint_file(checkpoint_data):
+    """Atomically write checkpoint JSON to checkpoints/<session>/<ts>.json.
+
+    Uses temp-file + os.replace for atomicity. Returns the Path on success,
+    or None on failure (never raises — file write failure must not crash the loop).
+    Per v4 write-ordering: file is written BEFORE any send attempt.
+    """
+    try:
+        session_dir = CHECKPOINT_DIR / checkpoint_data.get("session_id", "unknown")
+        session_dir.mkdir(parents=True, exist_ok=True)
+        # Filename-safe timestamp: 20260904T215400
+        ts = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
+        dest = session_dir / f"{ts}.json"
+        # Avoid collision if two checkpoints land in the same second
+        if dest.exists():
+            dest = session_dir / f"{ts}_{uuid.uuid4().hex[:4]}.json"
+        tmp = session_dir / f"{ts}.json.tmp"
+        tmp.write_text(json.dumps(checkpoint_data, ensure_ascii=False, indent=2), encoding="utf-8")
+        os.replace(str(tmp), str(dest))
+        return dest
+    except Exception as error:
+        print(f"CHECKPOINT_FILE_WRITE_FAILED: {type(error).__name__}: {error}")
+        # Clean up temp file if it exists
+        try:
+            if 'tmp' in dir() and tmp.exists():
+                tmp.unlink()
+        except Exception:
+            pass
+        return None
+
+# --- M1 Step 1.3: Human-readable checkpoint via normal send path ---
+def format_checkpoint_message(checkpoint_data, checkpoint_path):
+    """Format a human-readable checkpoint summary from Tier-1 data.
+
+    Returns a concise string suitable for sending through the channel.
+    """
+    lines = [
+        f"[CHECKPOINT] Turn budget exhausted after {checkpoint_data.get('step_count', '?')} autonomous steps without a send.",
+    ]
+    snapshot = checkpoint_data.get("tool_snapshot", [])
+    if snapshot:
+        lines.append(f"Last {len(snapshot)} tool calls:")
+        for i, entry in enumerate(snapshot, 1):
+            name = entry.get("tool_name", "?")
+            output = entry.get("output_truncated", "")
+            lines.append(f"  {i}. {name}: {output}")
+    else:
+        lines.append("(no tool calls in snapshot)")
+    if checkpoint_path:
+        lines.append(f"Checkpoint file: {checkpoint_path}")
+    else:
+        lines.append("(checkpoint file write failed — this is the human-readable fallback)")
+    lines.append(f"Session: {checkpoint_data.get('session_id', '?')}")
+    return "\n".join(lines)
+
+def send_checkpoint_message(checkpoint_data, checkpoint_path):
+    """Send a human-readable checkpoint summary via the normal send tool.
+
+    Best-effort: never raises. Returns True on success, False on failure.
+    Per v4 write-ordering this is called AFTER the file write.
+    """
+    try:
+        message = format_checkpoint_message(checkpoint_data, checkpoint_path)
+        result = invoke_dynamic(Path("tools/send.py"), "run",
+                                channel=CHECKPOINT_CHANNEL, content=message)
+        if not result["ok"]:
+            print(f"CHECKPOINT_SEND_FAILED: {result['error']}")
+            return False
+        send_result = result["result"]
+        if send_result != "SUCCESS":
+            print(f"CHECKPOINT_SEND_NONSUCCESS: {send_result}")
+            return False
+        print(f"CHECKPOINT_SENT via channel={CHECKPOINT_CHANNEL}")
+        return True
+    except Exception as error:
+        print(f"CHECKPOINT_SEND_EXCEPTION: {type(error).__name__}: {error}")
+        return False
 
 # --------------------------------------------------------------------
 # 3. Dynamic components:
@@ -210,7 +370,9 @@ client = openai.OpenAI(api_key=API_KEY, base_url=BASE_URL, timeout=LLM_TIMEOUT, 
 time.sleep(INIT_WAIT)
 Path("memory").mkdir(exist_ok=True)
 Path("transformations").mkdir(exist_ok=True)
-post_task_mode, autonomous_steps, new_burst, pending_event_append = False, 0, True, ""
+post_task_mode, autonomous_steps, new_burst = False, 0, True
+send_since_checkpoint = False
+pending_event_append = resume_claimed()
 cleanup_interval = MAX_EXPERIENCE_SIZE - RETAIN_EXPERIENCE_SIZE
 cleanup_bucket = len(experience) // cleanup_interval
 while True:
@@ -236,6 +398,7 @@ while True:
         print("AFTER RECEIVE")
         if event_append:
             autonomous_steps, new_burst, post_task_mode = 0, False, False
+            send_since_checkpoint = False
             print("IN FROM CHANNEL " + event_append)
             experience += [{"role": "user", "content": "Step " + get_current_time() + ": " + event_append}]
             save_experience(experience)
@@ -322,11 +485,39 @@ while True:
         save_experience(experience)
         print("Output> " + "\n".join(tool_outputs))
         autonomous_steps = 0 if event_append else autonomous_steps + 1
+        called_send = any(call.function.name == "send" for call in message.tool_calls)
         called_nop = any(call.function.name == "nop" for call in message.tool_calls)
+        if called_send:
+            send_since_checkpoint = True
+        if (not called_send
+                and autonomous_steps == TURN_WATCHDOG_THRESHOLD
+                and not event_append):
+            # Turn-budget watchdog: the agent is close to exhausting its step
+            # budget without having sent a reply. Inject a checkpoint reminder
+            # so it emits a progress summary via send before the limit.
+            experience += [{"role": "user", "content": (
+                f"[TURN BUDGET WARNING: You are at step {autonomous_steps} of {MAX_FAST_STEPS} "
+                f"without calling send. Call send NOW with a concise progress summary: "
+                f"what you accomplished, what remains, and the current state. "
+                f"Do not wait until the task is fully complete.")}]
+            save_experience(experience)
         if called_nop:
             new_burst, autonomous_steps = True, 0
             pending_event_append = slow_wait_for_input()
         elif autonomous_steps >= MAX_FAST_STEPS:
+            # M1 Step 1.1: Tier-1 mechanical checkpoint extraction (flag-guarded)
+            if ITER_CHECKPOINT_ENABLED and not send_since_checkpoint:
+                _checkpoint_data = extract_tier1_checkpoint(experience, autonomous_steps)
+                _checkpoint_path = write_checkpoint_file(_checkpoint_data)
+                if _checkpoint_path:
+                    print(f"CHECKPOINT_FILE_WRITTEN: {_checkpoint_path}")
+                else:
+                    print("CHECKPOINT_FILE_WRITE_FAILED — will still attempt send")
+                # M1 Step 1.3: human-readable send via normal tool path
+                send_checkpoint_message(_checkpoint_data, _checkpoint_path)
+            else:
+                _checkpoint_data = None
+                _checkpoint_path = None
             autonomous_steps = 0
             pending_event_append = slow_wait_for_input()
     except Exception as error:
