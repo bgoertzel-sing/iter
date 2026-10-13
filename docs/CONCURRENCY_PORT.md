@@ -33,10 +33,18 @@ isolated diff; see `docs/concurrency-port/REFERENCE_BRANCH_REPORT.md`.
 > | F3 | **Original errors kept (VM2 K9).** A call that fails within the deadline re-raises the original exception (type, `status_code`, `response` headers such as Retry-After), not `Exception("Background LLM call failed: …")`. | §2.2 |
 > | F4 | **Binding whenever concurrency is on (VM2 D7).** `ITER_REQUEST_BINDING = ITER_CONCURRENCY_ENABLED`, so 1 branch means 2 open requests. | §2.3, §9.3 step 7 |
 > | F5 | `tools/send_document.py` (laptop only) uses the request bound via `ITER_REQUEST_IDS`. | §9.5 item 2 |
+> | F6 | **Exclusive final answers (VM2 D12).** Channel: the outbox entry is created exclusively (`os.link`), so a racing closer can no longer overwrite a real answer with a close note; `close_active` returns `False` when another writer won. Listing open requests tolerates one closing mid-listing. | §5.1 |
+> | F7 | **Expiry spares owned requests (VM2 D11).** `close_unfinished_requests` passes `expire_stale(keep=...)` the foreground's and every active branch's request; a channel without `keep` skips expiry for that cycle (`STALE_REQUEST_EXPIRE_SKIPPED`). Before, a branch's request could get the timeout note and its real answer was refused. | §5.1, §7 item 14 |
+> | F8 | **Roll-back keeps merged branch entries (VM2 D13).** Drain (b) merges after `history_checkpoint`; a failed call's roll-back now keeps those entries (`_rollback_keeping_merged`). | §7 item 14 |
+> | F9 | **Arrival order.** The channel claims inbox requests by (mtime, name), not sha256 filename order. | §5.1 |
 >
 > Tests: `test_channel_has_probe.py` and `test_concurrency_fixes_20261012.py` (8 tests; 7 fail on
-> fd065a3). On this branch: 114 passed, 5 skipped in the ProtoCosmo2 layout.
-> Laptop deploy: branch `agent/protocosmo2-concurrency-fixes-20261012` (on top of fd065a3).
+> fd065a3); `test_d11_d13_20261013.py` (6 tests; all fail before F7/F8). On this branch: 120 passed,
+> 5 skipped in the ProtoCosmo2 layout. F6/F9 are channel changes (PORT 06f94d5, transport tests
+> `test_iter_outer_channel_d11_d12.py`); the transport is not published, so port them from the
+> description in §5.1.
+> Laptop deploy: branch `agent/protocosmo2-concurrency-fixes-20261012` (F1–F5 9aadb38 on top of fd065a3,
+> F7/F8 8071bed), deployed 2026-10-12/13.
 > New: **§10 Routing under concurrency (hive-route)**.
 
 ---
@@ -295,14 +303,15 @@ Not concurrency flags, but they interact with it: `DYNAMIC_TIMEOUT=30`
 
 | Function | Lines | Semantics the port relies on |
 |---|---|---|
-| `receive_request()` | 198-215 | If fewer than `max_open_requests()` are in `processing/`, move the oldest inbox file there, touch its mtime, return `{request_id, prompt}`; else `None`. More than the cap → error. |
+| `receive_request()` | 198-215 | If fewer than `max_open_requests()` are in `processing/`, move the oldest inbox file there, touch its mtime, return `{request_id, prompt}`; else `None`. More than the cap → error. **F9:** "oldest" is by (mtime, name); d574cc9 took the lowest sha256 filename. |
 | `receive()` | 218-225 | Legacy wrapper (prompt string). |
 | `resume()` | 228-239 | Legacy: exactly one open request. |
 | `resume_all()` | 242-246 | All open requests, oldest claim first (`[{request_id, prompt}]`). |
 | `active_request_ids()` | 322-324 | Ids in `processing/`, oldest first. |
-| `send(content, final=True, request_id=None)` | 282-319 | `final=True`: write `outbox/<id>.json`, move to `completed/` (closes). `final=False`: `progress/<id>.<seq>.json` (max 50/request), request stays open. A closed or unknown id is refused, so **a second final answer is impossible**. `request_id=None` with several open requests is refused. |
-| `close_active(note, request_id=None)` | 337-351 | Close that request with the "Iter stopped working…" note; returns `False` if it is already closed. |
-| `expire_stale(max_age_seconds, …)` | 366-386 | Close requests idle (claim time or newest progress note) longer than `max_age_seconds`. |
+| `send(content, final=True, request_id=None)` | 282-319 | `final=True`: write `outbox/<id>.json`, move to `completed/` (closes). `final=False`: `progress/<id>.<seq>.json` (max 50/request), request stays open. A closed or unknown id is refused, so **a second final answer is impossible**. `request_id=None` with several open requests is refused. **F6:** d574cc9 checked `outbox.exists()` then overwrote, so two racing finals could both pass and the loser replaced the winner's answer; the outbox entry must be created exclusively (`os.link` of a temp file) and the loser refused. |
+| `close_active(note, request_id=None)` | 337-351 | Close that request with the "Iter stopped working…" note; returns `False` if it is already closed, **or (F6) if another writer answered or closed it concurrently** (never raises for that race). |
+| `expire_stale(max_age_seconds, …, keep=())` | 366-386 | Close requests idle (claim time or newest progress note) longer than `max_age_seconds`. **F7:** never closes an id in `keep` (requests a live thread owns). |
+| `active_request_ids()` / `resume_all()` listing | 187-188 | **F6:** a request closing between `glob()` and `stat()` is skipped, not an error (an error made `_foreground_busy` drop the foreground's binding). |
 | `mark_late_pending(request_id)` | 70-79 | Receiver side: marks a request whose synchronous wait timed out. |
 
 **Results must stay structured.** `dynamic_worker` would otherwise call `str()` on
@@ -435,6 +444,11 @@ the order below.
     - no drains or deadline checks run;
     - no signal handlers are installed;
     - binding is off.
+14. **Owned requests and merged history survive failures (F7, F8).** Request expiry closes
+    only orphans: the foreground's request and every active branch's are passed as
+    `keep`. A hung branch is bounded by `BACKGROUND_DEADLINE`, which closes its request.
+    A failed model call rolls back the foreground's partial turn but keeps branch
+    entries that drain (b) merged after the checkpoint.
 
 ---
 

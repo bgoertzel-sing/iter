@@ -11,6 +11,8 @@ SRC = (HERE / "iter.py").read_text()
 FUNC = next(n for n in ast.parse(SRC).body
             if isinstance(n, ast.FunctionDef) and n.name == "close_unfinished_requests")
 FUNC_SRC = ast.get_source_segment(SRC, FUNC)
+OWNED_SRC = ast.get_source_segment(SRC, next(n for n in ast.parse(SRC).body
+                                             if isinstance(n, ast.FunctionDef) and n.name == "_owned_request_ids"))
 
 MULTI = "def send(c, final=True): pass\ndef close_active(): pass\ndef expire_stale(s): pass\n"
 OLD = "def send(c): pass\n"
@@ -33,6 +35,9 @@ def load(timeout=3600.0, concurrency=False, branch=None, results=None):
           # 2026-10-12: iter.py probes hooks with _channel_has (6ea3dd6); the fake channels
           # here are plain source, so answer the probe from their definitions.
           "_channel_has": lambda path, name: f"def {name}(" in Path(path).read_text()}
+    # 2026-10-13 (D11): expiry spares owned requests; none are owned in these legacy tests.
+    ns["_active_branches"] = {}
+    exec(OWNED_SRC, ns)
     exec(FUNC_SRC, ns)
     return ns["close_unfinished_requests"], calls
 

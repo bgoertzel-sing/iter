@@ -398,10 +398,22 @@ def resume_claimed():
 
 ITER_REQUEST_TIMEOUT = float(os.getenv("ITER_REQUEST_TIMEOUT", "3600"))
 
+def _owned_request_ids(channel_stem):
+    """Requests on this channel a live thread still owns: the foreground's and every active branch's.
+    expire_stale never closes these (D11): a branch's answer would be refused after the timeout note."""
+    owned = set()
+    if _foreground_request_ids.get(channel_stem):
+        owned.add(_foreground_request_ids[channel_stem])
+    with _branch_lock:
+        for branch in _active_branches.values():
+            if branch.request_ids.get(channel_stem):
+                owned.add(branch.request_ids[channel_stem])
+    return sorted(owned)
+
 def close_unfinished_requests():
     """Turn-end safety net (multi-send channels only):
-    1. expire_stale: close any request open longer than ITER_REQUEST_TIMEOUT,
-       even while a background branch runs (a hung branch must not hold it forever).
+    1. expire_stale: close any request idle longer than ITER_REQUEST_TIMEOUT that no live
+       thread owns (a hung branch is bounded by BACKGROUND_DEADLINE, which closes its request).
     2. close_active: close a request left open without a final send.
        Skipped while a background branch is active, since the branch may own it."""
     branch_active = ITER_CONCURRENCY_ENABLED and background_branch_active()
@@ -409,8 +421,14 @@ def close_unfinished_requests():
         if not channel_path.is_file():
             continue
         if _channel_has(channel_path, "expire_stale") and ITER_REQUEST_TIMEOUT > 0:
-            result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT)
-            if result.get("ok") and result.get("result"):
+            owned = _owned_request_ids(channel_path.stem)
+            if owned:
+                result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT, keep=owned)
+            else:
+                result = invoke_dynamic(channel_path, "expire_stale", ITER_REQUEST_TIMEOUT)
+            if not result.get("ok") and "keep" in str(result.get("error")):
+                print(f"STALE_REQUEST_EXPIRE_SKIPPED: channel={channel_path.stem} (channel cannot spare owned requests)")
+            elif result.get("ok") and result.get("result"):
                 print(f"STALE_REQUEST_EXPIRED: channel={channel_path.stem}")
                 if not ITER_REQUEST_BINDING:
                     continue
@@ -440,6 +458,11 @@ def slow_wait_for_input():
         if event_append:
             return event_append
     return ""
+
+def _rollback_keeping_merged(experience, checkpoint, merged):
+    """Roll a failed turn back to checkpoint, keeping branch entries drain (b) merged after it (D13)."""
+    keep = {id(entry) for entry in merged}
+    return experience[:checkpoint] + [entry for entry in experience[checkpoint:] if id(entry) in keep]
 
 def save_experience(experience):
     with open("experience.tmp", "w", encoding="utf-8") as file:
@@ -1583,6 +1606,7 @@ while True:
     if ITER_CONCURRENCY_ENABLED:
         drain_merge_queue()
     history_checkpoint = len(experience) #before user input
+    merged_after_checkpoint = []  # branch entries drain (b) adds; a roll-back must keep them (D13)
     try:
         time.sleep(DEFAULT_DELAY)
         branch_error = pop_branch_error() if ITER_CONCURRENCY_ENABLED else None
@@ -1658,7 +1682,9 @@ while True:
                 temporary_message += [{"role": "user", "content": f"[MEMORY FOLDER TOTAL CHARACTER CAPACITY BY FILES NOT BEGINNING WITH _ EXCEEDED BY {DIFF} CHARS. FIX THIS FIRST.]"}]
             # M2 Step 2.2: double drain — (b) immediately before building messages (R15)
             if ITER_CONCURRENCY_ENABLED:
+                merged_from = len(experience)
                 drain_merge_queue()
+                merged_after_checkpoint += experience[merged_from:]
                 foreground_view = sibling_view(None)
                 if foreground_view:
                     temporary_message += [{"role": "user", "content": foreground_view}]
@@ -1793,7 +1819,7 @@ while True:
             print(f"PROGRESS FALLBACK step={step_guard.steps} delivered={delivered}")
     except Exception as error:
         print(f"Output> {type(error).__name__}: {error}")
-        experience = experience[:history_checkpoint]
+        experience = _rollback_keeping_merged(experience, history_checkpoint, merged_after_checkpoint)
         if not retryable_provider_error(error):
             time.sleep(ERROR_RECOVERY_TIME)
             continue
