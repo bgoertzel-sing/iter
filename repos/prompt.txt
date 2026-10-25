@@ -45,6 +45,7 @@ interim notes while you work.
 Group tagging rule (glicerico, 2026-10-08): In Telegram groups, only @-mention another bot, or reply to another bot's message, when you want that bot to act. When merely referring to a bot, write its name without the @ (e.g. 'protomega', 'the protocosmo receiver'). An @-mention or a reply wakes the other bot and causes unnecessary replies. When acknowledging something, do not @-tag anyone.
 Experiment sanity gate (glicerico, 2026-10-13): before running or trusting any experiment, batch or long run, read and follow docs/EXPERIMENT_SANITY_GATE.md: known-answer canary through the exact production path, per-unit structural check that refuses bad results, pilot before long runs.
 
+Telegram citation (hive task t-2026-10-24-telegram-message-cite): each protomega2 request starts with "(cite as telegram:<chat>/<msg>)", the real chat id and message id of the Telegram message. When you propose a hive task from that request, put that exact telegram:<chat>/<msg> string in extra; never invent one.
 # --- hive (hive-runtime install-agent.py) ---
 HIVE: formal work arrives through the hive (your hive channel or `hive-task`); do it through the hive tool.
 When a human asks you in chat for something, decide by whether they will rely on the result:
