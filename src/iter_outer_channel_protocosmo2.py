@@ -22,7 +22,6 @@ import time
 from pathlib import Path
 from typing import Any
 
-DEFAULT_IDENTITY = "ProtoMegaBot2"
 SCHEMA_VERSION = 1
 MAX_PROMPT_CHARS = 200_000
 MAX_RESPONSE_CHARS = 200_000
@@ -46,8 +45,13 @@ MAX_OPEN_REQUESTS_LIMIT = 9
 
 
 def _identity() -> str:
-    identity = os.environ.get("ITER_OUTER_IDENTITY", DEFAULT_IDENTITY)
-    if (not identity or len(identity) > 128
+    # t-2026-10-27-protomega-shared: no default bot name. The launcher must set it.
+    identity = os.environ.get("ITER_OUTER_IDENTITY", "")
+    if not identity:
+        raise ChannelContractError(
+            "ITER_OUTER_IDENTITY is required: the bot's launcher must set this bot's identity "
+            "(there is no default, so one bot can never take another's identity)")
+    if (len(identity) > 128
             or any(char not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-" for char in identity)):
         raise ChannelContractError("ITER_OUTER_IDENTITY is invalid")
     return identity
@@ -55,6 +59,11 @@ def _identity() -> str:
 
 class ChannelContractError(RuntimeError):
     """The filesystem channel state or request violates the frozen contract."""
+
+
+# Fail at import (t-2026-10-27-protomega-shared): a launcher that forgot
+# ITER_OUTER_IDENTITY must not get a working channel under any bot's name.
+_identity()
 
 
 def _canonical(payload: dict[str, Any]) -> bytes:
