@@ -7,3 +7,11 @@ repos/channels/protomega*.py
 repos/.hive/
 repos/channels/hive.py
 repos/tools/hive_task.py
+
+# Per-bot transformation files (t-2026-10-28-gitignore-per-bot)
+# Dashboards: hand-written, host-local copies, each tied to one bot's own dashboard server; not shared code
+repos/transformations/dashboard*.py
+# Same dashboards under their real names (the "_" prefix makes iter's loader skip them); per bot as above
+repos/transformations/_dashboard_*.py
+# Runtime state the transformations write for this bot (space.metta, tool_reliability.json)
+repos/transformations/.runtime/
