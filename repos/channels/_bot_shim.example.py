@@ -1,4 +1,10 @@
-"""Authenticated filesystem channel owned exclusively by ProtoMegaBot2."""
+"""Example per-bot channel shim (not loaded: Iter skips channels/_*.py).
+
+Each bot keeps its own untracked copy as channels/<channel>.py (for example
+channels/protomega2.py), owned exclusively by <BOT_NAME>.  The bot's launcher
+must set ITER_OUTER_IDENTITY=<BOT_NAME> before Iter starts; the transport
+refuses to import without it.
+"""
 from __future__ import annotations
 
 import sys

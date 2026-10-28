@@ -6,6 +6,7 @@ no real ids or chat text are used.  Run: python3 -m unittest repos/tests/test_pr
 """
 import hashlib
 import importlib
+import importlib.util
 import os
 import sys
 import tempfile
@@ -28,7 +29,12 @@ class CiteTest(unittest.TestCase):
         os.environ["ITER_OUTER_IDENTITY"] = "ProtoMegaBot2"
         os.environ.pop("ITER_MAX_OPEN_REQUESTS", None)
         self.impl = importlib.import_module("src.iter_outer_channel_protocosmo2")
-        self.ch = importlib.import_module("channels.protomega2")
+        # The per-bot shim is untracked (t-2026-10-27-protomega-shared); test the
+        # tracked example it is copied from.
+        spec = importlib.util.spec_from_file_location(
+            "channels._bot_shim_example", REPO / "repos" / "channels" / "_bot_shim.example.py")
+        self.ch = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.ch)
         for d in ("inbox", "processing"):
             (self.root / d).mkdir(parents=True, exist_ok=True)
 
