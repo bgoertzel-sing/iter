@@ -305,13 +305,27 @@ _tool_context = threading.local()  # CONCURRENCY_PORT: per-thread request bindin
 
 
 def _tool_env():
-    """Environment for tool/channel subprocesses: adds ITER_REQUEST_IDS when this thread is bound."""
+    """Environment for tool/channel subprocesses: adds ITER_REQUEST_IDS when this thread is bound, and
+    ITER_SERVED_MODEL, the model that wrote this thread's latest response (note_served), so a tool knows
+    which model called it (the hive_task tool records it)."""
     ids = getattr(_tool_context, "request_ids", None)
-    if ids is None:
+    served = getattr(_tool_context, "served_model", None)
+    if ids is None and not served:
         return None
     env = dict(os.environ)
-    env["ITER_REQUEST_IDS"] = json.dumps(ids, sort_keys=True)
+    env.pop("ITER_SERVED_MODEL", None)
+    if ids is not None:
+        env["ITER_REQUEST_IDS"] = json.dumps(ids, sort_keys=True)
+    if served:
+        env["ITER_SERVED_MODEL"] = served
     return env
+
+
+def note_served(response):
+    """Remember, for this thread, the model the gateway says answered this response (after any fallback);
+    the tool calls it makes run with it as ITER_SERVED_MODEL. Cleared when the response doesn't say."""
+    served = getattr(response, "served_model", None)
+    _tool_context.served_model = served.strip()[:100] if isinstance(served, str) and served.strip() else None
 
 
 # G28: tools that read-modify-write shared state (chroma, metta/atomspace and memory files,
@@ -1127,6 +1141,7 @@ def _bg_branch_mini_loop(branch_id, branch_client, branch_messages, initial_resp
             return
         message = response.choices[0].message
         model_tag = served_model_tag(response)
+        note_served(response)  # HIVE_MODEL
         route_served(result_container.get("route_key"), response)  # HIVE_ROUTE
         raw_content = message.content
         if message.content:
@@ -2084,6 +2099,7 @@ while True:
                 _promoted = True
                 break
             print(f"LLM_CALL_SECONDS {time.time() - _llm_started:.1f} outcome=ok")
+            note_served(response)  # HIVE_MODEL
             route_served(_route_fg_key, response)  # HIVE_ROUTE
             _agent_errors, _long_step_pending = 0, False
             print("AFTER LLM", response)
